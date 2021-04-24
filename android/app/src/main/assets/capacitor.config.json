@@ -1,12 +1,13 @@
 {
-  "appId": "io.ionic.starter",
+  "appId": "io.enhausse.ytdownloder",
   "appName": "YT-Downloader",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
+  "linuxAndroidStudioPath":"/snap/bin/android-studio",
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 0
+      "launchShowDuration": 2
     }
   },
   "cordova": {}
