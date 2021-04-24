@@ -1,0 +1,7 @@
+{
+  "name": "YT-Downloader",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
