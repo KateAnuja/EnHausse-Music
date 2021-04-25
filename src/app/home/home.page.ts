@@ -13,8 +13,6 @@ import { File } from '@ionic-native/file/ngx';
 })
 export class HomePage {
   url : string="https://www.youtube.com/watch?v=mt9xg0mmt28";
-  // downloadUrl = "http://dl173.y2mate.com/?file=M3R4SUNiN3JsOHJ6WWQ2a3NQS1Y5ZGlxVlZIOCtyZ0NqZGsyakNZcUJhNUQ3Yms2MnErVEpvSm5KK3hFNTR1Z1d1bFJ2aFBkWlp2QUd3NmJzNTBvUXppcTlzWXl0aTJFd0lZaFVjQjFIVDM1aSttc2hIbzlwQWo5ZDh5R05yQlhlSDk2clFzbzR6U2EyUERaOXhqbzREdXJya0dHVXpRTHBqTldlS2YyNkpCZHdYekphcksyOVowVi9tUE54SndNaU5hRTVnejMxN2R3dTlONEZRay9aNFZRNW9udzRQakZta0VNakpVanlVS3FydDJzQjV3S0M2Q2hkREprQVRFQjZPZm1XQ1FWempVUjkzNkIrN3Q4OW1kWmZLMWh1anI2OU9LNklEaWRjWi9mWWRlQk12aTB0TUR0Ni9SazRoQ1g5N3FVeU1nWHpsemhXOEhsUTR4YzRCaDA4L1BTbzk4Z24wV3ZpUT09";
-  downloadUrl = "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3";
   constructor(
     private http: HTTP,
     private transfer: FileTransfer, 
@@ -23,8 +21,7 @@ export class HomePage {
 
 
   ionViewDidEnter(){
-    // this.verifyUrl();
-    this.downloadFromUrl();
+    this.verifyUrl();
   }
 
   async verifyUrl(){
@@ -33,7 +30,6 @@ export class HomePage {
       console.log("video id = ",videoid[1]);
       let downloadUrl=await this.scrapY2Mate(videoid[1].toString());
       console.log("downloadUrl",downloadUrl);
-
     }else{ 
       //TODO: add alert for non youtube url 
       console.log("The youtube url is not valid.");
@@ -44,8 +40,8 @@ export class HomePage {
     try{
       let kid:string=await this.getVideoKid(vid);
       let downloadUrl:string=await this.getDownloadUrl(kid,vid);
-      // this.downloadFromUrl(downloadUrl);
       console.log("downloadUrl..", downloadUrl);
+      this.downloadFromUrl(downloadUrl);
     }catch(err){
 
     }
@@ -128,9 +124,9 @@ export class HomePage {
     });
   }
 
-  downloadFromUrl(){
+  downloadFromUrl(downloadUrl){
     const fileTransfer: FileTransferObject = this.transfer.create();
-    fileTransfer.download(encodeURI(this.downloadUrl), this.file.dataDirectory + 'file.mp3').then((entry) => {
+    fileTransfer.download(encodeURI(downloadUrl), this.file.externalDataDirectory + 'file.mp3').then((entry) => {
       console.log('download complete: ' + entry.toURL());
     }, (error) => {
       console.log('error...', error);
