@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { HTTP } from '@ionic-native/http/ngx';
 
@@ -7,6 +7,7 @@ import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ng
 import { File } from '@ionic-native/file/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
 import { IonRange } from '@ionic/angular';
+import { Media, MediaObject } from '@ionic-native/media/ngx';
 
 export interface Track{
   name : string;
@@ -21,6 +22,9 @@ export class HomePage {
   playlist : Track[]=[];
   url : string="";
   activeTrack : Track = null;
+  downloadPercentage : number = 0;
+  imgSrc : any;
+  imgName : any;
   
   isPlaying = false;
   progress = 0;
@@ -30,18 +34,14 @@ export class HomePage {
     private transfer: FileTransfer, 
     private file: File,
     private toast : ToastController,
+    private media : Media,
+    private alert : AlertController,
+    private changeDetector : ChangeDetectorRef
   ) {}
 
 
   ionViewDidEnter(){
-    //this.getFileList();
-
-    for(let i=0;i<10;i++){
-      this.playlist.push({
-        name:"Song "+(i+1),
-        path:""
-      });
-    }
+    this.getFileList();
   }
 
   async getFileList(){
@@ -59,20 +59,33 @@ export class HomePage {
     })
   }
 
-  verifyUrl(){
+  async verifyUrl(){
     let videoid = this.url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
     if(videoid != null){
+      this.downloadPercentage=0.01;
       this.scrapY2Mate(videoid[1].toString());
     }else{ 
       //TODO: add alert for non youtube url 
-      alert("The youtube url is not valid.");
+      const alert = await this.alert.create({
+        cssClass: 'my-custom-class',
+        header: 'Alert',
+        message: 'Please Enter Valid YouTube URL.',
+        buttons: ['OK']
+      });
+  
+       alert.present();
     }
+
+    
+    
   }
 
   async scrapY2Mate(vid:string){
     try{
       let {kid,fileName}=await this.getVideoKid(vid);
+      this.downloadPercentage+=0.04;
       let downloadUrl:string=await this.getDownloadUrl(kid,vid);
+      this.downloadPercentage+=0.05;
       this.downloadFromUrl(downloadUrl,fileName);
     }catch(err){
 
@@ -114,6 +127,15 @@ export class HomePage {
             fileName.indexOf('</b>')
           );
           fileName=fileName.replace(/\s+/g,'_').replace(/[^a-z0-9]/gi,'-').replace(/--/gi,'')+".mp3";
+          this.imgName=fileName;
+          let thumbnailUrl="";
+          thumbnailUrl=responseString.substring(
+            responseString.indexOf('<img src="')+10,
+            responseString.indexOf('" alt="')
+          );
+          this.imgSrc=thumbnailUrl;
+          console.log("thumbnailUrl...", thumbnailUrl);
+          
           if(kid.length>0){
             resolve({kid,fileName});
           }else{
@@ -171,13 +193,26 @@ export class HomePage {
     if(fileName.length<1){
       fileName=+new Date()+".mp3";
     }
-    fileTransfer.download(encodeURI(downloadUrl), this.file.externalRootDirectory + '/Download/' + fileName).then(async (entry) => {
+    
+    fileTransfer.onProgress((event)=>{
+      console.log("download progress...", event);
+      let percentage = ((((event.loaded * 100)/event.total)*0.9)+10)/100;
+      this.downloadPercentage=percentage;
+      this.changeDetector.detectChanges();
+
+    })
+
+    fileTransfer.download(
+      encodeURI(downloadUrl), 
+      this.file.externalRootDirectory + '/Download/' + fileName
+    ).then(async (entry) => {
       const toast = await this.toast.create({
         message: 'Downloaded Successfully',
         duration: 2000
       });
       toast.present();
       this.url="";
+      this.downloadPercentage=0;
     }, (error) => {
       console.error('error...', error);
     });
@@ -185,6 +220,9 @@ export class HomePage {
   }
 
   start(track : Track){
+    console.log(track.path);
+    const audioFile : MediaObject = this.media.create(track.path.replace(/^file:\/\//,''));
+    audioFile.play();
     // if(this.player){
     //   this.player.stop();
     // }

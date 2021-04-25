@@ -6,17 +6,44 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <!-- <ion-input placeholder="Enter Youtube URL..." [(ngModel)]="url"></ion-input>
-    <ion-button color="primary" (click)="verifyUrl()">Download</ion-button> -->
-    <ion-list>
+<ion-content class="ion-text-center">
+    <ion-input class="inputUrl" placeholder="Enter Youtube URL..." [(ngModel)]="url"></ion-input>
+    <ion-button (click)="verifyUrl()" [disabled]="!url">Download</ion-button>
+    <ion-card class="homeContent">
+      <ion-card-title>
+        Welcome
+      </ion-card-title>
+      <ion-card-subtitle>
+        Enter YouTube URL Of Your Favourite Song And Download It At One Click!
+      </ion-card-subtitle>
+      <ion-card-content>
+        <img class="downloadFocus" src="/assets/icon/download-icon.svg"  width="50%">
+      </ion-card-content>
+    </ion-card>
+    <ion-card *ngIf="downloadPercentage > 0">
+      <ion-card-header>
+        {{imgName}}
+      </ion-card-header>
+      <ion-card-content>
+        <img [src]="imgSrc" height="500px" width="100%">
+      </ion-card-content>
+    </ion-card>
+    <!-- <ion-list>
       <ion-item button *ngFor="let track of playlist" (click)="start(track)">
         <ion-label>
           {{track.name}}
         </ion-label>
       </ion-item>
-    </ion-list>
+    </ion-list> -->
 </ion-content>
+<ion-footer *ngIf="downloadPercentage > 0">
+  <ion-card>
+    <ion-label>Downloading...</ion-label>
+    <ion-card-content>
+      <ion-progress-bar [value]="downloadPercentage"></ion-progress-bar>
+    </ion-card-content>
+  </ion-card>
+</ion-footer>
 <ion-footer *ngIf="activeTrack">
   <ion-toolbar>
     <ion-row>
