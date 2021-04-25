@@ -4,6 +4,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
+import { AlertController, ToastController } from '@ionic/angular';
 
 
 @Component({
@@ -12,24 +13,24 @@ import { File } from '@ionic-native/file/ngx';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  url : string="https://www.youtube.com/watch?v=mt9xg0mmt28";
+  url : string="";
   constructor(
     private http: HTTP,
     private transfer: FileTransfer, 
     private file: File,
+    private toast : ToastController
   ) {}
 
 
   ionViewDidEnter(){
-    this.verifyUrl();
+    
   }
 
-  async verifyUrl(){
+   verifyUrl(){
     let videoid = this.url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
     if(videoid != null){
       console.log("video id = ",videoid[1]);
-      let downloadUrl=await this.scrapY2Mate(videoid[1].toString());
-      console.log("downloadUrl",downloadUrl);
+      this.scrapY2Mate(videoid[1].toString());
     }else{ 
       //TODO: add alert for non youtube url 
       console.log("The youtube url is not valid.");
@@ -38,16 +39,16 @@ export class HomePage {
 
   async scrapY2Mate(vid:string){
     try{
-      let kid:string=await this.getVideoKid(vid);
+      let {kid,fileName}=await this.getVideoKid(vid);
       let downloadUrl:string=await this.getDownloadUrl(kid,vid);
       console.log("downloadUrl..", downloadUrl);
-      this.downloadFromUrl(downloadUrl);
+      this.downloadFromUrl(downloadUrl,fileName);
     }catch(err){
 
     }
   }
 
-  getVideoKid(vid:string):Promise<string>{
+  getVideoKid(vid:string):Promise<{kid:string,fileName:string}>{
     return new Promise((resolve,reject)=>{
       this.http.sendRequest(
         'https://www.y2mate.com/mates/analyze/ajax',
@@ -66,14 +67,24 @@ export class HomePage {
       }).then(d=>{
         if(d.data && d.data.result){
           let kid="";
+          let fileName="";
           d.data.result.subs
           let responseString=d.data.result;
           kid=responseString.substring(
             responseString.indexOf('k__id = "')+9,
             responseString.indexOf('"; var video_service')
           );
+          fileName=responseString.substring(
+            responseString.indexOf('<div class="caption text-left"> <b>')+35,
+            responseString.length
+          );
+          fileName=fileName.substring(
+            0,
+            fileName.indexOf('</b>')
+          );
+          fileName=fileName.replace(/\s+/g,'_').replace(/[^a-z0-9]/gi,'-').replace(/--/gi,'')+".mp3";
           if(kid.length>0){
-            resolve(kid);
+            resolve({kid,fileName});
           }else{
             reject("Video id not found");
           }
@@ -112,6 +123,7 @@ export class HomePage {
             responseString.indexOf('<a href="')+9,
             responseString.indexOf('" rel="nofollow"')
           );
+          console.log("getDownloadUrl responseString", responseString);
           if(downloadUrl.length>0){
             resolve(downloadUrl);
           }else{
@@ -124,14 +136,23 @@ export class HomePage {
     });
   }
 
-  downloadFromUrl(downloadUrl){
+  downloadFromUrl(downloadUrl:string,fileName:string){
     const fileTransfer: FileTransferObject = this.transfer.create();
-    fileTransfer.download(encodeURI(downloadUrl), this.file.externalDataDirectory + 'file.mp3').then((entry) => {
-      console.log('download complete: ' + entry.toURL());
+    if(fileName.length<1){
+      fileName=+new Date()+".mp3";
+    }
+    fileTransfer.download(encodeURI(downloadUrl), this.file.externalRootDirectory + '/Download/' + fileName).then(async (entry) => {
+      const toast = await this.toast.create({
+        message: 'Downloaded Successfully',
+        duration: 2000
+      });
+      toast.present();
+      this.url="";
     }, (error) => {
       console.log('error...', error);
     });
 
   }
+
 
 }
