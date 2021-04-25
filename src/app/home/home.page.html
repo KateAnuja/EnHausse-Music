@@ -9,7 +9,7 @@
 <ion-content class="ion-text-center">
     <ion-input class="inputUrl" placeholder="Enter Youtube URL..." [(ngModel)]="url"></ion-input>
     <ion-button (click)="verifyUrl()" [disabled]="!url">Download</ion-button>
-    <ion-card class="homeContent">
+    <ion-card class="homeContent" *ngIf="downloadPercentage == 0">
       <ion-card-title>
         Welcome
       </ion-card-title>
@@ -25,7 +25,7 @@
         {{imgName}}
       </ion-card-header>
       <ion-card-content>
-        <img [src]="imgSrc" height="500px" width="100%">
+        <img [src]="imgSrc" width="100%">
       </ion-card-content>
     </ion-card>
     <!-- <ion-list>

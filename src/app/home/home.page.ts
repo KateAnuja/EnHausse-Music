@@ -8,6 +8,11 @@ import { File } from '@ionic-native/file/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
 import { IonRange } from '@ionic/angular';
 import { Media, MediaObject } from '@ionic-native/media/ngx';
+import { Platform } from '@ionic/angular';
+import { Location } from '@angular/common';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+
+const { IonicPlugin } = Plugins;
 
 export interface Track{
   name : string;
@@ -28,6 +33,7 @@ export class HomePage {
   
   isPlaying = false;
   progress = 0;
+  isExitAlertBoxOpen = false;
   @ViewChild('range', {static : false}) range : IonRange;
   constructor(
     private http: HTTP,
@@ -36,12 +42,65 @@ export class HomePage {
     private toast : ToastController,
     private media : Media,
     private alert : AlertController,
-    private changeDetector : ChangeDetectorRef
-  ) {}
+    private changeDetector : ChangeDetectorRef,
+    private platform: Platform,
+    private location : Location,
+    private screenOrientation: ScreenOrientation
+  ) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      if(this.location.isCurrentPathEqualTo('/home')){
+        this.showExitConfirm();
+      }else{
+        this.location.back();
+      }
 
+      console.log('Handler was called!');
+    });
+
+    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+  }
+
+  showExitConfirm() {
+    if (!this.isExitAlertBoxOpen) {
+        this.isExitAlertBoxOpen = true;
+        this.alert
+            .create({
+                header: "App termination",
+                message: "Do you want to close the app?",
+                backdropDismiss: false,
+                buttons: [
+                    {
+                        text: "Stay",
+                        role: "cancel",
+                        handler: () => {
+                            console.log("Application exit prevented!");
+                            this.isExitAlertBoxOpen = false;
+                        },
+                    },
+                    {
+                        text: "Exit",
+                        handler: () => {
+                            navigator["app"].exitApp();
+                        },
+                    },
+                ],
+            })
+            .then((alert) => {
+                alert.present();
+            });
+    }
+}
+
+  async ionViewWillEnter(){
+    let pluginResponse=await IonicPlugin.getSharedLink();
+    if(pluginResponse.sharedLink && pluginResponse.sharedLink.length>20){
+      this.url=pluginResponse.sharedLink;
+      this.verifyUrl();
+    }
+  }
 
   ionViewDidEnter(){
-    this.getFileList();
+    //this.getFileList();
   }
 
   async getFileList(){
@@ -188,7 +247,7 @@ export class HomePage {
     });
   }
 
-  downloadFromUrl(downloadUrl:string,fileName:string){
+  async downloadFromUrl(downloadUrl:string,fileName:string){
     const fileTransfer: FileTransferObject = this.transfer.create();
     if(fileName.length<1){
       fileName=+new Date()+".mp3";
@@ -201,16 +260,17 @@ export class HomePage {
       this.changeDetector.detectChanges();
 
     })
-
+    await this.file.createDir(this.file.externalCacheDirectory, "Music", true);
     fileTransfer.download(
       encodeURI(downloadUrl), 
-      this.file.externalRootDirectory + '/Download/' + fileName
+      this.file.externalCacheDirectory + '/Music/' + fileName
     ).then(async (entry) => {
       const toast = await this.toast.create({
         message: 'Downloaded Successfully',
         duration: 2000
       });
       toast.present();
+      IonicPlugin.download({fileName});
       this.url="";
       this.downloadPercentage=0;
     }, (error) => {
