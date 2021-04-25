@@ -7,6 +7,39 @@
 </ion-header>
 
 <ion-content>
-    <ion-input placeholder="Enter Youtube URL..." [(ngModel)]="url"></ion-input>
-    <ion-button color="primary" (click)="verifyUrl()">Download</ion-button>
+    <!-- <ion-input placeholder="Enter Youtube URL..." [(ngModel)]="url"></ion-input>
+    <ion-button color="primary" (click)="verifyUrl()">Download</ion-button> -->
+    <ion-list>
+      <ion-item button *ngFor="let track of playlist" (click)="start(track)">
+        <ion-label>
+          {{track.name}}
+        </ion-label>
+      </ion-item>
+    </ion-list>
 </ion-content>
+<ion-footer *ngIf="activeTrack">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        {{activeTrack.name}}
+      </ion-col>
+      <ion-col size="12">
+        <ion-range #range [(ngModel)]="progress" max="100" color="success" (touchend)="seek()"></ion-range>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center">
+        <ion-button fill="clear" (click)="prev()" color="dark">
+          <ion-icon slot="icon-only" name="play-skip-back"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="togglePlayer(false)" *ngIf="!isPlaying" color="dark">
+          <ion-icon slot="icon-only" name="play"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="togglePlayer(true)"  *ngIf="isPlaying" color="dark">
+          <ion-icon slot="icon-only" name="pause"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="next()" color="dark">
+          <ion-icon slot="icon-only" name="play-skip-forward"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
