@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.firebase.crashlytics'
+
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "io.enhausse.ytdownloder"
+        applicationId "in.enhausse.music_app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -26,7 +26,6 @@ repositories {
 }
 
 dependencies {
-    classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
     implementation platform('com.google.firebase:firebase-bom:27.1.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation fileTree(include: ['*.jar'], dir: 'libs')

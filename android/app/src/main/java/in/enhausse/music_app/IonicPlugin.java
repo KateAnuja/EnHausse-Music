@@ -1,4 +1,4 @@
-package io.enhausse.ytdownloder;
+package in.enhausse.music_app;
 
 import android.app.DownloadManager;
 import android.content.Context;
@@ -57,7 +57,7 @@ public class IonicPlugin extends Plugin {
     String fileName = call.getString("fileName");
     File outputFile = new File(getContext().getExternalCacheDir() + "/Music/", fileName);
 
-    Uri uri = FileProvider.getUriForFile(getContext(), "io.enhausse.ytdownloder.fileprovider", outputFile);
+    Uri uri = FileProvider.getUriForFile(getContext(), "in.enhausse.music_app.fileprovider", outputFile);
 
     DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(DOWNLOAD_SERVICE);
     downloadManager.addCompletedDownload(outputFile.getName(), outputFile.getName(), true, "audio/mpeg", outputFile.getAbsolutePath(), outputFile.length(), true);

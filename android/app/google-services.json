@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "140019815896",
+    "project_id": "enhausse-music-app",
+    "storage_bucket": "enhausse-music-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140019815896:android:7881023e7ec394efb5cead",
+        "android_client_info": {
+          "package_name": "in.enhausse.music_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "140019815896-ecf8arh86seeoaskoc5cgqq9lbvfhotm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcrr1TWBDS8wr5ojdZFPF-9WNmIKFdBjU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "140019815896-ecf8arh86seeoaskoc5cgqq9lbvfhotm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
