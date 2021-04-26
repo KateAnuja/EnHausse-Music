@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>search</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-input #searchInput (ionChange)="searchTerm()"></ion-input>
+
+  <p *ngFor="let sugession of suggestionArray" (click)="getSearchResults(sugession)">{{sugession}}</p>
+  <ion-card *ngFor="let searchResult of searchResultArray" >
+    <p>{{searchResult.title}}</p>
+    <p>{{searchResult.videoId}}</p>
+    <img [src]="searchResult.thumbnail" width="50px"/>
+    <p>{{searchResult.duration}}</p>
+  </ion-card>
+
+</ion-content>
