@@ -56,8 +56,9 @@ export class HomePage {
 
       console.log('Handler was called!');
     });
-
-    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    if(this.platform.is("hybrid")){
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    }
   }
 
   showExitConfirm() {

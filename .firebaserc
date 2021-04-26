@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "enhausse-music-app": {
+      "hosting": {
+        "app": [
+          "enhausse-music-app"
+        ]
+      }
+    }
+  }
+}

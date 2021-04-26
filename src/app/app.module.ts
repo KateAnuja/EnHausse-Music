@@ -12,6 +12,7 @@ import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Media } from '@ionic-native/media/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +26,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
     File,
     Media,
     ScreenOrientation,
+    FirebaseCrashlytics
   ],
   bootstrap: [AppComponent],
 })

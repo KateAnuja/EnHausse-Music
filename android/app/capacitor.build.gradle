@@ -10,9 +10,10 @@ android {
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
 
-
+    implementation "com.google.firebase:firebase-analytics:17.4.3"
+    implementation "com.google.firebase:firebase-crashlytics:17.1.0"
 }
-
+apply from: "../../node_modules/cordova-plugin-firebase-crashlytics/firebase-crashlytics.gradle"
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

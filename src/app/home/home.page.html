@@ -1,25 +1,20 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      YT Downloader
-    </ion-title>
-  </ion-toolbar>
+<ion-header class="header">
+  <div class="cardHeader"></div>
 </ion-header>
 
 <ion-content class="ion-text-center">
-    <ion-input class="inputUrl" placeholder="Enter Youtube URL..." [(ngModel)]="url"></ion-input>
+    <img src="/assets/icon/logo.png" height="150px" width="150px">
+    <ion-input class="inputUrl" placeholder="Search OR Enter YouTube URL Here" [(ngModel)]="url"></ion-input>
     <ion-button (click)="verifyUrl()" [disabled]="!url">Download</ion-button>
-    <ion-card class="homeContent" *ngIf="downloadPercentage == 0">
-      <ion-card-title>
-        Welcome
-      </ion-card-title>
-      <ion-card-subtitle>
-        Enter YouTube URL Of Your Favourite Song And Download It At One Click!
-      </ion-card-subtitle>
+    <!-- <ion-card class="homeContent" *ngIf="downloadPercentage == 0">
+      <ion-card-header>
+        <ion-card-title>
+        </ion-card-title>
+      </ion-card-header>
       <ion-card-content>
         <img class="downloadFocus" src="/assets/icon/download-icon.svg"  width="50%">
       </ion-card-content>
-    </ion-card>
+    </ion-card> -->
     <ion-card *ngIf="downloadPercentage > 0">
       <ion-card-header>
         {{imgName}}

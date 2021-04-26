@@ -1,6 +1,6 @@
 {
-  "appId": "io.enhausse.ytdownloder",
-  "appName": "YT-Downloader",
+  "appId": "in.enhausse.music_app",
+  "appName": "EnHausse Music App",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
