@@ -10,7 +10,9 @@ import { IonRange } from '@ionic/angular';
 import { Media, MediaObject } from '@ionic-native/media/ngx';
 import { Platform } from '@ionic/angular';
 import { Location } from '@angular/common';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+
+import { ActivatedRoute, Router } from '@angular/router';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 const { IonicPlugin } = Plugins;
 
@@ -36,6 +38,8 @@ export class HomePage {
   isExitAlertBoxOpen = false;
   @ViewChild('range', {static : false}) range : IonRange;
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private http: HTTP,
     private transfer: FileTransfer, 
     private file: File,
@@ -45,7 +49,7 @@ export class HomePage {
     private changeDetector : ChangeDetectorRef,
     private platform: Platform,
     private location : Location,
-    private screenOrientation: ScreenOrientation
+    private splashScreen: SplashScreen,
   ) {
     this.platform.backButton.subscribeWithPriority(10, () => {
       if(this.location.isCurrentPathEqualTo('/home')){
@@ -54,11 +58,9 @@ export class HomePage {
         this.location.back();
       }
 
-      console.log('Handler was called!');
     });
-    if(this.platform.is("hybrid")){
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-    }
+
+    
   }
 
   showExitConfirm() {
@@ -66,7 +68,7 @@ export class HomePage {
         this.isExitAlertBoxOpen = true;
         this.alert
             .create({
-                header: "App termination",
+                header: "Close App?",
                 message: "Do you want to close the app?",
                 backdropDismiss: false,
                 buttons: [
@@ -98,9 +100,16 @@ export class HomePage {
       this.url=pluginResponse.sharedLink;
       this.verifyUrl();
     }
+
+    this.route.queryParams.subscribe(params => { 
+      if(params.videoId && params.videoId.length>0){
+        this.scrapY2Mate(params.videoId);
+      }
+    });
   }
 
   ionViewDidEnter(){
+    this.splashScreen.hide();
     //this.getFileList();
   }
 
@@ -127,8 +136,7 @@ export class HomePage {
     }else{ 
       //TODO: add alert for non youtube url 
       const alert = await this.alert.create({
-        cssClass: 'my-custom-class',
-        header: 'Alert',
+        header: 'Ohh No...',
         message: 'Please Enter Valid YouTube URL.',
         buttons: ['OK']
       });
@@ -248,18 +256,25 @@ export class HomePage {
     });
   }
 
+  lastUpdateValue=0;
+  lastProgress=0;
   async downloadFromUrl(downloadUrl:string,fileName:string){
     const fileTransfer: FileTransferObject = this.transfer.create();
     if(fileName.length<1){
       fileName=+new Date()+".mp3";
     }
-    
-    fileTransfer.onProgress((event)=>{
-      console.log("download progress...", event);
-      let percentage = ((((event.loaded * 100)/event.total)*0.9)+10)/100;
-      this.downloadPercentage=percentage;
-      this.changeDetector.detectChanges();
 
+    fileTransfer.onProgress((event)=>{
+      let progress = ((((event.loaded * 100)/event.total)*0.9)+10)/100;
+      if(this.lastProgress<progress){
+        this.lastProgress=progress;
+      }
+      if(this.lastUpdateValue<progress){
+        this.lastUpdateValue=progress+0.2;
+        this.downloadPercentage=this.lastProgress;
+        this.changeDetector.detectChanges(); 
+      }
+       
     })
     await this.file.createDir(this.file.externalCacheDirectory, "Music", true);
     fileTransfer.download(
@@ -274,6 +289,9 @@ export class HomePage {
       IonicPlugin.download({fileName});
       this.url="";
       this.downloadPercentage=0;
+      this.lastUpdateValue=0;
+      this.lastProgress=0;
+      this.router.navigate(['home']);
     }, (error) => {
       console.error('error...', error);
     });
@@ -281,7 +299,6 @@ export class HomePage {
   }
 
   start(track : Track){
-    console.log(track.path);
     const audioFile : MediaObject = this.media.create(track.path.replace(/^file:\/\//,''));
     audioFile.play();
     // if(this.player){
@@ -347,5 +364,8 @@ export class HomePage {
     }, 1000);
   }
 
+  openSearch(){
+    this.router.navigate(['search']);
+  }
 
 }

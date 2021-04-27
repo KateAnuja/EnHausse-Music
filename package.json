@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "cap-run": "ionic cap sync && ionic cap run android"
+    "cap-run": "ionic cap sync && ionic cap run android",
+    "cap-run-prod": "ionic cap sync --prod && ionic cap run android"
   },
   "private": true,
   "dependencies": {

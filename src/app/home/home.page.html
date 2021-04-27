@@ -4,7 +4,7 @@
 
 <ion-content class="ion-text-center">
     <img src="/assets/icon/logo.png" height="150px" width="150px">
-    <ion-input class="inputUrl" placeholder="Search OR Enter YouTube URL Here" [(ngModel)]="url"></ion-input>
+    <ion-input (click)="openSearch()" class="inputUrl" placeholder="Search For Song Here" [(ngModel)]="url"></ion-input>
     <ion-button (click)="verifyUrl()" [disabled]="!url">Download</ion-button>
     <!-- <ion-card class="homeContent" *ngIf="downloadPercentage == 0">
       <ion-card-header>

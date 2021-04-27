@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
 import { Platform } from '@ionic/angular';
 
@@ -11,7 +10,7 @@ import { Platform } from '@ionic/angular';
 })
 export class AppComponent {
   constructor(
-    private splashScreen: SplashScreen,
+    private screenOrientation: ScreenOrientation,
     private firebaseCrashlytics: FirebaseCrashlytics,
     private platform : Platform
   ) {
@@ -19,8 +18,10 @@ export class AppComponent {
     this.initializeApp();
   }
 
-  ionViewDidEnter(){
-    this.splashScreen.hide();
+  ionViewWillEnter(){
+    if(this.platform.is("hybrid")){
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    }
   }
 
   initializeApp(){
