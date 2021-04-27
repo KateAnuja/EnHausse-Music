@@ -13,6 +13,7 @@ import { File } from '@ionic-native/file/ngx';
 import { Media } from '@ionic-native/media/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
+import { FCM } from '@capacitor-community/fcm';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,7 +27,8 @@ import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
     File,
     Media,
     ScreenOrientation,
-    FirebaseCrashlytics
+    FirebaseCrashlytics,
+    FCM,
   ],
   bootstrap: [AppComponent],
 })

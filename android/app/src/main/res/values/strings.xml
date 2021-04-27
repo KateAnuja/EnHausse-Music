@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">YT-Downloader</string>
-    <string name="title_activity_main">YT-Downloader</string>
+    <string name="app_name">EnHausse Music App</string>
+    <string name="title_activity_main">EnHausse Music App</string>
     <string name="package_name">in.enhausse.music_app</string>
     <string name="custom_url_scheme">in.enhausse.music_app</string>
 </resources>
