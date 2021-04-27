@@ -148,16 +148,21 @@ export class HomePage {
     
   }
 
+  currentlyDownloading="";
   async scrapY2Mate(vid:string){
-    try{
-      let {kid,fileName}=await this.getVideoKid(vid);
-      this.downloadPercentage+=0.04;
-      let downloadUrl:string=await this.getDownloadUrl(kid,vid);
-      this.downloadPercentage+=0.05;
-      this.downloadFromUrl(downloadUrl,fileName);
-    }catch(err){
-
+    if(this.currentlyDownloading!=vid){
+      this.currentlyDownloading=vid;
+      try{
+        let {kid,fileName}=await this.getVideoKid(vid);
+        this.downloadPercentage+=0.04;
+        let downloadUrl:string=await this.getDownloadUrl(kid,vid);
+        this.downloadPercentage+=0.05;
+        this.downloadFromUrl(downloadUrl,fileName);
+      }catch(err){
+  
+      }
     }
+    
   }
 
   getVideoKid(vid:string):Promise<{kid:string,fileName:string}>{
@@ -288,6 +293,7 @@ export class HomePage {
       toast.present();
       IonicPlugin.download({fileName});
       this.url="";
+      this.currentlyDownloading="";
       this.downloadPercentage=0;
       this.lastUpdateValue=0;
       this.lastProgress=0;
