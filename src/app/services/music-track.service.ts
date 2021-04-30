@@ -24,9 +24,31 @@ export class MusicTrackService {
 
   }
 
-  addToPlaylist(path : string){
-  
+  async addToPlaylist(musicTrack: MusicTrack,playlistName:string){
+
+    this.getAllLocalTracks()
+    .then(async (musicArray)=>{
+      for(let i=0;i<musicArray.length;i++){
+        if(musicTrack.path == musicArray[i].path){
+          // musicArray[i].isFavourite = !musicArray[i].isFavourite;
+          // let favCount:number = (await this.storage.get(Constants.DB.COUNT_FAVOURITE) || 0);
+          // if(musicArray[i].isFavourite){favCount++}
+          // else{favCount--}
+          // this.storage.set(Constants.DB.COUNT_FAVOURITE,favCount);
+          musicArray[i].playlist.push(playlistName);
+          this.setPlaylistMusicTracksCount(playlistName,true);
+    
+          
+          break;
+        }
+      }
+      this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(musicArray));
+    })
+
+    
   }
+
+  
 
   async toggleFavourite(path : string){
     this.getAllLocalTracks()
@@ -111,6 +133,21 @@ export class MusicTrackService {
       })
     }
     return playlistArr;
+  }
+
+  async setPlaylistMusicTracksCount(playlistName:string,toAdd:boolean=true){
+    let incrementor=+1;
+    if(!toAdd){
+      incrementor=-1;
+    }
+    let playlistDbObj={};
+    try{ 
+      playlistDbObj=JSON.parse(await this.storage.get(Constants.DB.MODEL_PLAYLIST) || Constants.STRING_EMPTY_OBJECT);
+    }catch(err){
+
+    } 
+    playlistDbObj[playlistName].count+=incrementor;
+    await this.storage.set(Constants.DB.MODEL_PLAYLIST, JSON.stringify(playlistDbObj));
   }
 
   async createMockData(){

@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { HTTP } from '@ionic-native/http/ngx';
 import { IonInput } from '@ionic/angular';
+import { Constants } from '../util/constants';
 
 interface SearchData{
   title:string,
@@ -108,7 +109,7 @@ export class SearchPage implements OnInit {
       {
         "x-youtube-client-name":"2",
         "x-youtube-client-version":`2.${clienVersion}`,
-        "user-agent":"Mozilla/5.0 (Linux; Android 6.0.1; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Mobile Safari/537.36"
+        "user-agent":Constants.USER_AGENT
       }
     ).then((res)=>{
       try{

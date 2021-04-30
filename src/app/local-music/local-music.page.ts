@@ -3,6 +3,10 @@ import { AlertController } from '@ionic/angular';
 import { MusicTrack, MusicTrackUtil, SortByMusicTrack } from '../model/track';
 import { MusicTrackService } from '../services/music-track.service';
 import { ActionSheetController } from '@ionic/angular';
+import { PopoverController } from '@ionic/angular';
+import { Playlist } from '../model/playlist';
+
+
 
 
 @Component({
@@ -17,12 +21,14 @@ export class LocalMusicPage {
   musicArray : MusicTrack[]=[];
   filteredMusicArray : MusicTrack[]=[];
   trackInput : string = "";
+  playlistArray : Playlist[]=[];
   
   constructor(
     private musicTrackService : MusicTrackService,
     private alertController : AlertController,
     private changeDetector : ChangeDetectorRef,
     private actionSheetController: ActionSheetController,
+    public popoverController: PopoverController,
   ) { }
 
   ionViewWillEnter(){
@@ -30,7 +36,7 @@ export class LocalMusicPage {
   }
 
   ionViewDidEnter(){
-
+    this.getPlaylist();
   }
 
   ionViewWillLeave(){
@@ -139,7 +145,43 @@ export class LocalMusicPage {
     musicTrack.isFavourite=!musicTrack.isFavourite;
     this.musicTrackService.toggleFavourite(musicTrack.path);
   }
+
+  async addToPlaylist(musicTrack:MusicTrack){
+    let buttonConfigArray=[];
+    for(let i=0;i<this.playlistArray.length;i++){
+      buttonConfigArray.push({
+        text:this.playlistArray[i].name,
+        handler: ()=>{
+          if(musicTrack.playlist.indexOf(this.playlistArray[i].name)==-1){
+            this.musicTrackService.addToPlaylist(
+              musicTrack,
+              this.playlistArray[i].name
+            )
+          }
+        }
+      });
+    }
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Add To Playlist',
+      buttons: buttonConfigArray
+    });
+    await actionSheet.present();
+  }
+
+  deleteFormPlaylist(musicTrack:MusicTrack){
+
+  }
+
+  openTrackMenu(){
+
+  }
+
+  async getPlaylist(){
+    this.playlistArray=await this.musicTrackService.getPlaylist();
+  }
+
   
+
 }
 
 

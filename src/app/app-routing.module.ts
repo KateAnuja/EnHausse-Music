@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'playlist',
+    redirectTo: 'local-music',
     pathMatch: 'full'
   },
   {
