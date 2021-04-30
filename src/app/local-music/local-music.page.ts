@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { MusicTrack } from '../model/track';
 import { MusicTrackService } from '../services/music-track.service';
@@ -13,9 +13,12 @@ import { MusicTrackService } from '../services/music-track.service';
 
 export class LocalMusicPage {
   musicArray : MusicTrack[]=[];
+  filteredMusicArray : MusicTrack[]=[];
+  trackInput : string = "";
   constructor(
     private musicTrackService : MusicTrackService,
-    private alertController : AlertController
+    private alertController : AlertController,
+    private changeDetector : ChangeDetectorRef,
   ) { }
 
   ionViewWillEnter(){
@@ -36,7 +39,7 @@ export class LocalMusicPage {
 
   async getMusicArray(){
     this.musicArray= await this.musicTrackService.getAllLocalTracks();
-    console.log("musicArray", this.musicArray);
+    this.filteredMusicArray = this.musicArray;
   }
 
   async addMockMusicTrack(){
@@ -48,6 +51,17 @@ export class LocalMusicPage {
     });
 
      alert.present();
+  }
+
+  searchTrack(){
+     let filteredMusicArray = [];
+     this.musicArray.forEach((track)=>{
+      if(track.name.indexOf(this.trackInput) != -1){
+        filteredMusicArray.push(track);
+      }
+     })
+     this.filteredMusicArray = filteredMusicArray;
+     this.changeDetector.detectChanges();
   }
 
 }
