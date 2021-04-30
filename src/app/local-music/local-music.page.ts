@@ -118,6 +118,11 @@ export class LocalMusicPage {
     this.changeDetector.detectChanges();
   }
 
+  toggleFavourite(musicTrack:MusicTrack){
+    musicTrack.isFavourite=!musicTrack.isFavourite;
+    this.musicTrackService.toggleFavourite(musicTrack.path);
+  }
+
 }
 
 

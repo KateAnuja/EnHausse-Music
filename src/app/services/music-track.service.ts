@@ -27,8 +27,17 @@ export class MusicTrackService {
 
   }
 
-  toggleFavourite(path : string){
-
+  async toggleFavourite(path : string){
+    this.getAllLocalTracks()
+    .then((musicArray)=>{
+      for(let i=0;i<musicArray.length;i++){
+        if(path == musicArray[i].path){
+         musicArray[i].isFavourite = !musicArray[i].isFavourite; 
+         break;
+        }
+      }
+      this.storage.set("tracks",JSON.stringify(musicArray));
+    })
   }
 
   get20LocalTracks(){
