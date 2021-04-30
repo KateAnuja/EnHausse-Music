@@ -1,4 +1,13 @@
 export class Constants{
+  public static STRING_EMPTY_OBJECT="{}";
+  public static STRING_EMPTY_ARRAY="[]";
+
+  public static DB = {
+    MODEL_PLAYLIST:"playlist",
+    MODEL_MUSIC_TRACK:"music_track",
+    COUNT_FAVOURITE:"count_favourite"
+  }
+
     public static SONG_WORD_ARRAY = [
         "tere", "naina", "rab", "dil", 
       "tu", "jaane", "kyu", "log" , 
