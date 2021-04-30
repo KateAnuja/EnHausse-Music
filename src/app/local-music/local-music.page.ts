@@ -49,7 +49,12 @@ export class LocalMusicPage {
     const alert = await this.alertController.create({
       header: 'Success',
       message: 'Music Track Added.',
-      buttons: ['OK']
+      buttons: [{
+          text: 'OK',
+          handler: () => {
+            this.getMusicArray();
+          }
+      }]
     });
 
      alert.present();

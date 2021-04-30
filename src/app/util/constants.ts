@@ -5,7 +5,13 @@ export class Constants{
       "aankhien", "pyaar", "mere", 
       "aap", "hum", "tum", "muzse",
       "pahle", "naach", "jaan",
-      "maula", "de", "sanam"
+      "maula", "de", "sanam",
+      "dhokebaaz", "dard", "dukh",
+      "dhoka", "roya", "aassu",
+      "bewafa", "layak", "nahi",
+      "bhool", "mayus", "massom",
+      "noor", "channd", "intezaar",
+      "fizzaye"
     ];
 
     public static TUMBNAIL_ARRAY = [

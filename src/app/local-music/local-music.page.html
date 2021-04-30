@@ -14,6 +14,9 @@
   <ion-virtual-scroll [items]="filteredMusicArray" approxItemHeight="320px">
     <ion-card *virtualItem="let item; let itemBounds = bounds;">
       <ion-card-header>
+        <ion-thumbnail>
+          <ion-img [src]="item.thumbnail"></ion-img>
+        </ion-thumbnail>
         <ion-card-title>{{ item.name }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
