@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MusicTrack } from '../model/track';
+import { MusicTrack, MusicTrackUtil, SortByMusicTrack } from '../model/track';
 import { Constants } from '../util/constants';
 import { Utility } from '../util/utility';
 import { Storage } from '@ionic/storage';
@@ -71,9 +71,11 @@ export class MusicTrackService {
         duration : Utility.randomNumber(3*60*1000,8*60*1000),
         thumbnail : Constants.TUMBNAIL_ARRAY[Utility.randomNumber(0,Constants.TUMBNAIL_ARRAY.length)],
         playlist : [],
-        isFavourite : false
+        isFavourite : false,
+        addedTimeStamp : Utility.randomNumber(1612117800000,1619721000000)
       })
     }
+    mockDataArray = MusicTrackUtil.sort(SortByMusicTrack.A_TO_Z, mockDataArray);
     await this.storage.set("tracks",JSON.stringify(mockDataArray));
   }
 }
