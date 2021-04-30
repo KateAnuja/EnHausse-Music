@@ -1,39 +1,28 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { HTTP } from '@ionic-native/http/ngx';
-
-
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
 import { IonRange } from '@ionic/angular';
-import { Media, MediaObject } from '@ionic-native/media/ngx';
 import { Platform } from '@ionic/angular';
 import { Location } from '@angular/common';
-
 import { ActivatedRoute, Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 const { IonicPlugin } = Plugins;
 
-export interface Track{
-  name : string;
-  path : string;
-}
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  playlist : Track[]=[];
   url : string="";
-  activeTrack : Track = null;
   downloadPercentage : number = 0;
   imgSrc : any;
   imgName : any;
-  
-  isPlaying = false;
   progress = 0;
   isExitAlertBoxOpen = false;
   @ViewChild('range', {static : false}) range : IonRange;
@@ -44,7 +33,6 @@ export class HomePage {
     private transfer: FileTransfer, 
     private file: File,
     private toast : ToastController,
-    private media : Media,
     private alert : AlertController,
     private changeDetector : ChangeDetectorRef,
     private platform: Platform,
@@ -57,10 +45,7 @@ export class HomePage {
       }else{
         this.location.back();
       }
-
     });
-
-    
   }
 
   showExitConfirm() {
@@ -110,22 +95,6 @@ export class HomePage {
 
   ionViewDidEnter(){
     this.splashScreen.hide();
-    //this.getFileList();
-  }
-
-  async getFileList(){
-    let dirs=await this.file.listDir(this.file.externalRootDirectory,"Download");
-    dirs.forEach((dir)=>{
-      if(dir.isFile && dir.fullPath.indexOf(".mp3")!=-1){
-        this.playlist.push({
-          name:dir.fullPath.substring(
-            dir.fullPath.lastIndexOf("/")+1,
-            dir.fullPath.lastIndexOf(".mp3")
-          ).replace(/-/gi,' '),
-          path:dir.nativeURL
-        });
-      }
-    })
   }
 
   async verifyUrl(){
@@ -134,7 +103,6 @@ export class HomePage {
       this.downloadPercentage=0.01;
       this.scrapY2Mate(videoid[1].toString());
     }else{ 
-      //TODO: add alert for non youtube url 
       const alert = await this.alert.create({
         header: 'Ohh No...',
         message: 'Please Enter Valid YouTube URL.',
@@ -143,9 +111,6 @@ export class HomePage {
   
        alert.present();
     }
-
-    
-    
   }
 
   currentlyDownloading="";
@@ -302,72 +267,6 @@ export class HomePage {
       console.error('error...', error);
     });
 
-  }
-
-  start(track : Track){
-    const audioFile : MediaObject = this.media.create(track.path.replace(/^file:\/\//,''));
-    audioFile.play();
-    // if(this.player){
-    //   this.player.stop();
-    // }
-    // this.player = new Howl({
-    //   src : [track.path],
-    //   html5 : true,
-    //   onplay: () => {
-    //     this.isPlaying = true;
-        this.activeTrack = track; 
-    //     this.updateProgress();
-    //   },
-    //   onend: () => {
-    //     console.log("onend");
-    //   }
-    // });
-    // this.player.play();
-  }
-
-  togglePlayer(pause){
-    this.isPlaying = !pause;
-    if(pause){
-      //this.player.pause();
-      this.isPlaying = false;
-    }else{
-      //this.player.play(); 
-      this.isPlaying = true;
-    }
-
-  }
-
-  next(){
-    let index= this.playlist.indexOf(this.activeTrack);
-    if(index != this.playlist.length-1){
-      this.start(this.playlist[index+1])
-    }else{
-      this.start(this.playlist[0]);
-    }
-  }
-
-  prev(){
-    let index= this.playlist.indexOf(this.activeTrack);
-    if(index>0){
-      this.start(this.playlist[index-1])
-    }else{
-      this.start(this.playlist[this.playlist.length-1]);
-    }
-
-  }
-
-  seek(){
-    let newValue= +this.range.value;
-    //let duration= this.player.duration();
-    //this.player.seek(duration * (newValue/100));
-  }
-
-  updateProgress(){
-    //let seek= this.player.seek();
-    //this.progress= (seek/this.player.duration())*100 || 0;
-    setTimeout(()=>{
-      this.updateProgress()
-    }, 1000);
   }
 
   openSearch(){

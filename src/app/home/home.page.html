@@ -1,11 +1,9 @@
-<ion-header class="header">
-  <div class="cardHeader"></div>
-</ion-header>
 
 <ion-content class="ion-text-center">
+  <div *ngIf="downloadPercentage == 0" class="cardHeader"></div>
     <img src="/assets/icon/logo.png" height="150px" width="150px">
-    <ion-input (click)="openSearch()" class="inputUrl" placeholder="Search For Song Here" [(ngModel)]="url"></ion-input>
-    <ion-button (click)="verifyUrl()" [disabled]="!url">Download</ion-button>
+    <ion-input (click)="openSearch()" *ngIf="downloadPercentage == 0" class="inputUrl" placeholder="Search For Song Here" [(ngModel)]="url"></ion-input>
+    <ion-button (click)="verifyUrl()" *ngIf="downloadPercentage == 0" [disabled]="!url">Download</ion-button>
     <!-- <ion-card class="homeContent" *ngIf="downloadPercentage == 0">
       <ion-card-header>
         <ion-card-title>
@@ -39,29 +37,4 @@
     </ion-card-content>
   </ion-card>
 </ion-footer>
-<ion-footer *ngIf="activeTrack">
-  <ion-toolbar>
-    <ion-row>
-      <ion-col size="12" class="ion-text-center">
-        {{activeTrack.name}}
-      </ion-col>
-      <ion-col size="12">
-        <ion-range #range [(ngModel)]="progress" max="100" color="success" (touchend)="seek()"></ion-range>
-      </ion-col>
-      <ion-col size="12" class="ion-text-center">
-        <ion-button fill="clear" (click)="prev()" color="dark">
-          <ion-icon slot="icon-only" name="play-skip-back"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" (click)="togglePlayer(false)" *ngIf="!isPlaying" color="dark">
-          <ion-icon slot="icon-only" name="play"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" (click)="togglePlayer(true)"  *ngIf="isPlaying" color="dark">
-          <ion-icon slot="icon-only" name="pause"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" (click)="next()" color="dark">
-          <ion-icon slot="icon-only" name="play-skip-forward"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-toolbar>
-</ion-footer>
+
