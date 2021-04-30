@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { HTTP } from '@ionic-native/http/ngx';
 import { IonInput } from '@ionic/angular';
 
@@ -113,14 +113,17 @@ export class SearchPage implements OnInit {
     ).then((res)=>{
       try{
         let data=JSON.parse(res.data);
-        let videoArr=data.response.contents.sectionListRenderer.contents[0].itemSectionRenderer.contents;
+        let videoArr=data.response
+        .contents.sectionListRenderer
+        .contents[0].itemSectionRenderer.contents;
         videoArr.forEach(videoEl => {
           let title="",thumbnail="",videoId="",duration="";
           try{
             title=videoEl.compactVideoRenderer.title.runs[0].text;
             thumbnail=videoEl.compactVideoRenderer.thumbnail.thumbnails[0].url;
             videoId=videoEl.compactVideoRenderer.videoId;
-            duration=videoEl.compactVideoRenderer.lengthText.accessibility.accessibilityData.label;
+            duration=videoEl.compactVideoRenderer.lengthText
+            .accessibility.accessibilityData.label;
           }catch(err){}
           if(title.length>0 && videoId!=""){
             this.searchResultArray.push({

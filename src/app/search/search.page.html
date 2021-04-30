@@ -3,24 +3,38 @@
 </ion-header>
 
 <ion-content>
-  <ion-input class="inputUrl" #searchInput (ionChange)="searchTerm()" placeholder="Type here.."></ion-input>
+  <ion-input 
+    class="inputUrl" 
+    #searchInput 
+    (ionChange)="searchTerm()" 
+    placeholder="Type here..">
+  </ion-input>
 
 
-  <ion-item *ngFor="let sugession of suggestionArray" (click)="getSearchResults(sugession)">{{sugession}}</ion-item>
+  <ion-item 
+    *ngFor="let sugession of suggestionArray" 
+    (click)="getSearchResults(sugession)">
+    {{sugession}}
+  </ion-item>
   
   
-  <ion-card *ngFor="let searchResult of searchResultArray" >
-
-    <ion-item button (click)="downloadVideo(searchResult.videoId)">
-      <ion-avatar slot="start">
+  <ion-card 
+    *ngFor="let searchResult of searchResultArray">
+    <ion-item 
+      button 
+      (click)="downloadVideo(searchResult.videoId)">
+      <ion-avatar 
+        slot="start">
         <img [src]="searchResult.thumbnail">
       </ion-avatar>
       <ion-label>
-        
-        <h2>{{searchResult.title}}</h2>
-        <p>{{searchResult.duration}}</p>
+          <h2>
+            {{searchResult.title}}
+          </h2>
+          <p>
+            {{searchResult.duration}}
+          </p>
       </ion-label>
     </ion-item>
   </ion-card>
-
 </ion-content>

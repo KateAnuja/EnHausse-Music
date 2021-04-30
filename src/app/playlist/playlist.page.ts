@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Playlist } from '../model/playlist';
 import { MusicTrackService } from '../services/music-track.service';
@@ -46,11 +46,13 @@ export class PlaylistPage {
   }
 
   async deletePlaylist(playlistObj:Playlist){
-    console.log("count", playlistObj.count);
     if(playlistObj.count > 1){
       const alert = await this.alertController.create({
         header: 'Warning',
-        message: `Are you sure to delete ${playlistObj.name} having ${playlistObj.count} songs?`,
+        message: `Are you sure to delete 
+                  ${playlistObj.name} 
+                  having ${playlistObj.count} songs?`
+                  .replace(/\n/gi,'').replace(/\t/gi,''),
         buttons: [
           {
               text: 'DELETE',
