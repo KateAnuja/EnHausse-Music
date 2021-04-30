@@ -3,8 +3,8 @@ import { AlertController } from '@ionic/angular';
 import { MusicTrack, MusicTrackUtil, SortByMusicTrack } from '../model/track';
 import { MusicTrackService } from '../services/music-track.service';
 import { ActionSheetController } from '@ionic/angular';
-import { PopoverController } from '@ionic/angular';
 import { Playlist } from '../model/playlist';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -22,17 +22,25 @@ export class LocalMusicPage {
   filteredMusicArray : MusicTrack[]=[];
   trackInput : string = "";
   playlistArray : Playlist[]=[];
+  activePlaylist : string = "";
   
   constructor(
     private musicTrackService : MusicTrackService,
     private alertController : AlertController,
     private changeDetector : ChangeDetectorRef,
     private actionSheetController: ActionSheetController,
-    public popoverController: PopoverController,
+    private activatedRoute: ActivatedRoute,
+
   ) { }
 
   ionViewWillEnter(){
-    this.getMusicArray();
+    
+    this.activatedRoute.params.subscribe(params=>{
+      if(params && params.playlistName){
+        this.activePlaylist=params.playlistName;
+      }
+      this.getMusicArray();
+    });
   }
 
   ionViewDidEnter(){
@@ -48,7 +56,19 @@ export class LocalMusicPage {
   }
 
   async getMusicArray(){
-    this.musicArray= await this.musicTrackService.getAllLocalTracks();
+    let musicArray= await this.musicTrackService.getAllLocalTracks();
+    if(this.activePlaylist==""){
+      this.musicArray=musicArray;
+    }else{
+      let musicInPlaylistArray=[];
+      musicArray.forEach((musicTrack:MusicTrack)=>{
+        console.log(musicTrack.playlist);
+        if(musicTrack.playlist.indexOf(this.activePlaylist)!=-1){
+          musicInPlaylistArray.push(musicTrack);
+        }
+      });
+      this.musicArray=musicInPlaylistArray;
+    }
     this.filteredMusicArray = this.musicArray;
   }
 

@@ -17,7 +17,8 @@
     [items]="playlistArray" 
     approxItemHeight="320px">
     <ion-card 
-      *virtualItem="let item; let itemBounds = bounds;">
+      *virtualItem="let item; let itemBounds = bounds;"
+      (click)="openPlaylist(item)">
       <ion-card-header>
         <ion-card-title>
           {{ item.name }}

@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Playlist } from '../model/playlist';
 import { MusicTrackService } from '../services/music-track.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-playlist',
@@ -13,9 +14,10 @@ export class PlaylistPage {
   playlist = "";
   
   constructor(
+    private router : Router,
     private musicTrackService : MusicTrackService,
     private chnageDetector : ChangeDetectorRef,
-    private alertController : AlertController
+    private alertController : AlertController,
   ) { }
 
   ionViewWillEnter(){
@@ -74,6 +76,10 @@ export class PlaylistPage {
       await this.musicTrackService.deletePlaylist(playlistObj);
     }
     this.getPlaylist();
+  }
+
+  openPlaylist(playlistObj:Playlist){
+    this.router.navigate([`/local-music/${playlistObj.name}`])
   }
 
 }

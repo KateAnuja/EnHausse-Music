@@ -7,6 +7,9 @@ const routes: Routes = [
   {
     path: '',
     component: LocalMusicPage
+  },{
+    path:':playlistName',
+    component: LocalMusicPage
   }
 ];
 
