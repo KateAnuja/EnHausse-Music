@@ -5,6 +5,7 @@ import { MusicTrackService } from '../services/music-track.service';
 import { ActionSheetController } from '@ionic/angular';
 import { Playlist } from '../model/playlist';
 import { ActivatedRoute } from '@angular/router';
+import { Constants } from '../util/constants';
 
 
 
@@ -20,9 +21,9 @@ export class LocalMusicPage {
 
   musicArray : MusicTrack[]=[];
   filteredMusicArray : MusicTrack[]=[];
-  trackInput : string = "";
+  trackInput : string = Constants.STRING_EMPTY_STRING;
   playlistArray : Playlist[]=[];
-  activePlaylist : string = "";
+  activePlaylist : string = Constants.STRING_EMPTY_STRING;
   
   constructor(
     private musicTrackService : MusicTrackService,
@@ -57,12 +58,19 @@ export class LocalMusicPage {
 
   async getMusicArray(){
     let musicArray= await this.musicTrackService.getAllLocalTracks();
-    if(this.activePlaylist==""){
+    if(this.activePlaylist==Constants.STRING_EMPTY_STRING){
       this.musicArray=musicArray;
+    }else if(this.activePlaylist==Constants.STRING_PLAYLIST_FAV){
+      let musicInPlaylistArray=[];
+      musicArray.forEach((musicTrack:MusicTrack)=>{
+        if(musicTrack.isFavourite){
+          musicInPlaylistArray.push(musicTrack);
+        }
+      });
+      this.musicArray=musicInPlaylistArray;
     }else{
       let musicInPlaylistArray=[];
       musicArray.forEach((musicTrack:MusicTrack)=>{
-        console.log(musicTrack.playlist);
         if(musicTrack.playlist.indexOf(this.activePlaylist)!=-1){
           musicInPlaylistArray.push(musicTrack);
         }

@@ -3,6 +3,7 @@ import { AlertController } from '@ionic/angular';
 import { Playlist } from '../model/playlist';
 import { MusicTrackService } from '../services/music-track.service';
 import { Router } from '@angular/router';
+import { Constants } from '../util/constants';
 
 @Component({
   selector: 'app-playlist',
@@ -11,7 +12,8 @@ import { Router } from '@angular/router';
 })
 export class PlaylistPage {
   playlistArray = [];
-  playlist = "";
+  playlist = Constants.STRING_EMPTY_STRING;
+  favouritesCount =0;
   
   constructor(
     private router : Router,
@@ -38,7 +40,7 @@ export class PlaylistPage {
 
   async getPlaylist(){
     this.playlistArray= await this.musicTrackService.getPlaylist();
-    this.playlist="";
+    this.playlist=Constants.STRING_EMPTY_STRING;
     this.chnageDetector.detectChanges();
   }
 
@@ -78,8 +80,8 @@ export class PlaylistPage {
     this.getPlaylist();
   }
 
-  openPlaylist(playlistObj:Playlist){
-    this.router.navigate([`/local-music/${playlistObj.name}`])
+  openPlaylist(playlistName:string){
+    this.router.navigate([`/local-music/${playlistName}`])
   }
 
 }

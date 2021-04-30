@@ -25,6 +25,15 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-.ion-page{
-   background : #000;
+/*
+theme ref 
+https://cms-assets.tutsplus.com/cdn-cgi/image/width=630/uploads/users/158/posts/34793/final_image/MusicPlayerAppUI0.jpg
+*/
+
+ion-card{
+   --ion-background-color:#242429;
+}
+
+ion-card.active{
+   background-color:var(--ion-color-primary);
 }

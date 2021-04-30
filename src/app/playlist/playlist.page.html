@@ -13,12 +13,24 @@
     (click)="addNewPlaylist(playlist)">
     Add New Playlist
   </ion-button>
+  <ion-card (click)="openPlaylist('__favourites')">
+    <ion-card-header>
+      <ion-card-title>
+        Favourites
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-label>
+        Total Songs : {{ favouritesCount }}
+      </ion-label>
+    </ion-card-content>
+  </ion-card>
   <ion-virtual-scroll 
     [items]="playlistArray" 
     approxItemHeight="320px">
     <ion-card 
       *virtualItem="let item; let itemBounds = bounds;"
-      (click)="openPlaylist(item)">
+      (click)="openPlaylist(item.name)">
       <ion-card-header>
         <ion-card-title>
           {{ item.name }}

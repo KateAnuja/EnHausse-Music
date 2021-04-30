@@ -19,7 +19,7 @@ interface SearchData{
 export class SearchPage implements OnInit {
 
   @ViewChild("searchInput",{static:false})searchInput:IonInput;
-  bufferClipBoard:string="";
+  bufferClipBoard:string=Constants.STRING_EMPTY_STRING;
   suggestionArray:string[]=[];
   searchResultArray:SearchData[]=[];
 
@@ -38,7 +38,7 @@ export class SearchPage implements OnInit {
   }
 
   searchTerm(){
-    let termString:string=(this.searchInput.value+"").trim();
+    let termString:string=(this.searchInput.value+Constants.STRING_EMPTY_STRING).trim();
     this.suggestionArray=[];
   
     if(termString.length>0 && termString!=this.bufferClipBoard){
@@ -47,7 +47,7 @@ export class SearchPage implements OnInit {
   }
 
   getSuggestion(term:string){
-    this.bufferClipBoard="";
+    this.bufferClipBoard=Constants.STRING_EMPTY_STRING;
     this.http.get(
       "https://suggestqueries-clients6.youtube.com/complete/search",
       {
@@ -62,10 +62,19 @@ export class SearchPage implements OnInit {
       try{
         let data=res.data+"";
         if(data.length>0 && data.indexOf("window.google.ac.h")!=-1){
-          data=data.replace(/window.google.ac.h\(/gi,'').replace(/\)/gi,'');
+          data=data.replace(
+            /window.google.ac.h\(/gi,
+            Constants.STRING_EMPTY_STRING
+          ).replace(/\)/gi,'');
           let sugArr=JSON.parse(data)[1];
           sugArr.forEach(sugEl => {
-            this.suggestionArray.push(sugEl[0].replace(/song /g,''))
+            this.suggestionArray.push(
+              sugEl[0]
+              .replace(
+                /song /g,
+                Constants.STRING_EMPTY_STRING
+              )
+            )
           });
           this.changeDetector.detectChanges();
           
@@ -84,7 +93,7 @@ export class SearchPage implements OnInit {
     this.searchResultArray=[];
     this.bufferClipBoard=term;
     this.searchInput.value=term;
-    let clienVersion="";
+    let clienVersion=Constants.STRING_EMPTY_STRING;
     let currentDate=new Date();
     clienVersion+=currentDate.getFullYear()
     let month=currentDate.getMonth()+1;
@@ -118,7 +127,10 @@ export class SearchPage implements OnInit {
         .contents.sectionListRenderer
         .contents[0].itemSectionRenderer.contents;
         videoArr.forEach(videoEl => {
-          let title="",thumbnail="",videoId="",duration="";
+          let title=Constants.STRING_EMPTY_STRING,
+          thumbnail=Constants.STRING_EMPTY_STRING,
+          videoId=Constants.STRING_EMPTY_STRING,
+          duration=Constants.STRING_EMPTY_STRING;
           try{
             title=videoEl.compactVideoRenderer.title.runs[0].text;
             thumbnail=videoEl.compactVideoRenderer.thumbnail.thumbnails[0].url;
@@ -126,7 +138,7 @@ export class SearchPage implements OnInit {
             duration=videoEl.compactVideoRenderer.lengthText
             .accessibility.accessibilityData.label;
           }catch(err){}
-          if(title.length>0 && videoId!=""){
+          if(title.length>0 && videoId!=Constants.STRING_EMPTY_STRING){
             this.searchResultArray.push({
               title,
               thumbnail,
