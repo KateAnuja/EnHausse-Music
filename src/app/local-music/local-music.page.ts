@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { MusicTrack } from '../model/track';
+import { MusicTrack, MusicTrackUtil, SortByMusicTrack } from '../model/track';
 import { MusicTrackService } from '../services/music-track.service';
+import { ActionSheetController } from '@ionic/angular';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class LocalMusicPage {
     private musicTrackService : MusicTrackService,
     private alertController : AlertController,
     private changeDetector : ChangeDetectorRef,
+    private actionSheetController: ActionSheetController,
   ) { }
 
   ionViewWillEnter(){
@@ -55,13 +57,62 @@ export class LocalMusicPage {
 
   searchTrack(){
      let filteredMusicArray = [];
-     this.musicArray.forEach((track)=>{
-      if(track.name.indexOf(this.trackInput) != -1){
-        filteredMusicArray.push(track);
-      }
-     })
-     this.filteredMusicArray = filteredMusicArray;
+     if(this.trackInput!=""){
+      this.musicArray.forEach((track)=>{
+        if(track.name.indexOf(this.trackInput) != -1){
+          filteredMusicArray.push(track);
+        }
+       })
+     }else{
+      filteredMusicArray=this.musicArray;
+     }
+     this.filteredMusicArray = filteredMusicArray;     
      this.changeDetector.detectChanges();
   }
 
+  async openSortMenu() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Arrange By',
+      cssClass: 'my-custom-class',
+      buttons: [{
+        text: 'A-Z',
+        handler: () => {
+          this.filteredMusicArray = MusicTrackUtil.sort(SortByMusicTrack.A_TO_Z,this.musicArray); 
+        }
+      }, {
+        text: 'Z-A',
+        handler: () => {
+          this.filteredMusicArray = MusicTrackUtil.sort(SortByMusicTrack.Z_TO_A,this.musicArray); 
+        }
+      }, {
+        text: 'Recent First',
+        handler: () => {
+          this.filteredMusicArray = MusicTrackUtil.sort(SortByMusicTrack.RECENT_FIRST,this.musicArray);
+        }
+      }, {
+        text: 'Old First',
+        handler: () => {
+          this.filteredMusicArray = MusicTrackUtil.sort(SortByMusicTrack.OLD_FIRST,this.musicArray);
+        }
+      }, {
+        text: 'Longest First',
+        handler: () => {
+          this.filteredMusicArray = MusicTrackUtil.sort(SortByMusicTrack.LONGEST_FIRST,this.musicArray);
+        }
+      }, {
+          text: 'Shortest First',
+          handler: () => {
+            this.filteredMusicArray = MusicTrackUtil.sort(SortByMusicTrack.SHORTEST_FIRST,this.musicArray);
+          }
+      }]
+    });
+    await actionSheet.present();
+
+    // const { role } = await actionSheet.onDidDismiss();
+    // console.log('onDidDismiss resolved with role', role);
+    this.changeDetector.detectChanges();
+  }
+
 }
+
+

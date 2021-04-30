@@ -1,17 +1,25 @@
 <ion-header>
   <ion-toolbar>
     <ion-input [(ngModel)]="trackInput" (ionChange)="searchTrack()" placeholder="Search Track here.."></ion-input>
+    <ion-buttons slot="end">
+      <ion-button (click)="openSortMenu()">
+        <ion-icon name="filter"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-button (click)="addMockMusicTrack()" hidden>Add Music Track</ion-button>
+  <ion-button (click)="addMockMusicTrack()">Add Music Track</ion-button>
   <ion-virtual-scroll [items]="filteredMusicArray" approxItemHeight="320px">
     <ion-card *virtualItem="let item; let itemBounds = bounds;">
       <ion-card-header>
         <ion-card-title>{{ item.name }}</ion-card-title>
       </ion-card-header>
-      <ion-card-content>{{ item.duration }}</ion-card-content>
+      <ion-card-content>
+        <ion-label> Duration :  {{ item.duration }} </ion-label>
+        <ion-label> Added Time :  {{ item.addedTimeStamp | date}} </ion-label>
+      </ion-card-content>
     </ion-card>
   </ion-virtual-scroll>
 </ion-content>
