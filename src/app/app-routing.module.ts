@@ -8,12 +8,16 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'music-player',
     pathMatch: 'full'
   },
   {
     path: 'search',
     loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
+  },
+  {
+    path: 'music-player',
+    loadChildren: () => import('./music-player/music-player.module').then( m => m.MusicPlayerPageModule)
   },
 ];
 

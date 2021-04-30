@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
 import { Platform } from '@ionic/angular';
 import {
@@ -25,7 +24,7 @@ const fcm = new FCM();
 })
 export class AppComponent {
   constructor(
-    private splashScreen: SplashScreen,
+    private screenOrientation: ScreenOrientation,
     private firebaseCrashlytics: FirebaseCrashlytics,
     private platform : Platform,
   ) {
@@ -33,9 +32,10 @@ export class AppComponent {
     this.initializeApp();
   }
 
-  ionViewDidEnter(){
-    this.splashScreen.hide();
-    
+  ionViewWillEnter(){
+    if(this.platform.is("hybrid")){
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    }
   }
 
   initializeApp(){
@@ -67,14 +67,14 @@ export class AppComponent {
       .then((r) => {
       })
       .catch((err) => console.log(err));
-    }).catch((err) => alert(JSON.stringify(err)));
+    }).catch((err) => console.log(JSON.stringify(err)));
   
   }
 
   getToken(){
     fcm
     .getToken()
-    .then((r) => alert(`Token ${r.token}`))
+    .then((r) => console.log(`Token ${r.token}`))
     .catch((err) => console.log(err));
   }
 
@@ -82,7 +82,7 @@ export class AppComponent {
   getNotification(){
     PushNotifications.addListener('pushNotificationReceived',
       (notification: PushNotification) => {
-        alert('Push received: ' + JSON.stringify(notification));
+        console.log('Push received: ' + JSON.stringify(notification));
       }
     );
   }

@@ -1,51 +1,43 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { HTTP } from '@ionic-native/http/ngx';
-
-
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
 import { IonRange } from '@ionic/angular';
-import { Media, MediaObject } from '@ionic-native/media/ngx';
 import { Platform } from '@ionic/angular';
 import { Location } from '@angular/common';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
 const { IonicPlugin } = Plugins;
 
-export interface Track{
-  name : string;
-  path : string;
-}
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  playlist : Track[]=[];
   url : string="";
-  activeTrack : Track = null;
   downloadPercentage : number = 0;
   imgSrc : any;
   imgName : any;
-  
-  isPlaying = false;
   progress = 0;
   isExitAlertBoxOpen = false;
   @ViewChild('range', {static : false}) range : IonRange;
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private http: HTTP,
     private transfer: FileTransfer, 
     private file: File,
     private toast : ToastController,
-    private media : Media,
     private alert : AlertController,
     private changeDetector : ChangeDetectorRef,
     private platform: Platform,
     private location : Location,
-    private screenOrientation: ScreenOrientation
+    private splashScreen: SplashScreen,
   ) {
     this.platform.backButton.subscribeWithPriority(10, () => {
       if(this.location.isCurrentPathEqualTo('/home')){
@@ -53,12 +45,7 @@ export class HomePage {
       }else{
         this.location.back();
       }
-
-      console.log('Handler was called!');
     });
-    if(this.platform.is("hybrid")){
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-    }
   }
 
   showExitConfirm() {
@@ -66,7 +53,7 @@ export class HomePage {
         this.isExitAlertBoxOpen = true;
         this.alert
             .create({
-                header: "App termination",
+                header: "Close App?",
                 message: "Do you want to close the app?",
                 backdropDismiss: false,
                 buttons: [
@@ -98,25 +85,16 @@ export class HomePage {
       this.url=pluginResponse.sharedLink;
       this.verifyUrl();
     }
+
+    this.route.queryParams.subscribe(params => { 
+      if(params.videoId && params.videoId.length>0){
+        this.scrapY2Mate(params.videoId);
+      }
+    });
   }
 
   ionViewDidEnter(){
-    //this.getFileList();
-  }
-
-  async getFileList(){
-    let dirs=await this.file.listDir(this.file.externalRootDirectory,"Download");
-    dirs.forEach((dir)=>{
-      if(dir.isFile && dir.fullPath.indexOf(".mp3")!=-1){
-        this.playlist.push({
-          name:dir.fullPath.substring(
-            dir.fullPath.lastIndexOf("/")+1,
-            dir.fullPath.lastIndexOf(".mp3")
-          ).replace(/-/gi,' '),
-          path:dir.nativeURL
-        });
-      }
-    })
+    this.splashScreen.hide();
   }
 
   async verifyUrl(){
@@ -125,31 +103,31 @@ export class HomePage {
       this.downloadPercentage=0.01;
       this.scrapY2Mate(videoid[1].toString());
     }else{ 
-      //TODO: add alert for non youtube url 
       const alert = await this.alert.create({
-        cssClass: 'my-custom-class',
-        header: 'Alert',
+        header: 'Ohh No...',
         message: 'Please Enter Valid YouTube URL.',
         buttons: ['OK']
       });
   
        alert.present();
     }
-
-    
-    
   }
 
+  currentlyDownloading="";
   async scrapY2Mate(vid:string){
-    try{
-      let {kid,fileName}=await this.getVideoKid(vid);
-      this.downloadPercentage+=0.04;
-      let downloadUrl:string=await this.getDownloadUrl(kid,vid);
-      this.downloadPercentage+=0.05;
-      this.downloadFromUrl(downloadUrl,fileName);
-    }catch(err){
-
+    if(this.currentlyDownloading!=vid){
+      this.currentlyDownloading=vid;
+      try{
+        let {kid,fileName}=await this.getVideoKid(vid);
+        this.downloadPercentage+=0.04;
+        let downloadUrl:string=await this.getDownloadUrl(kid,vid);
+        this.downloadPercentage+=0.05;
+        this.downloadFromUrl(downloadUrl,fileName);
+      }catch(err){
+  
+      }
     }
+    
   }
 
   getVideoKid(vid:string):Promise<{kid:string,fileName:string}>{
@@ -248,18 +226,25 @@ export class HomePage {
     });
   }
 
+  lastUpdateValue=0;
+  lastProgress=0;
   async downloadFromUrl(downloadUrl:string,fileName:string){
     const fileTransfer: FileTransferObject = this.transfer.create();
     if(fileName.length<1){
       fileName=+new Date()+".mp3";
     }
-    
-    fileTransfer.onProgress((event)=>{
-      console.log("download progress...", event);
-      let percentage = ((((event.loaded * 100)/event.total)*0.9)+10)/100;
-      this.downloadPercentage=percentage;
-      this.changeDetector.detectChanges();
 
+    fileTransfer.onProgress((event)=>{
+      let progress = ((((event.loaded * 100)/event.total)*0.9)+10)/100;
+      if(this.lastProgress<progress){
+        this.lastProgress=progress;
+      }
+      if(this.lastUpdateValue<progress){
+        this.lastUpdateValue=progress+0.2;
+        this.downloadPercentage=this.lastProgress;
+        this.changeDetector.detectChanges(); 
+      }
+       
     })
     await this.file.createDir(this.file.externalCacheDirectory, "Music", true);
     fileTransfer.download(
@@ -273,79 +258,19 @@ export class HomePage {
       toast.present();
       IonicPlugin.download({fileName});
       this.url="";
+      this.currentlyDownloading="";
       this.downloadPercentage=0;
+      this.lastUpdateValue=0;
+      this.lastProgress=0;
+      this.router.navigate(['home']);
     }, (error) => {
       console.error('error...', error);
     });
 
   }
 
-  start(track : Track){
-    console.log(track.path);
-    const audioFile : MediaObject = this.media.create(track.path.replace(/^file:\/\//,''));
-    audioFile.play();
-    // if(this.player){
-    //   this.player.stop();
-    // }
-    // this.player = new Howl({
-    //   src : [track.path],
-    //   html5 : true,
-    //   onplay: () => {
-    //     this.isPlaying = true;
-        this.activeTrack = track; 
-    //     this.updateProgress();
-    //   },
-    //   onend: () => {
-    //     console.log("onend");
-    //   }
-    // });
-    // this.player.play();
+  openSearch(){
+    this.router.navigate(['search']);
   }
-
-  togglePlayer(pause){
-    this.isPlaying = !pause;
-    if(pause){
-      //this.player.pause();
-      this.isPlaying = false;
-    }else{
-      //this.player.play(); 
-      this.isPlaying = true;
-    }
-
-  }
-
-  next(){
-    let index= this.playlist.indexOf(this.activeTrack);
-    if(index != this.playlist.length-1){
-      this.start(this.playlist[index+1])
-    }else{
-      this.start(this.playlist[0]);
-    }
-  }
-
-  prev(){
-    let index= this.playlist.indexOf(this.activeTrack);
-    if(index>0){
-      this.start(this.playlist[index-1])
-    }else{
-      this.start(this.playlist[this.playlist.length-1]);
-    }
-
-  }
-
-  seek(){
-    let newValue= +this.range.value;
-    //let duration= this.player.duration();
-    //this.player.seek(duration * (newValue/100));
-  }
-
-  updateProgress(){
-    //let seek= this.player.seek();
-    //this.progress= (seek/this.player.duration())*100 || 0;
-    setTimeout(()=>{
-      this.updateProgress()
-    }, 1000);
-  }
-
 
 }

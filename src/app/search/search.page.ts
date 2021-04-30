@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
 import { HTTP } from '@ionic-native/http/ngx';
 import { IonInput } from '@ionic/angular';
 
@@ -22,6 +23,7 @@ export class SearchPage implements OnInit {
   searchResultArray:SearchData[]=[];
 
   constructor(
+    private router: Router,
     private http: HTTP,
     private changeDetector:ChangeDetectorRef,
 
@@ -31,7 +33,7 @@ export class SearchPage implements OnInit {
   }
   
   ionViewDidEnter(){
-    
+    this.searchInput.setFocus();
   }
 
   searchTerm(){
@@ -136,5 +138,10 @@ export class SearchPage implements OnInit {
     }).catch((err)=>{
       console.error(err)
     });
+  }
+
+  downloadVideo(videoId:string){
+    this.searchResultArray=[];
+    this.router.navigate(['home'], {queryParams:{videoId}});
   }
 }

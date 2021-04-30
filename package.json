@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "cap-run": "ionic cap sync && ionic cap run android"
+    "cap-run": "ionic cap sync && ionic cap run android",
+    "cap-run-prod": "ionic cap sync --prod && ionic cap run android"
   },
   "private": true,
   "dependencies": {
@@ -33,6 +34,7 @@
     "@ionic-native/screen-orientation": "^5.32.1",
     "@ionic-native/splash-screen": "^5.32.1",
     "@ionic/angular": "^5.5.2",
+    "@types/howler": "^2.2.2",
     "cordova-plugin-advanced-http": "^3.1.0",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-file-transfer": "^1.7.1",
