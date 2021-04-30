@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>local_music</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button (click)="addMockMusicTrack()" hidden>Add Music Track</ion-button>
+  <ion-virtual-scroll [items]="musicArray" approxItemHeight="320px">
+    <ion-card *virtualItem="let item; let itemBounds = bounds;">
+      <ion-card-header>
+        <ion-card-title>{{ item.name }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>{{ item.duration }}</ion-card-content>
+    </ion-card>
+  </ion-virtual-scroll>
+</ion-content>

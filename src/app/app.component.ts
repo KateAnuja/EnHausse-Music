@@ -40,9 +40,11 @@ export class AppComponent {
 
   initializeApp(){
     this.platform.ready().then(() => {
+      if(this.platform.is("hybrid")){
         const crashlytics = this.firebaseCrashlytics.initialise();
         crashlytics.logException('my caught exception');
-     });
+      }
+    });
 
      
 

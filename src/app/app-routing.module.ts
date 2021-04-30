@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'music-player',
+    redirectTo: 'local-music',
     pathMatch: 'full'
   },
   {
@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'music-player',
     loadChildren: () => import('./music-player/music-player.module').then( m => m.MusicPlayerPageModule)
+  },
+  {
+    path: 'local-music',
+    loadChildren: () => import('./local-music/local-music.module').then( m => m.LocalMusicPageModule)
   },
 ];
 

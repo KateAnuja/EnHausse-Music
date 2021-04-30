@@ -14,11 +14,21 @@ import { Media } from '@ionic-native/media/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
 import { FCM } from '@capacitor-community/fcm';
+import { IonicStorageModule } from '@ionic/storage-angular';
+import { Drivers } from '@ionic/storage';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [
+    BrowserModule, 
+    AppRoutingModule,
+    IonicModule.forRoot(), 
+    IonicStorageModule.forRoot({
+      name: '__enh_music_app',
+      driverOrder:[Drivers.IndexedDB, Drivers.LocalStorage]
+    }),
+  ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     SplashScreen,
