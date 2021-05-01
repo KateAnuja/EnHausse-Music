@@ -7,7 +7,14 @@
   "linuxAndroidStudioPath":"/snap/bin/android-studio",
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 10
+      "launchShowDuration": 10000,
+      "launchAutoHide":false,
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "androidSpinnerStyle": "small",
+      "spinnerColor": "#999999",
+      "showSpinner": true,
+      "splashFullScreen": true
     },
     "PushNotifications": {
       "presentationOptions": ["badge", "sound", "alert"]
