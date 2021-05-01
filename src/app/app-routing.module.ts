@@ -42,6 +42,10 @@ const routes: Routes = [
         m => m.PlaylistPageModule
       )
   },
+  {
+    path: 'download',
+    loadChildren: () => import('./download/download.module').then( m => m.DownloadPageModule)
+  },
 ];
 
 @NgModule({

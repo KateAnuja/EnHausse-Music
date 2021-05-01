@@ -16,6 +16,7 @@ import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
 import { FCM } from '@capacitor-community/fcm';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { Drivers } from '@ionic/storage';
+import { SuperTabsModule } from '@ionic-super-tabs/angular';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,7 @@ import { Drivers } from '@ionic/storage';
       name: '__enh_music_app',
       driverOrder:[Drivers.IndexedDB, Drivers.LocalStorage]
     }),
+    SuperTabsModule.forRoot(),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
