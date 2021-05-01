@@ -8,13 +8,9 @@
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 10000,
-      "launchAutoHide":false,
+      "launchAutoHide":true,
       "androidSplashResourceName": "splash",
-      "androidScaleType": "CENTER_CROP",
-      "androidSpinnerStyle": "small",
-      "spinnerColor": "#999999",
-      "showSpinner": true,
-      "splashFullScreen": true
+      "androidScaleType": "CENTER_CROP"
     },
     "PushNotifications": {
       "presentationOptions": ["badge", "sound", "alert"]

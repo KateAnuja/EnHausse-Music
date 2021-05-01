@@ -8,9 +8,8 @@ import { IonRange } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 
-const { IonicPlugin } = Plugins;
+const { IonicPlugin,SplashScreen } = Plugins;
 
 
 @Component({
@@ -37,7 +36,6 @@ export class HomePage {
     private changeDetector : ChangeDetectorRef,
     private platform: Platform,
     private location : Location,
-    private splashScreen: SplashScreen,
   ) {
     this.platform.backButton.subscribeWithPriority(10, () => {
       if(this.location.isCurrentPathEqualTo('/home')){
@@ -94,7 +92,9 @@ export class HomePage {
   }
 
   ionViewDidEnter(){
-    this.splashScreen.hide();
+    if(this.platform.is("hybrid")){
+      SplashScreen.hide();
+    }
   }
 
   async verifyUrl(){
