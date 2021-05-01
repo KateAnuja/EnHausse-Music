@@ -4,18 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { LocalMusicPageRoutingModule } from './local-music-routing.module';
+import { DownloadPageRoutingModule } from './download-routing.module';
 
-import { LocalMusicPage } from './local-music.page';
+import { DownloadPage } from './download.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    LocalMusicPageRoutingModule
+    DownloadPageRoutingModule
   ],
-  declarations: [LocalMusicPage],
-  entryComponents : [LocalMusicPage]
+  declarations: [DownloadPage]
 })
-export class LocalMusicPageModule {}
+export class DownloadPageModule {}

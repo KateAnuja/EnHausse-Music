@@ -15,6 +15,7 @@ import { PlaylistPage } from './playlist.page';
     IonicModule,
     PlaylistPageRoutingModule
   ],
-  declarations: [PlaylistPage]
+  declarations: [PlaylistPage],
+  entryComponents : [PlaylistPage]
 })
 export class PlaylistPageModule {}

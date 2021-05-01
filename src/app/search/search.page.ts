@@ -17,7 +17,7 @@ interface SearchData{
   styleUrls: ['./search.page.scss'],
 })
 export class SearchPage implements OnInit {
-
+  public static TAG : string = "SearchPage";
   @ViewChild("searchInput",{static:false})searchInput:IonInput;
   bufferClipBoard:string=Constants.STRING_EMPTY_STRING;
   suggestionArray:string[]=[];

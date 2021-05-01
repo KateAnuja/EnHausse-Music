@@ -11,6 +11,7 @@ import { Constants } from '../util/constants';
   styleUrls: ['./playlist.page.scss'],
 })
 export class PlaylistPage {
+  public static TAG : string = "PlaylistPage";
   playlistArray = [];
   playlist = Constants.STRING_EMPTY_STRING;
   favouritesCount =0;
@@ -28,11 +29,10 @@ export class PlaylistPage {
   }
   
   ionViewDidEnter(){
-
+    
   }
 
   ionViewWillLeave(){
-
   }
 
   ionViewDidLeave(){

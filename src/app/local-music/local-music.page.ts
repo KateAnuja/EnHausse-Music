@@ -16,7 +16,7 @@ import { Constants } from '../util/constants';
 
 
 export class LocalMusicPage {
-
+  public static TAG : string = "LocalMusicPage";
   musicArray : MusicTrack[]=[];
   filteredMusicArray : MusicTrack[]=[];
   trackInput : string = Constants.STRING_EMPTY_STRING;
@@ -35,7 +35,6 @@ export class LocalMusicPage {
   ) { }
 
   ionViewWillEnter(){
-    
     this.activatedRoute.params.subscribe(params=>{
       if(params && params.playlistName){
         this.activePlaylist=params.playlistName;
@@ -49,7 +48,7 @@ export class LocalMusicPage {
   }
 
   ionViewWillLeave(){
-
+    
   }
 
   ionViewDidLeave(){
