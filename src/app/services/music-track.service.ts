@@ -4,12 +4,14 @@ import { Constants } from '../util/constants';
 import { Utility } from '../util/utility';
 import { Storage } from '@ionic/storage';
 import { Playlist } from '../model/playlist';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class MusicTrackService {
+  //allMusicTrack = new BehaviorSubject<MusicTrack[]>();
   constructor(
     private storage:Storage  
   ) {

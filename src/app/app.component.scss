@@ -1,3 +1,7 @@
-ion-app{
-    --background : #000;
+app-floating-music-player{
+    z-index: 99;
+    position: fixed;
+    bottom: 100px;
+    width:100%;
+    height:150px;
 }

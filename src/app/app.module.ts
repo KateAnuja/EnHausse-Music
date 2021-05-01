@@ -17,9 +17,10 @@ import { FCM } from '@capacitor-community/fcm';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { Drivers } from '@ionic/storage';
 import { SuperTabsModule } from '@ionic-super-tabs/angular';
+import { FloatingMusicPlayerComponent } from './floating-music-player/floating-music-player.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, FloatingMusicPlayerComponent],
   entryComponents: [],
   imports: [
     BrowserModule, 
