@@ -2,7 +2,9 @@ export class Constants{
   public static STRING_EMPTY_OBJECT="{}";
   public static STRING_EMPTY_ARRAY="[]";
   public static STRING_EMPTY_STRING="";
-  public static STRING_PLAYLIST_FAV="__fovourite";
+  public static STRING_PLAYLIST_FAV="__favourite";
+  public static STRING_WORD_ALL="All Music";
+  public static STRING_WORD_FAVOURITE="Favourites";
   public static USER_AGENT="Mozilla/5.0 (Linux; Android 6.0.1; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Mobile Safari/537.36";
 
   public static DB = {

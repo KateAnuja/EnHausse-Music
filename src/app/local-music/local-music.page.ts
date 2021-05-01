@@ -8,8 +8,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Constants } from '../util/constants';
 
 
-
-
 @Component({
   selector: 'app-local-music',
   templateUrl: './local-music.page.html',
@@ -24,6 +22,8 @@ export class LocalMusicPage {
   trackInput : string = Constants.STRING_EMPTY_STRING;
   playlistArray : Playlist[]=[];
   activePlaylist : string = Constants.STRING_EMPTY_STRING;
+  activePlaylistName : string = Constants.STRING_WORD_ALL;
+  isOpen = false;
   
   constructor(
     private musicTrackService : MusicTrackService,
@@ -60,6 +60,7 @@ export class LocalMusicPage {
     let musicArray= await this.musicTrackService.getAllLocalTracks();
     if(this.activePlaylist==Constants.STRING_EMPTY_STRING){
       this.musicArray=musicArray;
+      this.activePlaylistName=Constants.STRING_WORD_ALL;
     }else if(this.activePlaylist==Constants.STRING_PLAYLIST_FAV){
       let musicInPlaylistArray=[];
       musicArray.forEach((musicTrack:MusicTrack)=>{
@@ -68,6 +69,8 @@ export class LocalMusicPage {
         }
       });
       this.musicArray=musicInPlaylistArray;
+      this.activePlaylistName=Constants.STRING_WORD_FAVOURITE;
+      console.log(this.activePlaylistName);
     }else{
       let musicInPlaylistArray=[];
       musicArray.forEach((musicTrack:MusicTrack)=>{
@@ -76,8 +79,10 @@ export class LocalMusicPage {
         }
       });
       this.musicArray=musicInPlaylistArray;
+      this.activePlaylistName = this.activePlaylist;
     }
     this.filteredMusicArray = this.musicArray;
+    
   }
 
   async addMockMusicTrack(){
@@ -197,7 +202,8 @@ export class LocalMusicPage {
   }
 
   deleteFormPlaylist(musicTrack:MusicTrack){
-
+    this.musicTrackService.deleteMusictrackFromPlaylist(musicTrack, this.activePlaylistName);
+    musicTrack.uiHideInList = true;
   }
 
   openTrackMenu(){
@@ -206,6 +212,10 @@ export class LocalMusicPage {
 
   async getPlaylist(){
     this.playlistArray=await this.musicTrackService.getPlaylist();
+  }
+
+  toggleSearchBar(){
+    this.isOpen = !this.isOpen;
   }
 
   

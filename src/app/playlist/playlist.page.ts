@@ -14,6 +14,7 @@ export class PlaylistPage {
   playlistArray = [];
   playlist = Constants.STRING_EMPTY_STRING;
   favouritesCount =0;
+  favPlaylistString=Constants.STRING_PLAYLIST_FAV;
   
   constructor(
     private router : Router,
@@ -41,6 +42,7 @@ export class PlaylistPage {
   async getPlaylist(){
     this.playlistArray= await this.musicTrackService.getPlaylist();
     this.playlist=Constants.STRING_EMPTY_STRING;
+    this.favouritesCount=await this.musicTrackService.getFavCount();
     this.chnageDetector.detectChanges();
   }
 
