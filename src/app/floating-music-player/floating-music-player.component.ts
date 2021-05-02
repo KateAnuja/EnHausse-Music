@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MusicPlayer, MusicPlayerUtil } from '../model/musicPlayer';
+import { MusicPlayer, MusicPlayerOrderPreference, MusicPlayerUtil } from '../model/musicPlayer';
 import { MusicTrack } from '../model/track';
 import { MusicTrackService } from '../services/music-track.service';
 
@@ -11,9 +11,14 @@ import { MusicTrackService } from '../services/music-track.service';
 export class FloatingMusicPlayerComponent implements OnInit {
 
   currentMusicTrack:MusicTrack;
+  musicTrackArray:MusicTrack[]=[];
   nextMusicTrack:MusicTrack;
   prevMusicTrack:MusicTrack;
   totalDurationOfPlaylist:number=0;
+  isPlaying : boolean =false;
+  orderPreference = MusicPlayerOrderPreference;
+
+
   
   constructor(
     private musicTrackService:MusicTrackService,
@@ -21,7 +26,12 @@ export class FloatingMusicPlayerComponent implements OnInit {
     this.musicTrackService.playerDataBehaviorSubject.subscribe((mP:MusicPlayer)=>{
       if(mP){
         this.currentMusicTrack=mP.currentMusictTrack;
-        MusicPlayerUtil.startPlayer(mP.currentMusictTrack,mP.musicTrackArray);
+        this.musicTrackArray=mP.musicTrackArray;
+        MusicPlayerUtil.startPlayer(
+                              mP.currentMusictTrack,
+                              mP.musicTrackArray, 
+                              mP.orderPreference
+                        );
         this.nextMusicTrack=MusicPlayerUtil.getNext();
         this.prevMusicTrack=MusicPlayerUtil.getPrev();
         this.totalDurationOfPlaylist=MusicPlayerUtil.getTotalDuration();
@@ -31,6 +41,24 @@ export class FloatingMusicPlayerComponent implements OnInit {
 
   ngOnInit() {
     
+  }
+
+  prev(){
+    this.musicTrackService.playTrack(this.prevMusicTrack,this.musicTrackArray);
+  }
+
+  next(){
+    this.musicTrackService.playTrack(this.nextMusicTrack,this.musicTrackArray);
+  }
+
+  togglePlayer(pause){
+    this.isPlaying=!this.isPlaying;
+  }
+
+  setOrderPreference(orderPreference : MusicPlayerOrderPreference){
+    let adjacentTrackObj=this.musicTrackService.setMusicOrderPreference(orderPreference);
+    this.prevMusicTrack=adjacentTrackObj.prevTrack;
+    this.nextMusicTrack=adjacentTrackObj.nextTrack;
   }
 
 }

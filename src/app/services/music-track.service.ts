@@ -5,7 +5,7 @@ import { Utility } from '../util/utility';
 import { Storage } from '@ionic/storage';
 import { Playlist } from '../model/playlist';
 import { BehaviorSubject } from 'rxjs';
-import { MusicPlayer } from '../model/musicPlayer';
+import { MusicPlayer, MusicPlayerOrderPreference, MusicPlayerUtil } from '../model/musicPlayer';
 
 
 @Injectable({
@@ -27,11 +27,11 @@ export class MusicTrackService {
 
   }
 
-  playTrack(currentMusictTrack:MusicTrack,musicTrackArray:MusicTrack[]){
-    console.log("playTrack");
+  async playTrack(currentMusictTrack:MusicTrack,musicTrackArray:MusicTrack[]){
     this.playerDataBehaviorSubject.next({
       currentMusictTrack,
-      musicTrackArray
+      musicTrackArray,
+      orderPreference : await this.getMusicOrderPreference()
     })
   }
 
@@ -201,6 +201,39 @@ export class MusicTrackService {
       this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(musicArray));
     })
 
+  }
+
+  setMusicOrderPreference(musicOrderPreference : MusicPlayerOrderPreference){
+    this.storage.set(Constants.DB.MUSIC_PREFERENCE_ORDER, musicOrderPreference);
+    return MusicPlayerUtil.setOrderPreference(musicOrderPreference);
+  }
+  
+  async getMusicOrderPreference(){
+    let musicPlayerOrderPrefernce : MusicPlayerOrderPreference;
+    let _musicPlayerOrderPreferenceString = 
+                                        await this.storage.get(
+                                          Constants.DB.MUSIC_PREFERENCE_ORDER
+                                        );
+    switch(_musicPlayerOrderPreferenceString){
+      case MusicPlayerOrderPreference.ALL_IN_LOOP : {
+        musicPlayerOrderPrefernce = MusicPlayerOrderPreference.ALL_IN_LOOP;
+        break;
+      }
+      case MusicPlayerOrderPreference.ONE_IN_LOOP : {
+        musicPlayerOrderPrefernce = MusicPlayerOrderPreference.ONE_IN_LOOP;
+        break;
+      }
+      case MusicPlayerOrderPreference.SHUFFLE : {
+        musicPlayerOrderPrefernce = MusicPlayerOrderPreference.SHUFFLE;
+        break;
+      }
+      default : {
+        musicPlayerOrderPrefernce = MusicPlayerOrderPreference.ALL_IN_LOOP;
+      }
+     
+    }
+
+    return musicPlayerOrderPrefernce;
   }
 
 

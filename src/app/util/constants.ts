@@ -10,7 +10,8 @@ export class Constants{
   public static DB = {
     MODEL_PLAYLIST:"playlist",
     MODEL_MUSIC_TRACK:"music_track",
-    COUNT_FAVOURITE:"count_favourite"
+    COUNT_FAVOURITE:"count_favourite",
+    MUSIC_PREFERENCE_ORDER:"__music_order_preference"
   }
 
   public static SONG_WORD_ARRAY = [
