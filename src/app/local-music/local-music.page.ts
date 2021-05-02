@@ -81,11 +81,12 @@ export class LocalMusicPage {
       this.activePlaylistName = this.activePlaylist;
     }
     this.filteredMusicArray = this.musicArray;
-    
+
+    //TODO:remove
+    this.playTrack(this.musicArray[1]);    
   }
 
   async addMockMusicTrack(){
-    this.musicTrackService.createMockData();
     const alert = await this.alertController.create({
       header: 'Success',
       message: 'Music Track Added.',

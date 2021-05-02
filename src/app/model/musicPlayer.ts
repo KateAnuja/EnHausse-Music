@@ -46,7 +46,7 @@ export class MusicPlayerUtil{
         }else if(this._orderPreference == MusicPlayerOrderPreference.ONE_IN_LOOP){
             return this.currentMusictTrack;
         }else if(this._orderPreference == MusicPlayerOrderPreference.SHUFFLE){
-            return this.musicTrackArray[Utility.randomNumber(0,this.musicTrackArray.length-1)];
+            return this.musicTrackArray[Utility.randomNumber(0,this.musicTrackArray.length)];
         }
         
     }
@@ -60,7 +60,7 @@ export class MusicPlayerUtil{
         }else if(this._orderPreference == MusicPlayerOrderPreference.ONE_IN_LOOP){
             return this.currentMusictTrack;
         }else if(this._orderPreference == MusicPlayerOrderPreference.SHUFFLE){
-            return this.musicTrackArray[Utility.randomNumber(0,this.musicTrackArray.length-1)];
+            return this.musicTrackArray[Utility.randomNumber(0,this.musicTrackArray.length)];
         }
         
     }

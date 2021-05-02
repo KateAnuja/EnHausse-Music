@@ -38,3 +38,11 @@
     </ion-item>
   </ion-card>
 </ion-content>
+<ion-footer *ngIf="downloadPercentage > 0">
+  <ion-card>
+    <ion-label>Downloading...</ion-label>
+    <ion-card-content>
+      <ion-progress-bar [value]="downloadPercentage"></ion-progress-bar>
+    </ion-card-content>
+  </ion-card>
+</ion-footer>

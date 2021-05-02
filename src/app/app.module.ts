@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -17,7 +15,10 @@ import { FCM } from '@capacitor-community/fcm';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { Drivers } from '@ionic/storage';
 import { SuperTabsModule } from '@ionic-super-tabs/angular';
-import { FloatingMusicPlayerComponent } from './floating-music-player/floating-music-player.component';
+import { 
+  FloatingMusicPlayerComponent 
+} from './floating-music-player/floating-music-player.component';
+import { Constants } from './util/constants';
 
 @NgModule({
   declarations: [AppComponent, FloatingMusicPlayerComponent],
@@ -27,7 +28,7 @@ import { FloatingMusicPlayerComponent } from './floating-music-player/floating-m
     AppRoutingModule,
     IonicModule.forRoot(), 
     IonicStorageModule.forRoot({
-      name: '__enh_music_app',
+      name: Constants.DB.DB_NAME,
       driverOrder:[Drivers.IndexedDB, Drivers.LocalStorage]
     }),
     SuperTabsModule.forRoot(),
