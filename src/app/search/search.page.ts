@@ -279,6 +279,14 @@ export class SearchPage implements OnInit {
     });
   }
 
+  async showSuccessToast(){
+    const toast = await this.toast.create({
+      message: 'Downloaded Successfully',
+      duration: 2000
+    });
+    toast.present();
+  }
+
   lastUpdateValue=0;
   lastProgress=0;
   async downloadFromUrl(downloadUrl:string,fileName:string){
@@ -304,11 +312,7 @@ export class SearchPage implements OnInit {
       encodeURI(downloadUrl), 
       this.file.externalCacheDirectory + '/Music/' + fileName
     ).then(async (entry) => {
-        const toast = await this.toast.create({
-          message: 'Downloaded Successfully',
-          duration: 2000
-        });
-        toast.present();
+        
         IonicPlugin.download({fileName});
         this.url="";
         this.currentlyDownloading="";
@@ -325,8 +329,30 @@ export class SearchPage implements OnInit {
           addedTimeStamp : +new Date()
         }
         let audio=this.media.create(musicTrack.path.replace(/^file:\/\//,''));
-        musicTrack.duration=audio.getDuration();
-        this.musicTrackService.saveTrack(musicTrack);
+        audio.setVolume(0);
+        audio.play();
+        let _count=0;
+        let _int=setInterval(()=>{
+          _count++;
+          if(_count>20){
+            this.musicTrackService.saveTrack(musicTrack);
+            audio.setVolume(1);
+            audio.stop();
+            this.showSuccessToast();
+            clearInterval(_int);
+          }else{
+            musicTrack.duration=audio.getDuration();
+            if(musicTrack.duration>0){
+              this.musicTrackService.saveTrack(musicTrack);
+              audio.setVolume(1);
+              audio.stop();
+              this.showSuccessToast();
+              clearInterval(_int);
+            }
+          }
+        },100);
+        
+        
     }, (error) => {
         console.error('error...', error);
     });
