@@ -10,6 +10,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { NetworkService } from '../services/network.service';
 import { MusicTrackService } from '../services/music-track.service';
 import { MusicTrack } from '../model/track';
+//import { Media } from '@ionic-native/media/ngx';
 
 
 const { IonicPlugin } = Plugins;
@@ -40,7 +41,6 @@ export class SearchPage implements OnInit {
   @ViewChild('range', {static : false}) range : IonRange;
 
   constructor(
-    private router: Router,
     private http: HTTP,
     private changeDetector:ChangeDetectorRef,
     private transfer: FileTransfer, 
@@ -48,7 +48,8 @@ export class SearchPage implements OnInit {
     private toast : ToastController,
     private alert : AlertController,
     private networkService : NetworkService,
-    private musicTrackService : MusicTrackService
+    private musicTrackService : MusicTrackService,
+    //private media : Media,
 
   ) { }
 
@@ -302,31 +303,32 @@ export class SearchPage implements OnInit {
     fileTransfer.download(
       encodeURI(downloadUrl), 
       this.file.externalCacheDirectory + '/Music/' + fileName
-      ).then(async (entry) => {
-      const toast = await this.toast.create({
-        message: 'Downloaded Successfully',
-        duration: 2000
-      });
-      toast.present();
-      IonicPlugin.download({fileName});
-      this.url="";
-      this.currentlyDownloading="";
-      this.downloadPercentage=0;
-      this.lastUpdateValue=0;
-      this.lastProgress=0;
-      let musicTrack : MusicTrack = {
-        name : fileName,
-        duration : 0,
-        path : this.file.externalCacheDirectory + '/Music/' + fileName,
-        thumbnail : this.imgSrc,
-        playlist : [],
-        isFavourite : false,
-        addedTimeStamp : +new Date()
-      }
-      this.musicTrackService.saveTrack(musicTrack);
-      }, (error) => {
-      console.error('error...', error);
+    ).then(async (entry) => {
+        const toast = await this.toast.create({
+          message: 'Downloaded Successfully',
+          duration: 2000
+        });
+        toast.present();
+        IonicPlugin.download({fileName});
+        this.url="";
+        this.currentlyDownloading="";
+        this.downloadPercentage=0;
+        this.lastUpdateValue=0;
+        this.lastProgress=0;
+        let musicTrack : MusicTrack = {
+          name : fileName,
+          duration : 0,
+          path : entry.nativeURL,
+          thumbnail : this.imgSrc,
+          playlist : [],
+          isFavourite : false,
+          addedTimeStamp : +new Date()
+        }
+        //let audio=this.media.create(musicTrack.path.replace(/^file:\/\//,''));
+        //musicTrack.duration=audio.getDuration();
+        this.musicTrackService.saveTrack(musicTrack);
+    }, (error) => {
+        console.error('error...', error);
     });
-
   }
 }

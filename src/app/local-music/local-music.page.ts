@@ -81,7 +81,9 @@ export class LocalMusicPage {
       this.activePlaylistName = this.activePlaylist;
     }
     this.filteredMusicArray = this.musicArray;
-    
+
+    //TODO:remove
+    this.playTrack(this.musicArray[1]);    
   }
 
   async addMockMusicTrack(){
