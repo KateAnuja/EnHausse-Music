@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MusicPlayer } from '../model/musicPlayer';
+import { MusicTrack } from '../model/track';
+import { MusicTrackService } from '../services/music-track.service';
 
 @Component({
   selector: 'app-floating-music-player',
@@ -7,8 +10,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FloatingMusicPlayerComponent implements OnInit {
 
-  constructor() { }
+  currentMusicTrack:MusicTrack;
+  
+  constructor(
+    private musicTrackService:MusicTrackService,
+  ) { 
+    this.musicTrackService.playerDataBehaviorSubject.subscribe((mP:MusicPlayer)=>{
+      if(mP){
+        this.currentMusicTrack=mP.currentMusictTrack;
+      }
+    })
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
 }

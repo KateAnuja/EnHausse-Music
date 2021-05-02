@@ -1,6 +1,6 @@
 <div class="container">
-  <ion-card>
-    floating-music-player works!
+  <ion-card *ngIf="currentMusicTrack">
+    {{currentMusicTrack.name}}
   </ion-card>
 </div>
   

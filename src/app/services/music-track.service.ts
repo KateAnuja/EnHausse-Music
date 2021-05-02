@@ -5,6 +5,7 @@ import { Utility } from '../util/utility';
 import { Storage } from '@ionic/storage';
 import { Playlist } from '../model/playlist';
 import { BehaviorSubject } from 'rxjs';
+import { MusicPlayer } from '../model/musicPlayer';
 
 
 @Injectable({
@@ -12,6 +13,10 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class MusicTrackService {
   //allMusicTrack = new BehaviorSubject<MusicTrack[]>();
+  favCountBehaviorSubject = new BehaviorSubject(0);
+  playListUpdated = new BehaviorSubject(0);
+  playerDataBehaviorSubject = new BehaviorSubject<MusicPlayer>(null);
+
   constructor(
     private storage:Storage  
   ) {
@@ -22,8 +27,12 @@ export class MusicTrackService {
 
   }
 
-  playTrack(path : string){
-
+  playTrack(currentMusictTrack:MusicTrack,musicTrackArray:MusicTrack[]){
+    console.log("playTrack");
+    this.playerDataBehaviorSubject.next({
+      currentMusictTrack,
+      musicTrackArray
+    })
   }
 
   async addToPlaylist(musicTrack: MusicTrack,playlistName:string){
