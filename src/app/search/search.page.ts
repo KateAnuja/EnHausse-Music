@@ -10,7 +10,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { NetworkService } from '../services/network.service';
 import { MusicTrackService } from '../services/music-track.service';
 import { MusicTrack } from '../model/track';
-//import { Media } from '@ionic-native/media/ngx';
+import { Media } from '@ionic-native/media/ngx';
 
 
 const { IonicPlugin } = Plugins;
@@ -49,7 +49,7 @@ export class SearchPage implements OnInit {
     private alert : AlertController,
     private networkService : NetworkService,
     private musicTrackService : MusicTrackService,
-    //private media : Media,
+    private media : Media,
 
   ) { }
 
@@ -324,8 +324,8 @@ export class SearchPage implements OnInit {
           isFavourite : false,
           addedTimeStamp : +new Date()
         }
-        //let audio=this.media.create(musicTrack.path.replace(/^file:\/\//,''));
-        //musicTrack.duration=audio.getDuration();
+        let audio=this.media.create(musicTrack.path.replace(/^file:\/\//,''));
+        musicTrack.duration=audio.getDuration();
         this.musicTrackService.saveTrack(musicTrack);
     }, (error) => {
         console.error('error...', error);
