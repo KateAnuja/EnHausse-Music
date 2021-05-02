@@ -85,7 +85,6 @@ export class LocalMusicPage {
   }
 
   async addMockMusicTrack(){
-    this.musicTrackService.createMockData();
     const alert = await this.alertController.create({
       header: 'Success',
       message: 'Music Track Added.',

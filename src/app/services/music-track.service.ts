@@ -23,7 +23,14 @@ export class MusicTrackService {
       this.storage.create();
   }
     
-  saveTrack(youTubeVideoId : string){
+  saveTrack(musicTrack : MusicTrack){
+    this.getAllLocalTracks()
+    .then(async (musicArray)=>{
+      musicArray.push(musicTrack);
+      musicArray = MusicTrackUtil.sort(SortByMusicTrack.A_TO_Z, musicArray);
+      this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(musicArray));
+    })
+
 
   }
 
@@ -41,15 +48,8 @@ export class MusicTrackService {
     .then(async (musicArray)=>{
       for(let i=0;i<musicArray.length;i++){
         if(musicTrack.path == musicArray[i].path){
-          // musicArray[i].isFavourite = !musicArray[i].isFavourite;
-          // let favCount:number = (await this.storage.get(Constants.DB.COUNT_FAVOURITE) || 0);
-          // if(musicArray[i].isFavourite){favCount++}
-          // else{favCount--}
-          // this.storage.set(Constants.DB.COUNT_FAVOURITE,favCount);
           musicArray[i].playlist.push(playlistName);
           this.setPlaylistMusicTracksCount(playlistName,true);
-    
-          
           break;
         }
       }
