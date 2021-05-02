@@ -2,11 +2,18 @@
     color: #e74c3c;
 }
 
+ion-card{
+    --background:#232429;
+    --color:#fff;
+    height: 100px;
+    border-radius: 10px;
+    padding-top : 5px;
+}
+
 ion-card.hidden{
     display: none;
 }
 
 ion-content {
-    --padding-bottom: 50px;
-   
-  }
+    --background:#1b1a1f;
+}

@@ -26,6 +26,7 @@
 </ion-header>
 
 <ion-content>
+  <ion-button (click)="addMockMusicTrack()" hidden>Add Music Track</ion-button>
   <ion-virtual-scroll 
     [items]="filteredMusicArray" 
     approxItemHeight="320px">
@@ -38,7 +39,7 @@
             [src]="item.thumbnail">
           </ion-img>
         </ion-thumbnail>
-        <ion-card-title>
+        <ion-card-title color="light">
           {{ item.name }}
         </ion-card-title>
       </ion-card-header>

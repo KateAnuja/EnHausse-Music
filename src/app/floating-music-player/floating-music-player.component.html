@@ -1,12 +1,14 @@
-<div class="container">
-  <ion-toolbar *ngIf="currentMusicTrack">
+  <ion-toolbar>
     <ion-row>
       <ion-col size="12" class="ion-text-center">
-        <p>
+        <ion-title color="light">
           {{currentMusicTrack.name}}
-        </p>
+        </ion-title>
       </ion-col>
-      <ion-col size="12">
+      <ion-col size="1" class="ion-text-center" class="pt-20">
+        <ion-note color="light" class="text-sm">0:00</ion-note>
+      </ion-col>
+      <ion-col size="10">
         <ion-range 
           pin
           #trackRange 
@@ -15,20 +17,37 @@
           (touchstart)="OnSeekTrackFocus()">
         </ion-range>
       </ion-col>
-      <ion-col size="12" class="ion-text-center">
-        <ion-button fill="clear" (click)="prev()" color="dark">
+      <ion-col size="1" class="ion-text-center" class="pt-20">
+        <ion-note color="light" class="text-sm">0:00</ion-note>
+      </ion-col>
+    </ion-row>
+    <ion-row class="pb-15">
+      <ion-col size="2" class="ion-text-center">
+
+      </ion-col>
+      <ion-col size="2" class="ion-text-center">
+        <ion-button class="btn-bg-grey" (click)="prev()">
           <ion-icon slot="icon-only" name="play-skip-back"></ion-icon>
         </ion-button> 
-        <ion-button fill="clear" (click)="togglePlayer(false)" *ngIf="!isPlaying" color="dark">
+      </ion-col>
+      <ion-col size="4" class="ion-text-center">
+        <ion-button class="btn-big-primary" (click)="togglePlayer(false)" *ngIf="!isPlaying">
           <ion-icon slot="icon-only" name="play"></ion-icon>
         </ion-button>
-        <ion-button fill="clear" (click)="togglePlayer(true)"  *ngIf="isPlaying" color="dark">
+        <ion-button class="btn-big-primary" (click)="togglePlayer(true)"  >
           <ion-icon slot="icon-only" name="pause"></ion-icon>
         </ion-button>
-        <ion-button fill="clear" (click)="next()" color="dark">
+      </ion-col>  
+      <ion-col size="2" class="ion-text-center">
+        <ion-button class="btn-bg-grey" (click)="next()" >
           <ion-icon slot="icon-only" name="play-skip-forward"></ion-icon>
         </ion-button>
-        <ion-button fill="clear" (click)="setOrderPreference(orderPreference.SHUFFLE)" color="dark">
+      </ion-col>
+      <ion-col size="2" class="ion-text-center">
+        <ion-button class="btn-bg-none" fill="clear" (click)="setOrderPreference(orderPreference.SHUFFLE)" >
+          <ion-icon slot="icon-only" name="shuffle" color="light"></ion-icon>
+        </ion-button>
+        <!-- <ion-button fill="clear" (click)="setOrderPreference(orderPreference.SHUFFLE)" color="dark">
           <ion-icon slot="icon-only" name="shuffle"></ion-icon>
         </ion-button>
         <ion-button fill="clear" (click)="setOrderPreference(orderPreference.ALL_IN_LOOP)" color="dark">
@@ -36,10 +55,9 @@
         </ion-button>
         <ion-button fill="clear" (click)="setOrderPreference(orderPreference.ONE_IN_LOOP)" color="dark">
           <ion-icon slot="icon-only" name="repeat"></ion-icon>
-        </ion-button>
+        </ion-button> -->
       </ion-col>
+      
     </ion-row>
   </ion-toolbar>
-</div>
-  
 
