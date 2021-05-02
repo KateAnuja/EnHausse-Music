@@ -217,6 +217,9 @@ export class LocalMusicPage {
     this.isOpen = !this.isOpen;
   }
 
+  playTrack(musicTrack:MusicTrack){
+    this.musicTrackService.playTrack(musicTrack,this.musicArray);
+  }
   
 
 }

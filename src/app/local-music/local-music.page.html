@@ -28,7 +28,7 @@
 <ion-content>
   <ion-button 
     (click)="addMockMusicTrack()" 
-    hidden>
+    >
     Add Music Track
   </ion-button>
   <ion-virtual-scroll 
@@ -75,6 +75,11 @@
           *ngIf="activePlaylist == activePlaylistName"
           (click)="deleteFormPlaylist(item)">
           <ion-icon name="remove">              
+          </ion-icon>
+        </ion-button>
+        <ion-button 
+          (click)="playTrack(item)">
+          <ion-icon name="caret-forward-outline">
           </ion-icon>
         </ion-button>
         </ion-buttons>
