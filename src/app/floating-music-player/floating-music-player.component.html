@@ -1,6 +1,15 @@
 <div class="container">
   <ion-card *ngIf="currentMusicTrack">
-    {{currentMusicTrack.name}}
+    <p>
+      Playing : {{currentMusicTrack.name}}
+    </p>
+    <p>
+      Next : {{nextMusicTrack.name}}
+    </p>
+    <p>
+      Prev : {{prevMusicTrack.name}}
+    </p>
+    <p>Total : {{totalDurationOfPlaylist}}</p>
   </ion-card>
 </div>
   

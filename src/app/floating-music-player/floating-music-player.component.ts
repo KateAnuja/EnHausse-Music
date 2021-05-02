@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MusicPlayer } from '../model/musicPlayer';
+import { MusicPlayer, MusicPlayerUtil } from '../model/musicPlayer';
 import { MusicTrack } from '../model/track';
 import { MusicTrackService } from '../services/music-track.service';
 
@@ -11,6 +11,9 @@ import { MusicTrackService } from '../services/music-track.service';
 export class FloatingMusicPlayerComponent implements OnInit {
 
   currentMusicTrack:MusicTrack;
+  nextMusicTrack:MusicTrack;
+  prevMusicTrack:MusicTrack;
+  totalDurationOfPlaylist:number=0;
   
   constructor(
     private musicTrackService:MusicTrackService,
@@ -18,6 +21,10 @@ export class FloatingMusicPlayerComponent implements OnInit {
     this.musicTrackService.playerDataBehaviorSubject.subscribe((mP:MusicPlayer)=>{
       if(mP){
         this.currentMusicTrack=mP.currentMusictTrack;
+        MusicPlayerUtil.startPlayer(mP.currentMusictTrack,mP.musicTrackArray);
+        this.nextMusicTrack=MusicPlayerUtil.getNext();
+        this.prevMusicTrack=MusicPlayerUtil.getPrev();
+        this.totalDurationOfPlaylist=MusicPlayerUtil.getTotalDuration();
       }
     })
   }

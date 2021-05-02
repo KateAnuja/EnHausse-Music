@@ -24,5 +24,23 @@ export class MusicPlayerUtil{
         })
     }
 
+    public static getTotalDuration(){
+        return this.totalDuration;
+    }
+
+    public static getNext(){
+        if((this.currentIndex+1)>this.musicTrackArray.length-1){
+            return this.musicTrackArray[0];
+        }
+        return this.musicTrackArray[this.currentIndex+1];
+    }
+
+    public static getPrev(){
+        if((this.currentIndex-1)<0){
+            return this.musicTrackArray[this.musicTrackArray.length-1];
+        }
+        return this.musicTrackArray[this.currentIndex-1];
+    }
+
     
 }
