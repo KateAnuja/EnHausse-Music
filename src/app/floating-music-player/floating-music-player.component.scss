@@ -1,49 +1,90 @@
 ion-toolbar{
     --background: #0f0f0f;
 }
-ion-icon{
-    --color:#fff;
-    font-size : 50px;
-}
-.btn-big-primary{
-    --border-radius: 15px!important;
-    width:60px;
-    height: 60px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(119,90,246,0.7);
+// ion-icon{
+//     --color:#fff;
+//     font-size : 50px;
+// }
+// .btn-big-primary{
+//     --border-radius: 15px!important;
+//     width:60px;
+//     height: 60px;
+//     border-radius: 15px;
+//     box-shadow: 0 5px 15px rgba(119,90,246,0.7);
+// }
+
+// .hidden{
+//     display: none;;
+// }
+// ion-button.btn-bg-grey{
+//     --background: #222 !important;
+//     width:40px;
+//     height: 40px;
+//     border-radius: 10px;;
+//     --border-radius: 10px!important;
+//     margin-top: 15px;
+// }
+
+// ion-button.btn-bg-none{
+//     --background: #0f0f0f !important;
+//     width:40px;
+//     height: 40px;
+//     border-radius: 10px;;
+//     --border-radius: 10px!important;
+//     margin-top: 15px;
+//     color:#fff; 
+// }
+// ion-range{
+//     --padding-top:4px  !important;
+//     padding-top: 4px;
+// }
+
+// .pb-15{
+//     padding-bottom: 15px;;
+// }
+// .pt-20{
+//     padding-top: 20px;
+// }
+
+// .text-sm{
+//     font-size: 10px;
+//     text-align: center;
+// }
+
+ion-col.no-pad{
+    --padding-top:0px;
+    --padding-bottom:0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
-ion-button.btn-bg-grey{
-    --background: #222 !important;
-    width:40px;
-    height: 40px;
-    border-radius: 10px;;
-    --border-radius: 10px!important;
-    margin-top: 15px;
+.music-title{
+    display: block;
+    width: 100%;
+    height: 35px;
+    overflow: hidden;
+    padding-top:10px;
 }
 
-ion-button.btn-bg-none{
-    --background: #0f0f0f !important;
-    width:40px;
-    height: 40px;
-    border-radius: 10px;;
-    --border-radius: 10px!important;
-    margin-top: 15px;
-    color:#fff; 
-}
 ion-range{
-    --padding-top:4px  !important;
-    padding-top: 4px;
+    --padding-top:0px;
+    padding-top:0px;
 }
 
-.pb-15{
-    padding-bottom: 15px;;
-}
-.pt-20{
-    padding-top: 20px;
+.sp-time{
+    display: block;
+    margin: auto;
+    padding-top: 15px;
 }
 
-.text-sm{
-    font-size: 10px;
-    text-align: center;
+ion-range{
+    height: 0px;
+    margin-top:20px
+}
+
+.music-title-next{
+    display: block;
+    width: 100%;
+    height: 20px;
+    overflow: hidden;
 }

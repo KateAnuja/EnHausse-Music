@@ -1,0 +1,56 @@
+/*
+Primary Color: #1f70e1
+rgb(31,112,225)
+*/
+.btn{
+    padding: 0;
+}
+
+.btn-priamry{
+    background: #1f70e1;
+    color: #fff;
+}
+
+.btn-secondary{
+    background: #232429;
+    color: #fff;
+}
+.btn-hollow{
+    background: none;
+    color: #888;
+    ion-icon{
+        width: 30px;
+        height: 30px;
+    }
+    .ion-sm{
+        width:20px;
+        height: 20px;
+    }
+}
+
+.btn-glow{
+    box-shadow: 0 5px 10px rgb(31,112,225,0.7);
+}
+.btn-big{
+    width:60px;
+    height: 60px;
+    border-radius: 15px;
+    font-size: 30px;
+    line-height: 40px;
+    text-align: center;
+}
+.btn-big{
+    ion-icon{
+        width: 30px;
+        height: 60px;
+    }
+}
+
+.btn-player-controller{
+    width:50px;
+    height: 35px;
+    border-radius: 10px;
+    display: block;
+    margin: auto;
+    margin-top: 15px;
+}

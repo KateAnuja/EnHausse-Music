@@ -1,4 +1,4 @@
-  <ion-toolbar>
+  <!-- <ion-toolbar>
     <ion-row>
       <ion-col size="12" class="ion-text-center">
         <ion-title color="light">
@@ -31,10 +31,14 @@
         </ion-button> 
       </ion-col>
       <ion-col size="4" class="ion-text-center">
-        <ion-button class="btn-big-primary" (click)="togglePlayer(false)" *ngIf="!isPlaying">
+        <ion-button 
+          class="btn-big-primary" 
+          (click)="togglePlayer(false)" >
           <ion-icon slot="icon-only" name="play"></ion-icon>
         </ion-button>
-        <ion-button class="btn-big-primary" (click)="togglePlayer(true)"  >
+        <ion-button 
+          class="btn-big-primary" 
+          (click)="togglePlayer(true)"  >
           <ion-icon slot="icon-only" name="pause"></ion-icon>
         </ion-button>
       </ion-col>  
@@ -47,7 +51,7 @@
         <ion-button class="btn-bg-none" fill="clear" (click)="setOrderPreference(orderPreference.SHUFFLE)" >
           <ion-icon slot="icon-only" name="shuffle" color="light"></ion-icon>
         </ion-button>
-        <!-- <ion-button fill="clear" (click)="setOrderPreference(orderPreference.SHUFFLE)" color="dark">
+        <ion-button fill="clear" (click)="setOrderPreference(orderPreference.SHUFFLE)" color="dark">
           <ion-icon slot="icon-only" name="shuffle"></ion-icon>
         </ion-button>
         <ion-button fill="clear" (click)="setOrderPreference(orderPreference.ALL_IN_LOOP)" color="dark">
@@ -55,9 +59,58 @@
         </ion-button>
         <ion-button fill="clear" (click)="setOrderPreference(orderPreference.ONE_IN_LOOP)" color="dark">
           <ion-icon slot="icon-only" name="repeat"></ion-icon>
-        </ion-button> -->
+        </ion-button> 
       </ion-col>
       
     </ion-row>
-  </ion-toolbar>
+  </ion-toolbar> -->
 
+<ion-toolbar>
+  <ion-row class="ion-text-center">
+    <ion-col size="12" class="no-pad">
+      <ion-title color="light">
+        <span class="music-title">[Music Title]</span>
+      </ion-title>
+    </ion-col>
+    <ion-col size="1">
+      <span class="text-sm-light sp-time">0:00</span>
+    </ion-col>
+    <ion-col size="10">
+      <ion-range 
+          pin
+          color="primary">
+        </ion-range>
+    </ion-col>
+    <ion-col size="1">
+      <span class="text-sm-light sp-time">0:00</span>
+    </ion-col>
+    <ion-col size="2">
+      <button class="btn btn-hollow btn-player-controller">
+        <ion-icon class="ion-sm" slot="icon-only" name="settings-sharp"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col size="3">
+      <button class="btn btn-secondary btn-player-controller">
+        <ion-icon slot="icon-only" name="play-skip-back"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col size="2">
+      <button class="btn btn-priamry btn-glow btn-big">
+        <ion-icon slot="icon-only" name="play"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col size="3">
+      <button class="btn btn-secondary btn-player-controller">
+        <ion-icon slot="icon-only" name="play-skip-forward"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col size="2">
+      <button class="btn btn-hollow btn-player-controller">
+        <ion-icon slot="icon-only" name="repeat"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col size="12">
+      <span class="music-title-next">Up Next : [Next Music]</span>
+    </ion-col>
+  </ion-row>
+</ion-toolbar>
