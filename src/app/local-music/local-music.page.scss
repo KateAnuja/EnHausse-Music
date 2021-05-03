@@ -5,7 +5,7 @@
 ion-card{
     --background:#232429;
     --color:#fff;
-    height: 100px;
+    height: 120px;
     border-radius: 10px;
     padding-top : 5px;
 }
@@ -16,4 +16,12 @@ ion-card.hidden{
 
 ion-content {
     --background:#1b1a1f;
+}
+
+.pt-12{
+    padding-top : 12px;
+}
+
+.pl-8{
+    padding-left : 8px;
 }

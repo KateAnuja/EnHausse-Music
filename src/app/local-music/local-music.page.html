@@ -32,54 +32,67 @@
     approxItemHeight="320px">
     <ion-card 
       *virtualItem="let item; let itemBounds = bounds;"
-      [ngClass]="{'active':item.isFavourite, 'hidden':item.uiHideInList}">
-      <ion-card-header>
-        <ion-thumbnail>
-          <ion-img 
-            [src]="item.thumbnail">
-          </ion-img>
-        </ion-thumbnail>
-        <ion-card-title color="light">
-          {{ item.name }}
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-label> 
-          Duration :  {{ item.duration }} 
-        </ion-label>
-        <ion-label>
-            Added Time :  {{ item.addedTimeStamp | date}} 
-        </ion-label>
-        <ion-buttons>
-          <ion-button 
-            [ngClass]="{'is-favourite':item.isFavourite}" 
-            (click)="toggleFavourite(item)">
-            <ion-icon name="heart">              
-            </ion-icon>
-          </ion-button>
-          <ion-button 
-          (click)="openTrackMenu()">
-          <ion-icon name="ellipsis-vertical">              
-          </ion-icon>
-        </ion-button>
-        <ion-button 
-          (click)="addToPlaylist(item)">
-          <ion-icon name="add">              
-          </ion-icon>
-        </ion-button>
-        <ion-button 
-          *ngIf="activePlaylist == activePlaylistName"
-          (click)="deleteFormPlaylist(item)">
-          <ion-icon name="remove">              
-          </ion-icon>
-        </ion-button>
-        <ion-button 
-          (click)="playTrack(item)">
-          <ion-icon name="caret-forward-outline">
-          </ion-icon>
-        </ion-button>
-        </ion-buttons>
-      </ion-card-content>
+      [ngClass]="{'active':item.isFavourite, 'hidden':item.uiHideInList}"
+      (click)="playTrack(item)">
+      <ion-row>
+        <ion-col size="2">
+          <ion-thumbnail>
+            <ion-img 
+              [src]="item.thumbnail">
+            </ion-img>
+          </ion-thumbnail>
+        </ion-col>
+        <ion-col size="10">
+          <ion-label color="light">
+            {{ item.name }}
+          </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-text-center">
+        <ion-col size="4" class="pt-12">
+          <ion-label> 
+            Duration :  {{ item.duration*1000 | date:'mm:ss':'UTC'}} 
+          </ion-label>
+        </ion-col>
+        <ion-col size="5" class="pt-12">
+          <ion-label>
+            Date :  {{ item.addedTimeStamp | date}} 
+          </ion-label>
+        </ion-col>
+        <ion-col size="3" class="pl-8">
+            <ion-buttons>
+              <ion-button 
+                [ngClass]="{'is-favourite':item.isFavourite}" 
+                (click)="toggleFavourite(item)">
+                <ion-icon name="heart">              
+                </ion-icon>
+              </ion-button>
+              <ion-button 
+                (click)="openTrackMenu()">
+                <ion-icon name="ellipsis-vertical">              
+                </ion-icon>
+              </ion-button>
+            </ion-buttons>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+           <ion-buttons>
+            <ion-button 
+              (click)="addToPlaylist(item)">
+              <ion-icon name="add">              
+              </ion-icon>
+            </ion-button>
+            <ion-button 
+              *ngIf="activePlaylist == activePlaylistName"
+              (click)="deleteFormPlaylist(item)">
+              <ion-icon name="remove">              
+              </ion-icon>
+            </ion-button>
+            </ion-buttons>
+        </ion-col>
+      </ion-row>
+        
     </ion-card>
   </ion-virtual-scroll>
 </ion-content>
