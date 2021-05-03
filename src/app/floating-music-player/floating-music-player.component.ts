@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Media, MediaObject } from '@ionic-native/media/ngx';
-import { IonInput, IonRange, Platform } from '@ionic/angular';
+import { IonRange, Platform } from '@ionic/angular';
 import { 
   MusicPlayer, 
   MusicPlayerOrderPreference, 
@@ -30,7 +30,7 @@ export class FloatingMusicPlayerComponent {
   audioProgressBarInterval=null;
   audioDuration=-1;
   isSeekBarFocused=false;
-  soudTrackName="Music Track"
+  currentMusicPlayingDuration = 0;
 
 
   
@@ -50,6 +50,7 @@ export class FloatingMusicPlayerComponent {
   initMusicPlayer(mP:MusicPlayer){
     if(mP){
       this.audioDuration=-1;
+      this.currentMusicPlayingDuration = 0;
       if(this.audioProgressBarInterval){
         clearInterval(this.audioProgressBarInterval);
       }
@@ -74,12 +75,14 @@ export class FloatingMusicPlayerComponent {
       
       this.audioProgressBarInterval=setInterval(async ()=>{
         this.audioFile.getCurrentPosition().then((pos)=>{
+          this.currentMusicPlayingDuration = pos*1000;
           if(!this.isSeekBarFocused){
             if(this.audioDuration<0){
               this.audioDuration=this.audioFile.getDuration()*1000;
             }
             this.trackRange.value=(pos*1000*100/this.audioDuration)
             if(Number(this.trackRange.value)==100 || Number(this.trackRange.value)<0){
+              this.currentMusicPlayingDuration = 0;
               this.next();
             }
           }

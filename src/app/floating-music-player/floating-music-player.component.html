@@ -8,7 +8,7 @@
       </ion-title>
     </ion-col>
     <ion-col size="1">
-      <span class="text-sm-light sp-time">{{currentMusicTrack.duration}}</span>
+      <span class="text-sm-light sp-time">{{currentMusicPlayingDuration | date : 'mm:ss' : 'UTC'}}</span>
     </ion-col>
     <ion-col size="10">
       <ion-range 
@@ -21,7 +21,7 @@
         </ion-range>
     </ion-col>
     <ion-col size="1">
-      <span class="text-sm-light sp-time">{{currentMusicTrack.duration | date : "mm:ss" : "UTC"}}</span>
+      <span class="text-sm-light sp-time">{{currentMusicTrack.duration*1000 | date : 'mm:ss' : 'UTC'}}</span>
     </ion-col>
     <ion-col size="2">
       <button 
@@ -80,7 +80,7 @@
       </button>
     </ion-col>
     <ion-col size="12">
-      <span class="music-title-next">Up Next : [Next Music]</span>
+      <span class="music-title-next">Up Next : {{nextMusicTrack.name}}</span>
     </ion-col>
   </ion-row>
 </ion-toolbar>

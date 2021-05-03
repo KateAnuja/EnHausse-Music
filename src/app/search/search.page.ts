@@ -319,8 +319,9 @@ export class SearchPage implements OnInit {
         this.downloadPercentage=0;
         this.lastUpdateValue=0;
         this.lastProgress=0;
+        
         let musicTrack : MusicTrack = {
-          name : fileName,
+          name : fileName.replace(/.mp3/g,"").replace(/-/g," "),
           duration : 0,
           path : entry.nativeURL,
           thumbnail : this.imgSrc,
