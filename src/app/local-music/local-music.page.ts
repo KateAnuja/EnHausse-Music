@@ -35,6 +35,11 @@ export class LocalMusicPage {
   ) { }
 
   ionViewWillEnter(){
+    this.musicTrackService.musicTrackAddedBehaviourSubject.subscribe((isNewMusicTrackAdded)=>{
+      if(isNewMusicTrackAdded){
+        this.getMusicArray();
+      }
+    })
     this.activatedRoute.params.subscribe(params=>{
       if(params && params.playlistName){
         this.activePlaylist=params.playlistName;

@@ -16,6 +16,7 @@ export class MusicTrackService {
   favCountBehaviorSubject = new BehaviorSubject(0);
   playListUpdated = new BehaviorSubject(0);
   playerDataBehaviorSubject = new BehaviorSubject<MusicPlayer>(null);
+  musicTrackAddedBehaviourSubject = new BehaviorSubject<Boolean>(false);
 
   constructor(
     private storage:Storage  
@@ -27,7 +28,7 @@ export class MusicTrackService {
     this.getAllLocalTracks()
     .then(async (musicArray)=>{
       musicArray.push(musicTrack);
-      musicArray = MusicTrackUtil.sort(SortByMusicTrack.A_TO_Z, musicArray);
+      musicArray = MusicTrackUtil.sort(SortByMusicTrack.RECENT_FIRST, musicArray);
       this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(musicArray));
     })
 
@@ -187,7 +188,7 @@ export class MusicTrackService {
         addedTimeStamp : Utility.randomNumber(1612117800000,1619721000000)
       })
     }
-    mockDataArray = MusicTrackUtil.sort(SortByMusicTrack.A_TO_Z, mockDataArray);
+    mockDataArray = MusicTrackUtil.sort(SortByMusicTrack.RECENT_FIRST, mockDataArray);
     await this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(mockDataArray));
   }
 

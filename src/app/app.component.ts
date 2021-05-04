@@ -15,8 +15,11 @@ const { PushNotifications } = Plugins;
 
 import { FCM } from '@capacitor-community/fcm';
 import { MusicTrackService } from './services/music-track.service';
+import { fromEvent } from 'rxjs';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 
 const fcm = new FCM();
+
 
 
 @Component({
@@ -26,25 +29,48 @@ const fcm = new FCM();
 })
 export class AppComponent {
   isMusicPlayerReady  : boolean=false;
+  isKeyboradOpen : boolean=false;
+  showMusicPlayer : boolean=true;
   playerDataBehaviorSubscription;
+  screenHeight:number=0;
   constructor(
     private screenOrientation: ScreenOrientation,
     private firebaseCrashlytics: FirebaseCrashlytics,
     private platform : Platform,
     private musicTrackService : MusicTrackService,
+    private keyboard : Keyboard
     
   ) {
+    
+    let w:any=window;
+    this.screenHeight=w.innerHeight;
+    w.addEventListener("resize",()=>{
+      let wH=window.innerHeight;
+      if(wH<this.screenHeight){
+        this.isKeyboradOpen=true;
+      }else{
+        this.isKeyboradOpen=false;
+      }
+      this.toggleMusicPlayer();
+      
+    });
+
     this.playerDataBehaviorSubscription=this.musicTrackService.playerDataBehaviorSubject;
 
     this.playerDataBehaviorSubscription.subscribe((mP)=>{
         if(mP){
           if(!this.isMusicPlayerReady){
             this.isMusicPlayerReady = true;
+            this.toggleMusicPlayer();
             this.playerDataBehaviorSubscription.unsubscribe();
           }
         }
       });
     this.initializeApp();
+  }
+
+  toggleMusicPlayer(){
+    this.showMusicPlayer= this.isMusicPlayerReady && !this.isKeyboradOpen;
   }
 
   ionViewWillEnter(){

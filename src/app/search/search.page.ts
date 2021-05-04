@@ -300,9 +300,11 @@ export class SearchPage implements OnInit {
       duration: 2000
     });
     toast.present();
+    this.musicTrackService.musicTrackAddedBehaviourSubject.next(true);
     if(this.isInitialLoad){
       this.router.navigateByUrl('home');
     }
+
   }
 
   lastUpdateValue=0;
