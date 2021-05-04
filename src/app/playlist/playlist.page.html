@@ -9,7 +9,7 @@
         </ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title *ngIf="!isOpen">Playlist</ion-title>
+    <ion-title *ngIf="!isOpen" color="light" class="ion-text-center">Playlist</ion-title>
     <ion-input *ngIf="isOpen"
       [(ngModel)]="trackInput" 
       (ionChange)="searchTrack()" 

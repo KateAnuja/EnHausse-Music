@@ -69,7 +69,6 @@ export class LocalMusicPage {
       });
       this.musicArray=musicInPlaylistArray;
       this.activePlaylistName=Constants.STRING_WORD_FAVOURITE;
-      console.log(this.activePlaylistName);
     }else{
       let musicInPlaylistArray=[];
       musicArray.forEach((musicTrack:MusicTrack)=>{
@@ -81,7 +80,9 @@ export class LocalMusicPage {
       this.activePlaylistName = this.activePlaylist;
     }
     this.filteredMusicArray = this.musicArray;
-  
+    if(this.musicArray.length>0){
+      this.musicTrackService.playTrack(this.musicArray[0],this.musicArray,false);
+    }
   }
 
   async addMockMusicTrack(){
@@ -218,7 +219,7 @@ export class LocalMusicPage {
   }
 
   playTrack(musicTrack:MusicTrack){
-    this.musicTrackService.playTrack(musicTrack,this.musicArray);
+    this.musicTrackService.playTrack(musicTrack,this.musicArray,true);
   }
   
 

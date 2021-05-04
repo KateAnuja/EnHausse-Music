@@ -34,11 +34,12 @@ export class MusicTrackService {
 
   }
 
-  async playTrack(currentMusictTrack:MusicTrack,musicTrackArray:MusicTrack[]){
+  async playTrack(currentMusictTrack:MusicTrack,musicTrackArray:MusicTrack[],toPlay:boolean){
     this.playerDataBehaviorSubject.next({
       currentMusictTrack,
       musicTrackArray,
-      orderPreference : await this.getMusicOrderPreference()
+      orderPreference : await this.getMusicOrderPreference(),
+      toPlay
     })
   }
 
@@ -94,6 +95,13 @@ export class MusicTrackService {
 
     }
     return tracks;
+  }
+
+  async getAllLocalTracksCount(){
+    let tracks:MusicTrack[]=[];
+    tracks=await this.getAllLocalTracks();
+
+    return tracks.length;
   }
 
   getTracksByPlaylist(playlistName : string){

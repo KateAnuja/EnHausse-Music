@@ -18,7 +18,14 @@ export class FloatingMusicPlayerComponent {
 
   @ViewChild('trackRange',{static:false})trackRange:IonRange;
 
-  currentMusicTrack:MusicTrack;
+  currentMusicTrack:MusicTrack={
+    name: "abc", 
+    duration : 0, 
+    path : "", 
+    isFavourite : false,
+    playlist : [],
+    thumbnail : "",
+    addedTimeStamp : +new Date()};
   musicTrackArray:MusicTrack[]=[];
   nextMusicTrack:MusicTrack;
   prevMusicTrack:MusicTrack;
@@ -31,7 +38,6 @@ export class FloatingMusicPlayerComponent {
   audioDuration=-1;
   isSeekBarFocused=false;
   currentMusicPlayingDuration = 0;
-
 
   
   constructor(
@@ -71,7 +77,11 @@ export class FloatingMusicPlayerComponent {
       this.audioFile = this.media.create(
         this.currentMusicTrack.path.replace(/^file:\/\//,'')
       );
-      this.audioFile.play();
+      console.log("mP.toPlay",mP.toPlay);
+      if(mP.toPlay){
+        this.audioFile.play();
+        this.isPlaying=true;
+      }
       
       this.audioProgressBarInterval=setInterval(async ()=>{
         this.audioFile.getCurrentPosition().then((pos)=>{
@@ -88,18 +98,17 @@ export class FloatingMusicPlayerComponent {
           }
         })
       },200);
-      this.isPlaying=true;
     }
   }
 
   prev(){
     this.audioFile.stop();
-    this.musicTrackService.playTrack(this.prevMusicTrack,this.musicTrackArray);
+    this.musicTrackService.playTrack(this.prevMusicTrack,this.musicTrackArray,true);
   }
 
   next(){
     this.audioFile.stop();
-    this.musicTrackService.playTrack(this.nextMusicTrack,this.musicTrackArray);
+    this.musicTrackService.playTrack(this.nextMusicTrack,this.musicTrackArray,true);
   }
 
   togglePlayer(){

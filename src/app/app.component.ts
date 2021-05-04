@@ -14,6 +14,8 @@ import { Plugins } from '@capacitor/core';
 const { PushNotifications } = Plugins;
 
 import { FCM } from '@capacitor-community/fcm';
+import { MusicTrackService } from './services/music-track.service';
+
 const fcm = new FCM();
 
 
@@ -23,12 +25,25 @@ const fcm = new FCM();
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  isMusicPlayerReady  : boolean=false;
+  playerDataBehaviorSubscription;
   constructor(
     private screenOrientation: ScreenOrientation,
     private firebaseCrashlytics: FirebaseCrashlytics,
     private platform : Platform,
+    private musicTrackService : MusicTrackService,
+    
   ) {
+    this.playerDataBehaviorSubscription=this.musicTrackService.playerDataBehaviorSubject;
 
+    this.playerDataBehaviorSubscription.subscribe((mP)=>{
+        if(mP){
+          if(!this.isMusicPlayerReady){
+            this.isMusicPlayerReady = true;
+            this.playerDataBehaviorSubscription.unsubscribe();
+          }
+        }
+      });
     this.initializeApp();
   }
 
@@ -88,4 +103,6 @@ export class AppComponent {
       }
     );
   }
+  
+
 }
