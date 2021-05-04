@@ -17,6 +17,7 @@ export class PlaylistPage {
   favouritesCount =0;
   favPlaylistString=Constants.STRING_PLAYLIST_FAV;
   isOpen = false;
+  playlistInput="";
   
   constructor(
     private router : Router,
@@ -89,6 +90,10 @@ export class PlaylistPage {
 
   toggleSearchBar(){
     this.isOpen = !this.isOpen;
+  }
+
+  searchPlaylist(){
+    //TODO : search
   }
 
 }
