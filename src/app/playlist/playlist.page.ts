@@ -16,6 +16,7 @@ export class PlaylistPage {
   playlist = Constants.STRING_EMPTY_STRING;
   favouritesCount =0;
   favPlaylistString=Constants.STRING_PLAYLIST_FAV;
+  isOpen = false;
   
   constructor(
     private router : Router,
@@ -84,6 +85,10 @@ export class PlaylistPage {
 
   openPlaylist(playlistName:string){
     this.router.navigate([`/local-music/${playlistName}`])
+  }
+
+  toggleSearchBar(){
+    this.isOpen = !this.isOpen;
   }
 
 }
