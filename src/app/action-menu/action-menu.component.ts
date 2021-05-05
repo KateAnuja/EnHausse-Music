@@ -45,6 +45,7 @@ export class ActionMenuComponent implements OnInit {
       console.log("buttonConfigArray", buttonConfigArray);
       const actionSheet = await this.actionSheetController.create({
         header: 'Add To Playlist',
+        cssClass: 'action-sheet-playlist',
         buttons: buttonConfigArray
       });
       await actionSheet.present();
