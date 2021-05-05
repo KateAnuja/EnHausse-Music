@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: SearchPage
+  },
+  {
+    path: 'init',
+    component: SearchPage
   }
 ];
 

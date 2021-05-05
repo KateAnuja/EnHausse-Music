@@ -1,0 +1,12 @@
+super-tabs-toolbar{
+    background: #0f0f0f;
+    .ion-activatable{
+        --ion-color-contrast:red;
+    }
+    super-tab-button.active{
+        ion-label{
+            color:#1f70e1;
+            text-shadow: 0 0 10px rgba(31,112,225,0.6);
+        }
+    }
+}

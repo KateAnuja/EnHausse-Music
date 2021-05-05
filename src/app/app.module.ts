@@ -20,6 +20,7 @@ import {
 } from './floating-music-player/floating-music-player.component';
 import { Constants } from './util/constants';
 
+
 @NgModule({
   declarations: [AppComponent, FloatingMusicPlayerComponent],
   entryComponents: [],

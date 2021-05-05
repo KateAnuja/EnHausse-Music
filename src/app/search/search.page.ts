@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
@@ -38,6 +38,8 @@ export class SearchPage implements OnInit {
   imgSrc : any;
   url : string="";
   progress = 0;
+  isInitialLoad = false;
+  showProgressBar = false;
   @ViewChild('range', {static : false}) range : IonRange;
 
   constructor(
@@ -50,12 +52,19 @@ export class SearchPage implements OnInit {
     private networkService : NetworkService,
     private musicTrackService : MusicTrackService,
     private media : Media,
+    private activatedRoute : ActivatedRoute,
+    private router : Router
 
   ) { }
 
   ngOnInit() {
   }
   async ionViewWillEnter(){
+    if(this.router.url.indexOf("/search/init") != -1){
+      this.isInitialLoad = true;
+      let currentYear = +new Date().getFullYear();
+      this.getSearchResults(Constants.STRING_INITIAL_LOAD_SEARCH+currentYear);
+    }
     let pluginResponse=await IonicPlugin.getSharedLink();
     if(pluginResponse.sharedLink && pluginResponse.sharedLink.length>20){
       this.url=pluginResponse.sharedLink;
@@ -194,6 +203,7 @@ export class SearchPage implements OnInit {
     let videoid = this.url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
     if(videoid != null){
       this.downloadPercentage=0.01;
+      this.showProgressBar=true;
       this.scrapY2Mate(videoid[1].toString());
     }else{ 
       const alert = await this.alert.create({
@@ -212,7 +222,12 @@ export class SearchPage implements OnInit {
       this.currentlyDownloading=vid;
       try{
         let {kid,fileName}=await this.getVideoKid(vid);
-        this.downloadPercentage+=0.04;
+        this.showProgressBar=true;
+        if(this.downloadPercentage != 0){
+          this.downloadPercentage+=0.04;
+        }else{
+          this.downloadPercentage+=0.05;
+        }
         let downloadUrl:string=await this.networkService.getDownloadUrl(kid,vid);
         this.downloadPercentage+=0.05;
         this.downloadFromUrl(downloadUrl,fileName);
@@ -285,6 +300,11 @@ export class SearchPage implements OnInit {
       duration: 2000
     });
     toast.present();
+    this.musicTrackService.musicTrackAddedBehaviourSubject.next(true);
+    if(this.isInitialLoad){
+      this.router.navigateByUrl('home');
+    }
+
   }
 
   lastUpdateValue=0;
@@ -317,10 +337,12 @@ export class SearchPage implements OnInit {
         this.url="";
         this.currentlyDownloading="";
         this.downloadPercentage=0;
+        this.showProgressBar=false;
         this.lastUpdateValue=0;
         this.lastProgress=0;
+        
         let musicTrack : MusicTrack = {
-          name : fileName,
+          name : fileName.replace(/.mp3/g,"").replace(/-/g," "),
           duration : 0,
           path : entry.nativeURL,
           thumbnail : this.imgSrc,

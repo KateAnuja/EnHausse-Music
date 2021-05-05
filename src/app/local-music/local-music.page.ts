@@ -6,6 +6,8 @@ import { ActionSheetController } from '@ionic/angular';
 import { Playlist } from '../model/playlist';
 import { ActivatedRoute } from '@angular/router';
 import { Constants } from '../util/constants';
+import { PopoverController } from '@ionic/angular';
+import { ActionMenuComponent } from '../action-menu/action-menu.component';
 
 
 @Component({
@@ -24,6 +26,7 @@ export class LocalMusicPage {
   activePlaylist : string = Constants.STRING_EMPTY_STRING;
   activePlaylistName : string = Constants.STRING_WORD_ALL;
   isOpen = false;
+  isPlayerPlayingTrack : boolean = false;
   
   constructor(
     private musicTrackService : MusicTrackService,
@@ -31,10 +34,20 @@ export class LocalMusicPage {
     private changeDetector : ChangeDetectorRef,
     private actionSheetController: ActionSheetController,
     private activatedRoute: ActivatedRoute,
+    private popoverController: PopoverController,
 
-  ) { }
+  ) { 
+    this.musicTrackService.isPlayerPlayingBehaviourSubject.subscribe((isPlaying)=>{
+      this.isPlayerPlayingTrack=isPlaying;
+    })
+  }
 
   ionViewWillEnter(){
+    this.musicTrackService.musicTrackAddedBehaviourSubject.subscribe((isNewMusicTrackAdded)=>{
+      if(isNewMusicTrackAdded){
+        this.getMusicArray();
+      }
+    })
     this.activatedRoute.params.subscribe(params=>{
       if(params && params.playlistName){
         this.activePlaylist=params.playlistName;
@@ -44,7 +57,6 @@ export class LocalMusicPage {
   }
 
   ionViewDidEnter(){
-    this.getPlaylist();
   }
 
   ionViewWillLeave(){
@@ -69,7 +81,6 @@ export class LocalMusicPage {
       });
       this.musicArray=musicInPlaylistArray;
       this.activePlaylistName=Constants.STRING_WORD_FAVOURITE;
-      console.log(this.activePlaylistName);
     }else{
       let musicInPlaylistArray=[];
       musicArray.forEach((musicTrack:MusicTrack)=>{
@@ -81,12 +92,13 @@ export class LocalMusicPage {
       this.activePlaylistName = this.activePlaylist;
     }
     this.filteredMusicArray = this.musicArray;
-
-    //TODO:remove
-    this.playTrack(this.musicArray[1]);    
+    if(this.musicArray.length>0 && !this.isPlayerPlayingTrack){
+      this.musicTrackService.playTrack(this.musicArray[0],this.musicArray,false);
+    }
   }
 
   async addMockMusicTrack(){
+    this.musicTrackService.createMockData();
     const alert = await this.alertController.create({
       header: 'Success',
       message: 'Music Track Added.',
@@ -104,8 +116,9 @@ export class LocalMusicPage {
   searchTrack(){
       let filteredMusicArray = [];
       if(this.trackInput!=""){
+        this.trackInput=this.trackInput.toLowerCase();
         this.musicArray.forEach((track)=>{
-          if(track.name.indexOf(this.trackInput) != -1){
+          if(track.name.toLowerCase().indexOf(this.trackInput) != -1){
             filteredMusicArray.push(track);
           }
         })
@@ -179,27 +192,7 @@ export class LocalMusicPage {
     this.musicTrackService.toggleFavourite(musicTrack.path);
   }
 
-  async addToPlaylist(musicTrack:MusicTrack){
-    let buttonConfigArray=[];
-    for(let i=0;i<this.playlistArray.length;i++){
-      buttonConfigArray.push({
-        text:this.playlistArray[i].name,
-        handler: ()=>{
-          if(musicTrack.playlist.indexOf(this.playlistArray[i].name)==-1){
-            this.musicTrackService.addToPlaylist(
-              musicTrack,
-              this.playlistArray[i].name
-            )
-          }
-        }
-      });
-    }
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Add To Playlist',
-      buttons: buttonConfigArray
-    });
-    await actionSheet.present();
-  }
+  
 
   deleteFormPlaylist(musicTrack:MusicTrack){
     this.musicTrackService.deleteMusictrackFromPlaylist(musicTrack, this.activePlaylistName);
@@ -210,16 +203,33 @@ export class LocalMusicPage {
 
   }
 
-  async getPlaylist(){
-    this.playlistArray=await this.musicTrackService.getPlaylist();
-  }
 
   toggleSearchBar(){
     this.isOpen = !this.isOpen;
   }
 
   playTrack(musicTrack:MusicTrack){
-    this.musicTrackService.playTrack(musicTrack,this.musicArray);
+    this.musicTrackService.playTrack(musicTrack,this.musicArray,true);
+  }
+
+  async actionMenuPopover(ev: any, item) {
+    console.log("ev", ev);
+    const popover = await this.popoverController.create({
+      component: ActionMenuComponent,
+      event: ev,
+      cssClass: 'action-menu-popover',
+      componentProps: {
+        track : item
+      },
+      translucent: true
+    });
+
+    popover.onDidDismiss().then((result) => {
+      
+    });
+
+    return await popover.present();
+
   }
   
 

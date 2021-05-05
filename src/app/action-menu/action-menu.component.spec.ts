@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { DownloadPage } from './download.page';
+import { ActionMenuComponent } from './action-menu.component';
 
-describe('DownloadPage', () => {
-  let component: DownloadPage;
-  let fixture: ComponentFixture<DownloadPage>;
+describe('ActionMenuComponent', () => {
+  let component: ActionMenuComponent;
+  let fixture: ComponentFixture<ActionMenuComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DownloadPage ],
+      declarations: [ ActionMenuComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DownloadPage);
+    fixture = TestBed.createComponent(ActionMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

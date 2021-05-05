@@ -5,6 +5,9 @@ import { Location } from '@angular/common';
 import { LocalMusicPage } from '../local-music/local-music.page';
 import { PlaylistPage } from '../playlist/playlist.page';
 import { SearchPage } from '../search/search.page';
+import { MusicTrackService } from '../services/music-track.service';
+import { Router } from '@angular/router';
+
 
 const { IonicPlugin,SplashScreen } = Plugins;
 
@@ -26,6 +29,8 @@ export class HomePage {
     private platform: Platform,
     private location : Location,
     private alert : AlertController,
+    private musicTrackService : MusicTrackService,
+    private router : Router,
   ) {
     this.platform.backButton.subscribeWithPriority(10, () => {
       if(this.location.isCurrentPathEqualTo('/home')){
@@ -68,7 +73,10 @@ export class HomePage {
   }
 
   async ionViewWillEnter(){
-
+    let count = await this.musicTrackService.getAllLocalTracksCount();
+    if(count == 0){
+      this.router.navigateByUrl('search/init');
+    }
   }
 
   ionViewDidEnter(){

@@ -16,6 +16,8 @@ export class MusicTrackService {
   favCountBehaviorSubject = new BehaviorSubject(0);
   playListUpdated = new BehaviorSubject(0);
   playerDataBehaviorSubject = new BehaviorSubject<MusicPlayer>(null);
+  musicTrackAddedBehaviourSubject = new BehaviorSubject<boolean>(false);
+  isPlayerPlayingBehaviourSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
     private storage:Storage  
@@ -27,18 +29,19 @@ export class MusicTrackService {
     this.getAllLocalTracks()
     .then(async (musicArray)=>{
       musicArray.push(musicTrack);
-      musicArray = MusicTrackUtil.sort(SortByMusicTrack.A_TO_Z, musicArray);
+      musicArray = MusicTrackUtil.sort(SortByMusicTrack.RECENT_FIRST, musicArray);
       this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(musicArray));
     })
 
 
   }
 
-  async playTrack(currentMusictTrack:MusicTrack,musicTrackArray:MusicTrack[]){
+  async playTrack(currentMusictTrack:MusicTrack,musicTrackArray:MusicTrack[],toPlay:boolean){
     this.playerDataBehaviorSubject.next({
       currentMusictTrack,
       musicTrackArray,
-      orderPreference : await this.getMusicOrderPreference()
+      orderPreference : await this.getMusicOrderPreference(),
+      toPlay
     })
   }
 
@@ -96,6 +99,13 @@ export class MusicTrackService {
     return tracks;
   }
 
+  async getAllLocalTracksCount(){
+    let tracks:MusicTrack[]=[];
+    tracks=await this.getAllLocalTracks();
+
+    return tracks.length;
+  }
+
   getTracksByPlaylist(playlistName : string){
 
   }
@@ -131,6 +141,23 @@ export class MusicTrackService {
 
   removeFromPlaylist(playlistName : string, path : string){
 
+  }
+
+  async deleteMusicTrack(musicTrack : MusicTrack){
+    let musicTrackDbArray:MusicTrack[]=[];
+    try{
+      musicTrackDbArray=JSON.parse(await this.storage.get(Constants.DB.MODEL_MUSIC_TRACK || Constants.STRING_EMPTY_ARRAY));
+    }catch(err){
+
+    }
+    for(let i=0;i<musicTrackDbArray.length;i++){
+      if(musicTrackDbArray[i].path==musicTrack.path){
+        musicTrackDbArray.splice(i,1);
+      }
+    }
+
+    await this.storage.set(Constants.DB.MODEL_MUSIC_TRACK, JSON.stringify(musicTrackDbArray));
+    
   }
 
   async getPlaylist(){
@@ -179,7 +206,7 @@ export class MusicTrackService {
         addedTimeStamp : Utility.randomNumber(1612117800000,1619721000000)
       })
     }
-    mockDataArray = MusicTrackUtil.sort(SortByMusicTrack.A_TO_Z, mockDataArray);
+    mockDataArray = MusicTrackUtil.sort(SortByMusicTrack.RECENT_FIRST, mockDataArray);
     await this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(mockDataArray));
   }
 

@@ -1,45 +1,87 @@
-<div class="container">
-  <ion-toolbar *ngIf="currentMusicTrack">
-    <ion-row>
-      <ion-col size="12" class="ion-text-center">
-        <p>
+<ion-toolbar>
+  <ion-row class="ion-text-center">
+    <ion-col size="12" class="no-pad">
+      <ion-title color="light">
+        <span class="music-title">
           {{currentMusicTrack.name}}
-        </p>
-      </ion-col>
-      <ion-col size="12">
-        <ion-range 
-          pin
-          #trackRange 
-          color="primary"
-          (touchend)="seekTrackTo()"
-          (touchstart)="OnSeekTrackFocus()">
+        </span>
+      </ion-title>
+    </ion-col>
+    <ion-col size="2">
+      <span class="text-sm-light sp-time">{{currentMusicPlayingDuration | date : 'mm:ss' : 'UTC'}}</span>
+    </ion-col>
+    <ion-col size="8">
+      <ion-range 
+        pin
+        #trackRange 
+        color="primary"
+        (touchend)="seekTrackTo()"
+        (touchstart)="OnSeekTrackFocus()"
+        class="range-bar"
+        >
         </ion-range>
-      </ion-col>
-      <ion-col size="12" class="ion-text-center">
-        <ion-button fill="clear" (click)="prev()" color="dark">
-          <ion-icon slot="icon-only" name="play-skip-back"></ion-icon>
-        </ion-button> 
-        <ion-button fill="clear" (click)="togglePlayer(false)" *ngIf="!isPlaying" color="dark">
-          <ion-icon slot="icon-only" name="play"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" (click)="togglePlayer(true)"  *ngIf="isPlaying" color="dark">
-          <ion-icon slot="icon-only" name="pause"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" (click)="next()" color="dark">
-          <ion-icon slot="icon-only" name="play-skip-forward"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" (click)="setOrderPreference(orderPreference.SHUFFLE)" color="dark">
-          <ion-icon slot="icon-only" name="shuffle"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" (click)="setOrderPreference(orderPreference.ALL_IN_LOOP)" color="dark">
-          <ion-icon slot="icon-only" name="sync"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" (click)="setOrderPreference(orderPreference.ONE_IN_LOOP)" color="dark">
-          <ion-icon slot="icon-only" name="repeat"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-toolbar>
-</div>
-  
-
+    </ion-col>
+    <ion-col size="2">
+      <span class="text-sm-light sp-time">{{currentMusicTrack.duration*1000 | date : 'mm:ss' : 'UTC'}}</span>
+    </ion-col>
+    <ion-col size="2">
+      <button 
+          
+        class="btn btn-hollow btn-player-controller">
+        <ion-icon class="ion-sm" slot="icon-only" name="settings-sharp"></ion-icon>
+      </button>
+      
+    </ion-col>
+    <ion-col size="3">
+      <button 
+        class="btn btn-secondary btn-player-controller"
+        (click)="prev()">
+        <ion-icon slot="icon-only" name="play-skip-back"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col size="2">
+      <button 
+        *ngIf="!isPlaying"
+        (click)="togglePlayer()" 
+        class="btn btn-priamry btn-glow btn-big">
+        <ion-icon slot="icon-only" name="play"></ion-icon>
+      </button>
+      <button 
+        *ngIf="isPlaying"
+        (click)="togglePlayer()" 
+        class="btn btn-priamry btn-glow btn-big">
+        <ion-icon slot="icon-only" name="pause"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col size="3">
+      <button 
+        (click)="next()"
+        class="btn btn-secondary btn-player-controller">
+        <ion-icon slot="icon-only" name="play-skip-forward"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col size="2">
+      <button 
+        *ngIf="orderPreference==orderPreferenceRef.SHUFFLE"
+        (click)="setOrderPreference(orderPreferenceRef.ONE_IN_LOOP)"
+        class="btn btn-hollow btn-player-controller">
+        <ion-icon slot="icon-only" name="shuffle-sharp"></ion-icon>
+      </button>
+      <button 
+        *ngIf="orderPreference==orderPreferenceRef.ALL_IN_LOOP"
+        (click)="setOrderPreference(orderPreferenceRef.SHUFFLE)"
+        class="btn btn-hollow btn-player-controller">
+        <ion-icon slot="icon-only" name="sync-sharp"></ion-icon>
+      </button>
+      <button 
+        *ngIf="orderPreference==orderPreferenceRef.ONE_IN_LOOP"
+        (click)="setOrderPreference(orderPreferenceRef.ALL_IN_LOOP)"
+        class="btn btn-hollow btn-player-controller">
+        <ion-icon slot="icon-only" name="repeat-sharp"></ion-icon>
+      </button>
+    </ion-col>
+    <!-- <ion-col size="12">
+      <span class="music-title-next">Up Next : {{nextMusicTrack.name}}</span>
+    </ion-col> -->
+  </ion-row>
+</ion-toolbar>

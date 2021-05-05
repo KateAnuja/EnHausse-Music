@@ -5,6 +5,7 @@ export interface MusicPlayer{
     currentMusictTrack : MusicTrack;
     musicTrackArray : MusicTrack[];
     orderPreference : MusicPlayerOrderPreference;
+    toPlay:boolean;
 }
 
 export enum MusicPlayerOrderPreference{

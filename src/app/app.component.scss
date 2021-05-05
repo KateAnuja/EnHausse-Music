@@ -1,7 +1,3 @@
-app-floating-music-player{
-    z-index: 99;
-    position: fixed;
-    bottom: 100px;
-    width:100%;
-    height:150px;
+app-floating-music-player.hidden{
+    display : none;
 }

@@ -27,13 +27,13 @@
 
 /*
 theme ref 
+https://webdesign.tutsplus.com/tutorials/music-player-app-ui-design-adobe-xd--cms-34793
 https://cms-assets.tutsplus.com/cdn-cgi/image/width=630/uploads/users/158/posts/34793/final_image/MusicPlayerAppUI0.jpg
 */
 
-// ion-card{
-//    --ion-background-color:#242429;
-// }
+ion-icon{
+    --color : white;
+}
 
-// ion-card.active{
-//    background-color:var(--ion-color-primary);
-// }
+@import "../src/theme/text.css";
+@import "../src/theme/btn.scss";

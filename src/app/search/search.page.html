@@ -1,24 +1,31 @@
-<ion-header class="header">
-  <div class="cardHeader"></div>
+<ion-header>
+  <ion-toolbar>
+    <ion-title color="light" class="ion-text-center">Download</ion-title>
+  </ion-toolbar>
 </ion-header>
-
 <ion-content>
   <ion-input 
+    [ngClass]="{hidden : isInitialLoad}"
     class="inputUrl" 
     #searchInput 
     (ionChange)="searchTerm()" 
-    placeholder="Type here..">
+    placeholder="Start Typing here...">
   </ion-input>
+  <ion-title  *ngIf="isInitialLoad" color="light" class="ion-text-center">
+    Download any of the following music
+  </ion-title>
 
 
-  <ion-item 
+  <ion-item
     *ngFor="let sugession of suggestionArray" 
     (click)="getSearchResults(sugession)">
-    {{sugession}}
+      {{sugession}}
   </ion-item>
   
   
-  <ion-card 
+  
+  <ion-card
+    class="card-search-result" 
     *ngFor="let searchResult of searchResultArray">
     <ion-item 
       button 
@@ -38,10 +45,15 @@
     </ion-item>
   </ion-card>
 </ion-content>
-<ion-footer *ngIf="downloadPercentage > 0">
+
+<ion-footer [ngClass]="{hidden : !showProgressBar}">
   <ion-card>
-    <ion-label>Downloading...</ion-label>
+    <ion-card-header>
+      Downloading...
+    </ion-card-header>
+    <ion-card-title color="light">{{imgName}}</ion-card-title>
     <ion-card-content>
+        <img [src]="imgSrc" width="100%">
       <ion-progress-bar [value]="downloadPercentage"></ion-progress-bar>
     </ion-card-content>
   </ion-card>

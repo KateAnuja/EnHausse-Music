@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Media, MediaObject } from '@ionic-native/media/ngx';
-import { IonInput, IonRange, Platform } from '@ionic/angular';
+import { IonRange, Platform } from '@ionic/angular';
 import { 
   MusicPlayer, 
   MusicPlayerOrderPreference, 
@@ -23,13 +23,14 @@ export class FloatingMusicPlayerComponent {
   nextMusicTrack:MusicTrack;
   prevMusicTrack:MusicTrack;
   totalDurationOfPlaylist:number=0;
-  isPlaying : boolean =true;
-  orderPreference = MusicPlayerOrderPreference;
+  isPlaying : boolean = false;
+  orderPreferenceRef = MusicPlayerOrderPreference;
+  orderPreference : MusicPlayerOrderPreference= MusicPlayerOrderPreference.ALL_IN_LOOP;
   audioFile : MediaObject;
   audioProgressBarInterval=null;
   audioDuration=-1;
   isSeekBarFocused=false;
-
+  currentMusicPlayingDuration = 0;
 
   
   constructor(
@@ -45,15 +46,16 @@ export class FloatingMusicPlayerComponent {
     this.isSeekBarFocused=true;
   }
 
-
   initMusicPlayer(mP:MusicPlayer){
     if(mP){
       this.audioDuration=-1;
+      this.currentMusicPlayingDuration = 0;
       if(this.audioProgressBarInterval){
         clearInterval(this.audioProgressBarInterval);
       }
       this.currentMusicTrack=mP.currentMusictTrack;
       this.musicTrackArray=mP.musicTrackArray;
+      this.orderPreference=mP.orderPreference;
       MusicPlayerUtil.startPlayer(
                             mP.currentMusictTrack,
                             mP.musicTrackArray, 
@@ -68,37 +70,42 @@ export class FloatingMusicPlayerComponent {
       this.audioFile = this.media.create(
         this.currentMusicTrack.path.replace(/^file:\/\//,'')
       );
-      this.audioFile.play();
+      console.log("mP.toPlay",mP.toPlay);
+      if(mP.toPlay){
+        this.audioFile.play();
+        this.isPlaying=true;
+        this.musicTrackService.isPlayerPlayingBehaviourSubject.next(true);
+      }
       
       this.audioProgressBarInterval=setInterval(async ()=>{
         this.audioFile.getCurrentPosition().then((pos)=>{
+          this.currentMusicPlayingDuration = pos*1000;
           if(!this.isSeekBarFocused){
             if(this.audioDuration<0){
               this.audioDuration=this.audioFile.getDuration()*1000;
             }
-            console.log(Number(this.trackRange.value))
             this.trackRange.value=(pos*1000*100/this.audioDuration)
             if(Number(this.trackRange.value)==100 || Number(this.trackRange.value)<0){
+              this.currentMusicPlayingDuration = 0;
               this.next();
             }
           }
         })
       },200);
-      this.isPlaying=true;
     }
   }
 
   prev(){
     this.audioFile.stop();
-    this.musicTrackService.playTrack(this.prevMusicTrack,this.musicTrackArray);
+    this.musicTrackService.playTrack(this.prevMusicTrack,this.musicTrackArray,true);
   }
 
   next(){
     this.audioFile.stop();
-    this.musicTrackService.playTrack(this.nextMusicTrack,this.musicTrackArray);
+    this.musicTrackService.playTrack(this.nextMusicTrack,this.musicTrackArray,true);
   }
 
-  togglePlayer(pause){
+  togglePlayer(){
     this.isPlaying=!this.isPlaying;
     if(!this.isPlaying){
       this.audioFile.pause();
@@ -108,8 +115,10 @@ export class FloatingMusicPlayerComponent {
   }
 
   setOrderPreference(orderPreference : MusicPlayerOrderPreference){
+    this.orderPreference=orderPreference;
     let adjacentTrackObj=this.musicTrackService
                           .setMusicOrderPreference(orderPreference);
+    
     this.prevMusicTrack=adjacentTrackObj.prevTrack;
     this.nextMusicTrack=adjacentTrackObj.nextTrack;
   }
