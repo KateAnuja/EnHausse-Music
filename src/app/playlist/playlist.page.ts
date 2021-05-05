@@ -18,12 +18,14 @@ export class PlaylistPage {
   favPlaylistString=Constants.STRING_PLAYLIST_FAV;
   isOpen = false;
   playlistInput="";
+  filteredPlaylistArray = [];
   
   constructor(
     private router : Router,
     private musicTrackService : MusicTrackService,
     private chnageDetector : ChangeDetectorRef,
     private alertController : AlertController,
+    private changeDetector : ChangeDetectorRef,
   ) { }
 
   ionViewWillEnter(){
@@ -43,6 +45,7 @@ export class PlaylistPage {
 
   async getPlaylist(){
     this.playlistArray= await this.musicTrackService.getPlaylist();
+    this.filteredPlaylistArray=this.playlistArray;
     this.playlist=Constants.STRING_EMPTY_STRING;
     this.favouritesCount=await this.musicTrackService.getFavCount();
     this.chnageDetector.detectChanges();
@@ -93,7 +96,19 @@ export class PlaylistPage {
   }
 
   searchPlaylist(){
-    //TODO : search
+    let filteredPlaylistArray = [];
+      if(this.playlistInput!=""){
+        this.playlistInput=this.playlistInput.toLowerCase();
+        this.playlistArray.forEach((playlist)=>{
+          if(playlist.name.toLowerCase().indexOf(this.playlistInput) != -1){
+            filteredPlaylistArray.push(playlist);
+          }
+        })
+      }else{
+        filteredPlaylistArray=this.playlistArray;
+      }
+      this.filteredPlaylistArray = filteredPlaylistArray;     
+      this.changeDetector.detectChanges();
   }
 
 }

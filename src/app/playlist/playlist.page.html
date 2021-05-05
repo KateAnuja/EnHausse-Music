@@ -44,7 +44,7 @@
     </ion-card-content>
   </ion-card>
   <ion-virtual-scroll 
-    [items]="playlistArray" 
+    [items]="filteredPlaylistArray" 
     approxItemHeight="320px">
     <ion-card 
       *virtualItem="let item; let itemBounds = bounds;"
