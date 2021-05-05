@@ -139,15 +139,10 @@ export class SearchPage implements OnInit {
 
   currentlyDownloading="";
   async scrapY2Mate(vid:string){
-    console.log("scrapY2Mate",+new Date());
-    console.log("currentlyDownloading",this.currentlyDownloading);
-    console.log("vid",vid);
     if(this.currentlyDownloading!=vid){
       this.currentlyDownloading=vid;
       try{
         let {kid,fileName}=await this.getVideoKid(vid);
-        console.log("getVideoKid",+new Date());
-
         this.isPreparingForDownload=false;
         this.showProgressBar=true;
         if(this.downloadPercentage != 0){
@@ -156,8 +151,6 @@ export class SearchPage implements OnInit {
           this.downloadPercentage+=0.05;
         }
         let downloadUrl:string=await this.networkService.getDownloadUrl(kid,vid);
-        console.log("downloadUrl",+new Date());
-
         this.downloadPercentage+=0.05;
         this.downloadFromUrl(downloadUrl,fileName);
       }catch(err){
@@ -170,10 +163,7 @@ export class SearchPage implements OnInit {
   }
 
   async getVideoKid(vid:string):Promise<{kid:string,fileName:string}>{
-    console.log("getVideoKid:1");
     let videoKidObj:any=await this.networkService.getVideoKid(vid);
-    console.log("getVideoKid:2");
-    
     this.imgName=videoKidObj.fileName;
     this.imgSrc=videoKidObj.thumbnailUrl;
     return videoKidObj;
@@ -185,8 +175,6 @@ export class SearchPage implements OnInit {
       duration: 2000
     });
     toast.present();
-    console.log("showSuccessToast",+new Date());
-    
     this.musicTrackService.musicTrackAddedBehaviourSubject.next(true);
     if(this.isInitialLoad){
       this.router.navigateByUrl('home');
@@ -197,8 +185,6 @@ export class SearchPage implements OnInit {
   lastUpdateValue=0;
   lastProgress=0;
   async downloadFromUrl(downloadUrl:string,fileName:string){
-    console.log("downloadFromUrl",+new Date());
-
     const fileTransfer: FileTransferObject = this.transfer.create();
     if(fileName.length<1){
       fileName=+new Date()+".mp3";
@@ -217,14 +203,12 @@ export class SearchPage implements OnInit {
        
     })
     await this.file.createDir(this.file.externalCacheDirectory, "Music", true);
-    console.log("downloadFromUrl,createDir",+new Date());
-
+    
     fileTransfer.download(
       encodeURI(downloadUrl), 
       this.file.externalCacheDirectory + '/Music/' + fileName
     ).then(async (entry) => {
-        console.log("fileTransfer.download",+new Date())
-        IonicPlugin.download({fileName});
+        //IonicPlugin.download({fileName});
         this.url="";
         this.currentlyDownloading="";
         this.downloadPercentage=0;

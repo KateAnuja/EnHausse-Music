@@ -43,7 +43,15 @@ export class MusicTrackService {
       musicTrackArray,
       orderPreference : await this.getMusicOrderPreference(),
       toPlay
-    })
+    });
+  }
+
+  async saveLastPlayedTrack(musicTrack:MusicTrack){
+    this.storage.set(Constants.DB.MODEL_LAST_MUSIC_TRACK,musicTrack.path);
+  }
+
+  async getLastPlayedTrack(){
+    return (await this.storage.get((Constants.DB.MODEL_LAST_MUSIC_TRACK))) || "";
   }
 
   async addToPlaylist(musicTrack: MusicTrack,playlistName:string){

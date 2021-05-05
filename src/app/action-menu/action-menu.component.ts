@@ -25,7 +25,6 @@ export class ActionMenuComponent implements OnInit {
   }
 
   ngOnInit(){
-    // console.log("in action menu",this.track);
     this.getPlaylist();
   }
 
@@ -50,7 +49,6 @@ export class ActionMenuComponent implements OnInit {
           }
         });
       }
-      console.log("buttonConfigArray", buttonConfigArray);
       const actionSheet = await this.actionSheetController.create({
         header: 'Add To Playlist',
         cssClass: 'action-sheet-playlist',

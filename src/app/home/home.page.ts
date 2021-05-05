@@ -54,7 +54,6 @@ export class HomePage {
                         text: "Stay",
                         role: "cancel",
                         handler: () => {
-                            console.log("Application exit prevented!");
                             this.isExitAlertBoxOpen = false;
                         },
                     },

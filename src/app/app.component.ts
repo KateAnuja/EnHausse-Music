@@ -75,18 +75,10 @@ export class AppComponent {
     this.showMusicPlayer= this.isMusicPlayerReady && !this.isKeyboradOpen;
   }
 
-  async ionViewWillEnter(){
-    console.log("ionViewWillEnter")
-    // if(this.platform.is("hybrid")){
-    //   this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-    // }
-    alert("ionViewWillEnter")
-    
-  }
-
   initializeApp(){
     this.platform.ready().then(async () => {
       if(this.platform.is("hybrid")){
+        this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
         const crashlytics = this.firebaseCrashlytics.initialise();
         crashlytics.logException('my caught exception');
 
@@ -123,8 +115,8 @@ export class AppComponent {
       .subscribeTo({ topic: 'DAILY_MUSIC_DOSE' })
       .then((r) => {
       })
-      .catch((err) => console.log(err));
-    }).catch((err) => console.log(JSON.stringify(err)));
+      .catch((err) => console.error(err));
+    }).catch((err) => console.error(JSON.stringify(err)));
   
   }
 
@@ -132,7 +124,7 @@ export class AppComponent {
     fcm
     .getToken()
     .then((r) => console.log(`Token ${r.token}`))
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
   }
 
 

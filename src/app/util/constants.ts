@@ -13,6 +13,7 @@ export class Constants{
     DB_NAME:"v1/__enh_music_app",
     MODEL_PLAYLIST:"playlist",
     MODEL_MUSIC_TRACK:"music_track",
+    MODEL_LAST_MUSIC_TRACK:"last_music_track",
     COUNT_FAVOURITE:"count_favourite",
     MUSIC_PREFERENCE_ORDER:"__music_order_preference"
   }

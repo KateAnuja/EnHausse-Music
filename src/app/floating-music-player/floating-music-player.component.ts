@@ -70,11 +70,11 @@ export class FloatingMusicPlayerComponent {
       this.audioFile = this.media.create(
         this.currentMusicTrack.path.replace(/^file:\/\//,'')
       );
-      console.log("mP.toPlay",mP.toPlay);
       if(mP.toPlay){
         this.audioFile.play();
         this.isPlaying=true;
         this.musicTrackService.isPlayerPlayingBehaviourSubject.next(true);
+        this.musicTrackService.saveLastPlayedTrack(this.currentMusicTrack);
       }
       
       this.audioProgressBarInterval=setInterval(async ()=>{

@@ -71,14 +71,26 @@ export class LocalMusicPage {
 
   async getMusicArray(){
     let musicArray= await this.musicTrackService.getAllLocalTracks();
+    let lastTrackPlayed:MusicTrack;
+
+    let lastTrackPlayedPath=await this.musicTrackService.getLastPlayedTrack();
+
     if(this.activePlaylist==Constants.STRING_EMPTY_STRING){
       this.musicArray=musicArray;
       this.activePlaylistName=Constants.STRING_WORD_ALL;
+      musicArray.forEach((musicTrack:MusicTrack)=>{
+        if(musicTrack.path==lastTrackPlayedPath){
+          lastTrackPlayed=musicTrack;
+        }
+      });
     }else if(this.activePlaylist==Constants.STRING_PLAYLIST_FAV){
       let musicInPlaylistArray=[];
       musicArray.forEach((musicTrack:MusicTrack)=>{
         if(musicTrack.isFavourite){
           musicInPlaylistArray.push(musicTrack);
+        }
+        if(musicTrack.path==lastTrackPlayedPath){
+          lastTrackPlayed=musicTrack;
         }
       });
       this.musicArray=musicInPlaylistArray;
@@ -89,13 +101,19 @@ export class LocalMusicPage {
         if(musicTrack.playlist.indexOf(this.activePlaylist)!=-1){
           musicInPlaylistArray.push(musicTrack);
         }
+        if(musicTrack.path==lastTrackPlayedPath){
+          lastTrackPlayed=musicTrack;
+        }
       });
       this.musicArray=musicInPlaylistArray;
       this.activePlaylistName = this.activePlaylist;
     }
     this.filteredMusicArray = this.musicArray;
     if(this.musicArray.length>0 && !this.isPlayerPlayingTrack){
-      this.musicTrackService.playTrack(this.musicArray[0],this.musicArray,false);
+      if(!lastTrackPlayed){
+        lastTrackPlayed=this.musicArray[0];
+      }
+      this.musicTrackService.playTrack(lastTrackPlayed,this.musicArray,false);
     }
   }
 
@@ -218,7 +236,6 @@ export class LocalMusicPage {
   }
 
   async actionMenuPopover(ev: any, item:MusicTrack) {
-    console.log("ev", ev);
     const popover = await this.popoverController.create({
       component: ActionMenuComponent,
       event: ev,

@@ -22,13 +22,6 @@ const routes: Routes = [
       )
   },
   {
-    path: 'music-player',
-    loadChildren: () => 
-      import('./music-player/music-player.module').then( 
-        m => m.MusicPlayerPageModule
-      )
-  },
-  {
     path: 'local-music',
     loadChildren: () => 
       import('./local-music/local-music.module').then( 
