@@ -30,6 +30,7 @@ interface SearchData{
 export class SearchPage implements OnInit {
   public static TAG : string = "SearchPage";
   @ViewChild("searchInput",{static:false})searchInput:IonInput;
+  @ViewChild('range', {static : false}) range : IonRange;
   bufferClipBoard:string=Constants.STRING_EMPTY_STRING;
   suggestionArray:string[]=[];
   searchResultArray:SearchData[]=[];
@@ -40,7 +41,7 @@ export class SearchPage implements OnInit {
   progress = 0;
   isInitialLoad = false;
   showProgressBar = false;
-  @ViewChild('range', {static : false}) range : IonRange;
+  isPreparingForDownload = false;
 
   constructor(
     private http: HTTP,
@@ -85,118 +86,37 @@ export class SearchPage implements OnInit {
     }
   }
 
-  getSuggestion(term:string){
+  async getSuggestion(term:string){
     this.bufferClipBoard=Constants.STRING_EMPTY_STRING;
-    this.http.get(
-      "https://suggestqueries-clients6.youtube.com/complete/search",
-      {
-        client:"youtube-reduced",
-        q:`song ${term}`
-      },
-      {
+    let suggestionArray:any=[];
+    try{
+      suggestionArray=await this.networkService.getSuggestion(term);
+    }catch(err){
 
-      }
-    )
-    .then((res)=>{
-      try{
-        let data=res.data+"";
-        if(data.length>0 && data.indexOf("window.google.ac.h")!=-1){
-          data=data.replace(
-            /window.google.ac.h\(/gi,
-            Constants.STRING_EMPTY_STRING
-          ).replace(/\)/gi,'');
-          let sugArr=JSON.parse(data)[1];
-          sugArr.forEach(sugEl => {
-            this.suggestionArray.push(
-              sugEl[0]
-              .replace(
-                /song /g,
-                Constants.STRING_EMPTY_STRING
-              )
-            )
-          });
-          this.changeDetector.detectChanges();
-          
-        }else{
-          console.error("wrong res");
-        }
-      }catch(err){
-        console.error(err)
-      }
-      
-    })
+    }
+    this.suggestionArray=[...suggestionArray];
+    this.changeDetector.detectChanges();
   }
 
-  getSearchResults(term:string){
+  async getSearchResults(term:string){
     this.suggestionArray=[];
     this.searchResultArray=[];
     this.bufferClipBoard=term;
     this.searchInput.value=term;
-    let clienVersion=Constants.STRING_EMPTY_STRING;
-    let currentDate=new Date();
-    clienVersion+=currentDate.getFullYear()
-    let month=currentDate.getMonth()+1;
-    if(month<10){
-      clienVersion+="0"+month;
-    }else{
-      clienVersion+=month;
-    }
-    let date=currentDate.getDate();
-    if(date<10){
-      clienVersion+="0"+date;
-    }else{
-      clienVersion+=date;
-    }
+    let searchResultArray:any=[];
+    try{
+      searchResultArray=await this.networkService.getSearchResults(term);
+    }catch(err){
 
-    this.http.get(
-      "https://m.youtube.com/results",
-      {
-        search_query:`song ${term}`,
-        pbj:'1'
-      },
-      {
-        "x-youtube-client-name":"2",
-        "x-youtube-client-version":`2.${clienVersion}`,
-        "user-agent":Constants.USER_AGENT
-      }
-    ).then((res)=>{
-      try{
-        let data=JSON.parse(res.data);
-        let videoArr=data.response
-        .contents.sectionListRenderer
-        .contents[0].itemSectionRenderer.contents;
-        videoArr.forEach(videoEl => {
-          let title=Constants.STRING_EMPTY_STRING,
-          thumbnail=Constants.STRING_EMPTY_STRING,
-          videoId=Constants.STRING_EMPTY_STRING,
-          duration=Constants.STRING_EMPTY_STRING;
-          try{
-            title=videoEl.compactVideoRenderer.title.runs[0].text;
-            thumbnail=videoEl.compactVideoRenderer.thumbnail.thumbnails[0].url;
-            videoId=videoEl.compactVideoRenderer.videoId;
-            duration=videoEl.compactVideoRenderer.lengthText
-            .accessibility.accessibilityData.label;
-          }catch(err){}
-          if(title.length>0 && videoId!=Constants.STRING_EMPTY_STRING){
-            this.searchResultArray.push({
-              title,
-              thumbnail,
-              videoId,
-              duration
-            })
-          }
-        });
-        this.changeDetector.detectChanges();
-      }catch(err){
-
-      }
-    }).catch((err)=>{
-      console.error(err)
-    });
+    }
+    this.searchResultArray=[...searchResultArray];
+    this.changeDetector.detectChanges();
   }
 
   downloadVideo(videoId:string){
     this.searchResultArray=[];
+    this.searchInput.value="";
+    this.isPreparingForDownload=true;
     this.scrapY2Mate(videoId);
   }
   async verifyUrl(){
@@ -218,10 +138,16 @@ export class SearchPage implements OnInit {
 
   currentlyDownloading="";
   async scrapY2Mate(vid:string){
+    console.log("scrapY2Mate",+new Date());
+    console.log("currentlyDownloading",this.currentlyDownloading);
+    console.log("vid",vid);
     if(this.currentlyDownloading!=vid){
       this.currentlyDownloading=vid;
       try{
         let {kid,fileName}=await this.getVideoKid(vid);
+        console.log("getVideoKid",+new Date());
+
+        this.isPreparingForDownload=false;
         this.showProgressBar=true;
         if(this.downloadPercentage != 0){
           this.downloadPercentage+=0.04;
@@ -229,69 +155,27 @@ export class SearchPage implements OnInit {
           this.downloadPercentage+=0.05;
         }
         let downloadUrl:string=await this.networkService.getDownloadUrl(kid,vid);
+        console.log("downloadUrl",+new Date());
+
         this.downloadPercentage+=0.05;
         this.downloadFromUrl(downloadUrl,fileName);
       }catch(err){
-  
+        console.error(err)
+        this.currentlyDownloading="";
+        this.scrapY2Mate(vid)
       }
     }
     
   }
 
-  getVideoKid(vid:string):Promise<{kid:string,fileName:string}>{
-    return new Promise((resolve,reject)=>{
-      this.http.sendRequest(
-        'https://www.y2mate.com/mates/analyze/ajax',
-        {
-         method:"post",
-         data:{
-           url:`https://www.youtube.com/watch?v=${vid}`,
-           q_auto:"1",
-           ajax:"1"
-          },
-         serializer:"urlencoded",
-         responseType:"json",
-         headers:{
-          "content-type":"application/x-www-form-urlencoded; charset=UTF-8"
-        }
-      }).then(d=>{
-        if(d.data && d.data.result){
-          let kid="";
-          let fileName="";
-          d.data.result.subs
-          let responseString=d.data.result;
-          kid=responseString.substring(
-            responseString.indexOf('k__id = "')+9,
-            responseString.indexOf('"; var video_service')
-          );
-          fileName=responseString.substring(
-            responseString.indexOf('<div class="caption text-left"> <b>')+35,
-            responseString.length
-          );
-          fileName=fileName.substring(
-            0,
-            fileName.indexOf('</b>')
-          );
-          fileName=fileName.replace(/\s+/g,'_').replace(/[^a-z0-9]/gi,'-').replace(/--/gi,'')+".mp3";
-          this.imgName=fileName;
-          let thumbnailUrl="";
-          thumbnailUrl=responseString.substring(
-            responseString.indexOf('<img src="')+10,
-            responseString.indexOf('" alt="')
-          );
-          this.imgSrc=thumbnailUrl;
-          console.log("thumbnailUrl...", thumbnailUrl);
-          
-          if(kid.length>0){
-            resolve({kid,fileName});
-          }else{
-            reject("Video id not found");
-          }
-        }
-      }).catch(e=>{
-        reject(e);
-      })
-    });
+  async getVideoKid(vid:string):Promise<{kid:string,fileName:string}>{
+    console.log("getVideoKid:1");
+    let videoKidObj:any=await this.networkService.getVideoKid(vid);
+    console.log("getVideoKid:2");
+    
+    this.imgName=videoKidObj.fileName;
+    this.imgSrc=videoKidObj.thumbnailUrl;
+    return videoKidObj;
   }
 
   async showSuccessToast(){
@@ -300,6 +184,8 @@ export class SearchPage implements OnInit {
       duration: 2000
     });
     toast.present();
+    console.log("showSuccessToast",+new Date());
+    
     this.musicTrackService.musicTrackAddedBehaviourSubject.next(true);
     if(this.isInitialLoad){
       this.router.navigateByUrl('home');
@@ -310,6 +196,8 @@ export class SearchPage implements OnInit {
   lastUpdateValue=0;
   lastProgress=0;
   async downloadFromUrl(downloadUrl:string,fileName:string){
+    console.log("downloadFromUrl",+new Date());
+
     const fileTransfer: FileTransferObject = this.transfer.create();
     if(fileName.length<1){
       fileName=+new Date()+".mp3";
@@ -328,11 +216,13 @@ export class SearchPage implements OnInit {
        
     })
     await this.file.createDir(this.file.externalCacheDirectory, "Music", true);
+    console.log("downloadFromUrl,createDir",+new Date());
+
     fileTransfer.download(
       encodeURI(downloadUrl), 
       this.file.externalCacheDirectory + '/Music/' + fileName
     ).then(async (entry) => {
-        
+        console.log("fileTransfer.download",+new Date())
         IonicPlugin.download({fileName});
         this.url="";
         this.currentlyDownloading="";
@@ -377,6 +267,33 @@ export class SearchPage implements OnInit {
         
     }, (error) => {
         console.error('error...', error);
+      this.showError();
+
+    }).catch((err)=>{
+      console.error(err);
+      this.showError();
+    })
+  }
+
+  async showError(){
+    this.url="";
+    this.currentlyDownloading="";
+    this.downloadPercentage=0;
+    this.showProgressBar=false;
+    this.lastUpdateValue=0;
+    this.lastProgress=0;
+    const toast = await this.alert.create({
+      message: 'Ohh no.. An error occured. Try again!',
+      buttons: [
+        {
+          text:"OK",
+          role:'cancel',
+          handler:()=>{
+
+          }
+        }
+      ]
     });
+    toast.present();
   }
 }

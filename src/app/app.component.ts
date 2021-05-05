@@ -30,7 +30,7 @@ const fcm = new FCM();
 export class AppComponent {
   isMusicPlayerReady  : boolean=false;
   isKeyboradOpen : boolean=false;
-  showMusicPlayer : boolean=true;
+  showMusicPlayer : boolean=false;
   playerDataBehaviorSubscription;
   screenHeight:number=0;
   constructor(

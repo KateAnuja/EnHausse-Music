@@ -46,15 +46,22 @@
   </ion-card>
 </ion-content>
 
-<ion-footer [ngClass]="{hidden : !showProgressBar}">
-  <ion-card>
+
+
+<ion-footer >
+  <ion-card [ngClass]="{'hidden':!isPreparingForDownload}">
+    <p>Preparing for download...</p>
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  </ion-card>
+  
+  <ion-card [ngClass]="{hidden : !showProgressBar}">
     <ion-card-header>
       Downloading...
     </ion-card-header>
     <ion-card-title color="light">{{imgName}}</ion-card-title>
     <ion-card-content>
-        <img [src]="imgSrc" width="100%">
       <ion-progress-bar [value]="downloadPercentage"></ion-progress-bar>
+      <img [src]="imgSrc" width="100%">
     </ion-card-content>
   </ion-card>
 </ion-footer>
