@@ -18,14 +18,7 @@ export class FloatingMusicPlayerComponent {
 
   @ViewChild('trackRange',{static:false})trackRange:IonRange;
 
-  currentMusicTrack:MusicTrack={
-    name: "abc", 
-    duration : 0, 
-    path : "", 
-    isFavourite : false,
-    playlist : [],
-    thumbnail : "",
-    addedTimeStamp : +new Date()};
+  currentMusicTrack:MusicTrack;
   musicTrackArray:MusicTrack[]=[];
   nextMusicTrack:MusicTrack;
   prevMusicTrack:MusicTrack;
@@ -81,6 +74,7 @@ export class FloatingMusicPlayerComponent {
       if(mP.toPlay){
         this.audioFile.play();
         this.isPlaying=true;
+        this.musicTrackService.isPlayerPlayingBehaviourSubject.next(true);
       }
       
       this.audioProgressBarInterval=setInterval(async ()=>{

@@ -16,7 +16,8 @@ export class MusicTrackService {
   favCountBehaviorSubject = new BehaviorSubject(0);
   playListUpdated = new BehaviorSubject(0);
   playerDataBehaviorSubject = new BehaviorSubject<MusicPlayer>(null);
-  musicTrackAddedBehaviourSubject = new BehaviorSubject<Boolean>(false);
+  musicTrackAddedBehaviourSubject = new BehaviorSubject<boolean>(false);
+  isPlayerPlayingBehaviourSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
     private storage:Storage  

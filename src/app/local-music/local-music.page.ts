@@ -26,6 +26,7 @@ export class LocalMusicPage {
   activePlaylist : string = Constants.STRING_EMPTY_STRING;
   activePlaylistName : string = Constants.STRING_WORD_ALL;
   isOpen = false;
+  isPlayerPlayingTrack : boolean = false;
   
   constructor(
     private musicTrackService : MusicTrackService,
@@ -35,7 +36,11 @@ export class LocalMusicPage {
     private activatedRoute: ActivatedRoute,
     private popoverController: PopoverController,
 
-  ) { }
+  ) { 
+    this.musicTrackService.isPlayerPlayingBehaviourSubject.subscribe((isPlaying)=>{
+      this.isPlayerPlayingTrack=isPlaying;
+    })
+  }
 
   ionViewWillEnter(){
     this.musicTrackService.musicTrackAddedBehaviourSubject.subscribe((isNewMusicTrackAdded)=>{
@@ -87,7 +92,7 @@ export class LocalMusicPage {
       this.activePlaylistName = this.activePlaylist;
     }
     this.filteredMusicArray = this.musicArray;
-    if(this.musicArray.length>0){
+    if(this.musicArray.length>0 && !this.isPlayerPlayingTrack){
       this.musicTrackService.playTrack(this.musicArray[0],this.musicArray,false);
     }
   }
@@ -220,7 +225,7 @@ export class LocalMusicPage {
     });
 
     popover.onDidDismiss().then((result) => {
-      this.getMusicArray();
+      
     });
 
     return await popover.present();

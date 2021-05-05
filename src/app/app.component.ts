@@ -73,9 +73,9 @@ export class AppComponent {
   }
 
   ionViewWillEnter(){
-    if(this.platform.is("hybrid")){
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
-    }
+    // if(this.platform.is("hybrid")){
+    //   this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    // }
   }
 
   initializeApp(){
