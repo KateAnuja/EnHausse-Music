@@ -142,6 +142,23 @@ export class MusicTrackService {
 
   }
 
+  async deleteMusicTrack(musicTrack : MusicTrack){
+    let musicTrackDbArray:MusicTrack[]=[];
+    try{
+      musicTrackDbArray=JSON.parse(await this.storage.get(Constants.DB.MODEL_MUSIC_TRACK || Constants.STRING_EMPTY_ARRAY));
+    }catch(err){
+
+    }
+    for(let i=0;i<musicTrackDbArray.length;i++){
+      if(musicTrackDbArray[i].path==musicTrack.path){
+        musicTrackDbArray.splice(i,1);
+      }
+    }
+
+    await this.storage.set(Constants.DB.MODEL_MUSIC_TRACK, JSON.stringify(musicTrackDbArray));
+    
+  }
+
   async getPlaylist(){
     let playlistDbObj={};
     let playlistArr:Playlist[]=[];

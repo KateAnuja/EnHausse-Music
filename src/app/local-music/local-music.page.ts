@@ -220,7 +220,7 @@ export class LocalMusicPage {
     });
 
     popover.onDidDismiss().then((result) => {
-      console.log(result.data);
+      this.getMusicArray();
     });
 
     return await popover.present();

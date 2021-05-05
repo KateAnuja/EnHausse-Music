@@ -27,6 +27,7 @@ export class ActionMenuComponent implements OnInit {
     this.playlistArray=await this.musicTrackService.getPlaylist();
   }
 
+
   async addToPlaylist(){
       let buttonConfigArray=[];
       for(let i=0;i<this.playlistArray.length;i++){
@@ -54,7 +55,8 @@ export class ActionMenuComponent implements OnInit {
   }
 
 
-  onDelete(){
+  async deleteMusicTrack(){
+    await this.musicTrackService.deleteMusicTrack(this.track);
     this.popoverController.dismiss();
   }
 
