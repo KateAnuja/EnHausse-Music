@@ -111,8 +111,9 @@ export class LocalMusicPage {
   searchTrack(){
       let filteredMusicArray = [];
       if(this.trackInput!=""){
+        this.trackInput=this.trackInput.toLowerCase();
         this.musicArray.forEach((track)=>{
-          if(track.name.indexOf(this.trackInput) != -1){
+          if(track.name.toLowerCase().indexOf(this.trackInput) != -1){
             filteredMusicArray.push(track);
           }
         })
