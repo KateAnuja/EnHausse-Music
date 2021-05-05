@@ -8,13 +8,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 public class IntentActivity extends AppCompatActivity {
-  public static String SHARED_PREFERENCE_COLLECTION="__YT-Download";
+  public static String SHARED_PREFERENCE_COLLECTION="__EnH-Music";
   public static String SP_SHARED_TEXT="_sharedText";
 
   SharedPreferences sharedpreferences;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    MainActivity._mainActivity.finish();
     setContentView(R.layout.activity_intent);
     sharedpreferences = getSharedPreferences(IntentActivity.SHARED_PREFERENCE_COLLECTION, Context.MODE_PRIVATE);
 

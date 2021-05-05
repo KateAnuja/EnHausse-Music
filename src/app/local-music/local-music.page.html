@@ -10,7 +10,8 @@
       </ion-button>
     </ion-buttons>
     <ion-title *ngIf="!isOpen" color="light" class="ion-text-center">{{activePlaylistName}}</ion-title>
-    <ion-input *ngIf="isOpen"
+    <ion-input [ngClass]="{'hidden' : !isOpen}"
+      #inputSearch
       [(ngModel)]="trackInput" 
       (ionChange)="searchTrack()" 
       placeholder="Search Track here..">

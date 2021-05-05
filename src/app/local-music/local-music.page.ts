@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { AlertController, IonInput } from '@ionic/angular';
 import { MusicTrack, MusicTrackUtil, SortByMusicTrack } from '../model/track';
 import { MusicTrackService } from '../services/music-track.service';
 import { ActionSheetController } from '@ionic/angular';
@@ -27,6 +27,8 @@ export class LocalMusicPage {
   activePlaylistName : string = Constants.STRING_WORD_ALL;
   isOpen = false;
   isPlayerPlayingTrack : boolean = false;
+
+  @ViewChild("inputSearch",{static:false})inputSearch:IonInput;
   
   constructor(
     private musicTrackService : MusicTrackService,
@@ -206,13 +208,16 @@ export class LocalMusicPage {
 
   toggleSearchBar(){
     this.isOpen = !this.isOpen;
+    if(this.isOpen){
+      this.inputSearch.setFocus();
+    }
   }
 
   playTrack(musicTrack:MusicTrack){
     this.musicTrackService.playTrack(musicTrack,this.musicArray,true);
   }
 
-  async actionMenuPopover(ev: any, item) {
+  async actionMenuPopover(ev: any, item:MusicTrack) {
     console.log("ev", ev);
     const popover = await this.popoverController.create({
       component: ActionMenuComponent,
@@ -225,7 +230,9 @@ export class LocalMusicPage {
     });
 
     popover.onDidDismiss().then((result) => {
-      
+      if(result && result.data == "delete"){
+        item.uiHideInList=true;
+      }
     });
 
     return await popover.present();

@@ -12,9 +12,11 @@ import com.google.firebase.FirebaseApp;
 import java.util.ArrayList;
 
 public class MainActivity extends BridgeActivity {
+  public static BridgeActivity _mainActivity;
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    _mainActivity=this;
     // Initializes the Bridge
     this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
       // Additional plugins you've installed go here

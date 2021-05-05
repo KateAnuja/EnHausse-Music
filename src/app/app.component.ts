@@ -16,10 +16,12 @@ const { PushNotifications } = Plugins;
 import { FCM } from '@capacitor-community/fcm';
 import { MusicTrackService } from './services/music-track.service';
 import { fromEvent } from 'rxjs';
+import { Router } from '@angular/router';
+import { Utility } from './util/utility';
 
 
 const fcm = new FCM();
-
+const { IonicPlugin } = Plugins;
 
 
 @Component({
@@ -38,6 +40,7 @@ export class AppComponent {
     private firebaseCrashlytics: FirebaseCrashlytics,
     private platform : Platform,
     private musicTrackService : MusicTrackService,
+    private router:Router,
     
   ) {
     
@@ -72,17 +75,29 @@ export class AppComponent {
     this.showMusicPlayer= this.isMusicPlayerReady && !this.isKeyboradOpen;
   }
 
-  ionViewWillEnter(){
+  async ionViewWillEnter(){
+    console.log("ionViewWillEnter")
     // if(this.platform.is("hybrid")){
     //   this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     // }
+    alert("ionViewWillEnter")
+    
   }
 
   initializeApp(){
-    this.platform.ready().then(() => {
+    this.platform.ready().then(async () => {
       if(this.platform.is("hybrid")){
         const crashlytics = this.firebaseCrashlytics.initialise();
         crashlytics.logException('my caught exception');
+
+        let pluginResponse=await IonicPlugin.getSharedLink();
+        if(pluginResponse.sharedLink && pluginResponse.sharedLink.length>10){
+          let url=pluginResponse.sharedLink;
+          let vid=Utility.getVideoIdFromUrl(url);
+          if(vid){
+            this.router.navigate([`/search/download/${vid[1].toString()}`]);
+          }
+        }
       }
     });
 

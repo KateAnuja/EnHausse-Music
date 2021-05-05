@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: 'init',
     component: SearchPage
+  },
+  {
+    path: 'download/:vid',
+    component: SearchPage
   }
 ];
 

@@ -47,7 +47,6 @@ public class IonicPlugin extends Plugin {
     //send data
     JSObject jsObject=new JSObject();
     jsObject.put("sharedLink",sharedLink);
-    Log.e("getSharedLink",sharedLink);
     call.resolve(jsObject);
   }
 

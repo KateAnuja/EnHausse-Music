@@ -16,7 +16,13 @@ export class ActionMenuComponent implements OnInit {
     private popoverController: PopoverController,
     private musicTrackService : MusicTrackService,
     private actionSheetController: ActionSheetController,
-  ) { }
+  ) { 
+    this.musicTrackService.playListUpdatedBehaviourSubject.subscribe((playListrUpdated)=>{
+      if(playListrUpdated){
+        this.getPlaylist();
+      }
+    })
+  }
 
   ngOnInit(){
     // console.log("in action menu",this.track);
@@ -39,6 +45,7 @@ export class ActionMenuComponent implements OnInit {
                 this.track,
                 this.playlistArray[i].name
               )
+              this.musicTrackService.playListUpdatedBehaviourSubject.next(true);
             }
           }
         });
@@ -57,7 +64,7 @@ export class ActionMenuComponent implements OnInit {
 
   async deleteMusicTrack(){
     await this.musicTrackService.deleteMusicTrack(this.track);
-    this.popoverController.dismiss();
+    this.popoverController.dismiss("delete");
   }
 
   dismissPopover(){

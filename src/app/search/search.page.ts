@@ -61,16 +61,17 @@ export class SearchPage implements OnInit {
   ngOnInit() {
   }
   async ionViewWillEnter(){
+    if(this.router.url.indexOf("/download")!=-1){
+      let videoId=this.router.url.replace("/search/download/","");
+      this.isInitialLoad=true;
+      this.scrapY2Mate(videoId);
+    }
     if(this.router.url.indexOf("/search/init") != -1){
       this.isInitialLoad = true;
       let currentYear = +new Date().getFullYear();
       this.getSearchResults(Constants.STRING_INITIAL_LOAD_SEARCH+currentYear);
     }
-    let pluginResponse=await IonicPlugin.getSharedLink();
-    if(pluginResponse.sharedLink && pluginResponse.sharedLink.length>20){
-      this.url=pluginResponse.sharedLink;
-      this.verifyUrl();
-    }
+    
   }
   
   ionViewDidEnter(){

@@ -21,4 +21,9 @@ export class Utility{
         const r = Math.random()*(max-min) + min
         return Math.floor(r)
     }
+
+    public static getVideoIdFromUrl(url:string){
+        let videoid = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
+        return videoid;
+    }
 }

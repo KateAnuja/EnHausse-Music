@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { AlertController, IonInput } from '@ionic/angular';
 import { Playlist } from '../model/playlist';
 import { MusicTrackService } from '../services/music-track.service';
 import { Router } from '@angular/router';
@@ -19,6 +19,8 @@ export class PlaylistPage {
   isOpen = false;
   playlistInput="";
   filteredPlaylistArray = [];
+
+  @ViewChild("playlistInputSearch",{static:false}) playlistInputSearch:IonInput;
   
   constructor(
     private router : Router,
@@ -26,7 +28,13 @@ export class PlaylistPage {
     private chnageDetector : ChangeDetectorRef,
     private alertController : AlertController,
     private changeDetector : ChangeDetectorRef,
-  ) { }
+  ) { 
+    this.musicTrackService.playListUpdatedBehaviourSubject.subscribe((playListrUpdated)=>{
+      if(playListrUpdated){
+        this.getPlaylist();
+      }
+    })
+  }
 
   ionViewWillEnter(){
     this.getPlaylist();
@@ -53,7 +61,7 @@ export class PlaylistPage {
 
   async addNewPlaylist(playlistName : string){
     await this.musicTrackService.addNewPlaylist(playlistName);
-    this.getPlaylist();
+    this.musicTrackService.playListUpdatedBehaviourSubject.next(true);
   }
 
   async deletePlaylist(playlistObj:Playlist){
@@ -70,6 +78,7 @@ export class PlaylistPage {
               cssClass : "alert-btn-danger",
               handler: async() => {
                 await this.musicTrackService.deletePlaylist(playlistObj);
+                this.musicTrackService.playListUpdatedBehaviourSubject.next(true);
               }
           },{
               text: 'CANCEL',
@@ -93,6 +102,9 @@ export class PlaylistPage {
 
   toggleSearchBar(){
     this.isOpen = !this.isOpen;
+    if(this.isOpen){
+      this.playlistInputSearch.setFocus();
+    }
   }
 
   searchPlaylist(){

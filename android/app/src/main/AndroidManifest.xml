@@ -24,10 +24,11 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     android:usesCleartextTraffic="true"
+    android:screenOrientation="portrait"
     tools:targetApi="m">
     <activity android:name=".IntentActivity">
       <intent-filter>
-        <action android:name="android.intent.action.SEND" />
+        <action android:name="android.intent.action." />
         <category android:name="android.intent.category.DEFAULT" />
         <data android:mimeType="text/plain" />
       </intent-filter>
