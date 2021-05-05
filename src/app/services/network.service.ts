@@ -12,13 +12,16 @@ export class NetworkService {
   ) { }
 
   getSuggestion(term:string){
+    if(term.length<10){
+      term='song '+term;
+    }
     return new Promise((resolve,reject)=>{
       let suggestionArray=[];
       this.http.get(
         "https://suggestqueries-clients6.youtube.com/complete/search",
         {
           client:"youtube-reduced",
-          q:`song ${term}`
+          q:term
         },
         {
   
@@ -55,6 +58,9 @@ export class NetworkService {
     })
   }
   getSearchResults(term:string){
+    if(term.length<10){
+      term='song '+term;
+    }
     return new Promise((resolve,reject)=>{
     
       let clienVersion=Constants.STRING_EMPTY_STRING;
@@ -76,7 +82,7 @@ export class NetworkService {
       this.http.get(
         "https://m.youtube.com/results",
         {
-          search_query:`song ${term}`,
+          search_query:term,
           pbj:'1'
         },
         {

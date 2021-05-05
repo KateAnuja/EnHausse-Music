@@ -4,7 +4,7 @@ import { MusicTrack, MusicTrackUtil, SortByMusicTrack } from '../model/track';
 import { MusicTrackService } from '../services/music-track.service';
 import { ActionSheetController } from '@ionic/angular';
 import { Playlist } from '../model/playlist';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from '../util/constants';
 import { PopoverController } from '@ionic/angular';
 import { ActionMenuComponent } from '../action-menu/action-menu.component';
@@ -37,6 +37,7 @@ export class LocalMusicPage {
     private actionSheetController: ActionSheetController,
     private activatedRoute: ActivatedRoute,
     private popoverController: PopoverController,
+    private router:Router,
 
   ) { 
     this.musicTrackService.isPlayerPlayingBehaviourSubject.subscribe((isPlaying)=>{
@@ -254,6 +255,12 @@ export class LocalMusicPage {
 
     return await popover.present();
 
+  }
+
+  searchOnWeb(){
+    this.router.navigate([`/search/web/${this.trackInput}`]);
+    this.isOpen=false;
+    this.trackInput="";
   }
   
 

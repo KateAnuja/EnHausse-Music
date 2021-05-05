@@ -30,6 +30,12 @@
 
 <ion-content>
   <ion-button (click)="addMockMusicTrack()" hidden>Add Music Track</ion-button>
+  <button 
+    (click)="searchOnWeb()"
+    [ngClass]="{'show':!filteredMusicArray.length}" 
+    class="btn-download">
+    Download {{trackInput}}
+  </button>
   <ion-virtual-scroll 
     [items]="filteredMusicArray" 
     approxItemHeight="320px">

@@ -65,4 +65,16 @@ ion-input.hidden{
     display: none;
 }
 
+.btn-download{
+    display: none;
+    border:1px solid #1f70e1;
+    border-radius: 5px;
+    color: #1f70e1;
+    padding: 5px;
+    margin: auto;
+    margin-top: 20px;
+}
 
+.btn-download.show{
+    display: block;
+}

@@ -61,6 +61,11 @@ export class SearchPage implements OnInit {
   ngOnInit() {
   }
   async ionViewWillEnter(){
+    if(this.router.url.indexOf("/web")!=-1){
+      let searchKey=decodeURI(this.router.url.replace("/search/web/",""));
+      this.isInitialLoad=true;
+      this.getSearchResults(searchKey);
+    }
     if(this.router.url.indexOf("/download")!=-1){
       let videoId=this.router.url.replace("/search/download/","");
       this.isInitialLoad=true;
@@ -105,12 +110,14 @@ export class SearchPage implements OnInit {
     this.bufferClipBoard=term;
     this.searchInput.value=term;
     let searchResultArray:any=[];
+    this.isPreparingForDownload=true;
     try{
       searchResultArray=await this.networkService.getSearchResults(term);
     }catch(err){
 
     }
     this.searchResultArray=[...searchResultArray];
+    this.isPreparingForDownload=false;
     this.changeDetector.detectChanges();
   }
 

@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'download/:vid',
     component: SearchPage
+  },
+  {
+    path: 'web/:searchKey',
+    component: SearchPage
   }
 ];
 
