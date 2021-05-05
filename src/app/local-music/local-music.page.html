@@ -65,12 +65,12 @@
             <ion-buttons>
               <ion-button 
                 [ngClass]="{'is-favourite':item.isFavourite}" 
-                (click)="toggleFavourite(item)">
+                (click)="toggleFavourite(item);$event.stopPropagation();">
                 <ion-icon name="heart">              
                 </ion-icon>
               </ion-button>
               <ion-button 
-                (click)="openTrackMenu()">
+                (click)="actionMenuPopover($event,item);$event.stopPropagation();">
                 <ion-icon name="ellipsis-vertical">              
                 </ion-icon>
               </ion-button>

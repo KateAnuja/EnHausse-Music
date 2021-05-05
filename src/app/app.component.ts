@@ -16,7 +16,7 @@ const { PushNotifications } = Plugins;
 import { FCM } from '@capacitor-community/fcm';
 import { MusicTrackService } from './services/music-track.service';
 import { fromEvent } from 'rxjs';
-import { Keyboard } from '@ionic-native/keyboard/ngx';
+
 
 const fcm = new FCM();
 
@@ -38,7 +38,6 @@ export class AppComponent {
     private firebaseCrashlytics: FirebaseCrashlytics,
     private platform : Platform,
     private musicTrackService : MusicTrackService,
-    private keyboard : Keyboard
     
   ) {
     
@@ -62,7 +61,7 @@ export class AppComponent {
           if(!this.isMusicPlayerReady){
             this.isMusicPlayerReady = true;
             this.toggleMusicPlayer();
-            this.playerDataBehaviorSubscription.unsubscribe();
+            // this.playerDataBehaviorSubscription.unsubscribe();
           }
         }
       });

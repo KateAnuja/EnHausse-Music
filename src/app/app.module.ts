@@ -19,7 +19,7 @@ import {
   FloatingMusicPlayerComponent 
 } from './floating-music-player/floating-music-player.component';
 import { Constants } from './util/constants';
-import { Keyboard } from '@ionic-native/keyboard/ngx';
+
 
 @NgModule({
   declarations: [AppComponent, FloatingMusicPlayerComponent],
@@ -44,7 +44,6 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
     ScreenOrientation,
     FirebaseCrashlytics,
     FCM,
-    Keyboard,
   ],
   bootstrap: [AppComponent],
 })
