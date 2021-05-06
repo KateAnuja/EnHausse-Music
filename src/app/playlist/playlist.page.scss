@@ -2,31 +2,7 @@
    color: red;
 }
 
-ion-content{
-   --background:#1b1a1f;
-}
 
-ion-header{
-   background: #0f0f0f;
-}
-ion-toolbar{
-   --background: #0f0f0f;
-   ion-button{
-       background: #26262e;
-       border-radius: 15px;
-       width:40px;
-       height: 40px;
-       color: #fff;
-       line-height: 30px;
-       box-shadow: 0 1px 2px rgba(0,0,0,0.8);
-   }
-   ion-button.mr-left{
-       margin-left: 15px;
-   }
-   ion-button.mr-right{
-       margin-right: 15px;
-   }
-}
 
 .input{
     border : 1px solid grey;
@@ -66,8 +42,4 @@ ion-virtual-scroll{
 .card-header-playlist{
    padding-bottom: 0px;
    padding-top : 4px;
-}
-
-ion-input.hidden{
-   display: none;
 }

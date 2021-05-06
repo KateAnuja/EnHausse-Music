@@ -1,9 +1,9 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header class="bg-dark-black">
+  <ion-toolbar class="bg-dark-black">
     <ion-title color="light" class="ion-text-center">Download</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content class="bg-black">
   <ion-input 
     [ngClass]="{hidden : isInitialLoad}"
     class="inputUrl" 
@@ -17,6 +17,7 @@
 
 
   <ion-item
+    class="bg-black"
     *ngFor="let sugession of suggestionArray" 
     (click)="getSearchResults(sugession)">
       {{sugession}}
@@ -28,6 +29,7 @@
     class="card-search-result" 
     *ngFor="let searchResult of searchResultArray">
     <ion-item 
+      class="bg-black"
       button 
       (click)="downloadVideo(searchResult.videoId)">
       <ion-avatar 
@@ -48,13 +50,17 @@
 
 
 
-<ion-footer >
-  <ion-card [ngClass]="{'hidden':!isPreparingForDownload}">
+<ion-footer class="bg-black">
+  <ion-card 
+    class="bg-black"
+    [ngClass]="{'hidden':!isPreparingForDownload}">
     <p>Preparing for download...</p>
     <ion-progress-bar type="indeterminate"></ion-progress-bar>
   </ion-card>
   
-  <ion-card [ngClass]="{hidden : !showProgressBar}">
+  <ion-card 
+    class="bg-black"
+    [ngClass]="{hidden : !showProgressBar}">
     <ion-card-header>
       Downloading...
     </ion-card-header>

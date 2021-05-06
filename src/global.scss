@@ -31,13 +31,108 @@ https://webdesign.tutsplus.com/tutorials/music-player-app-ui-design-adobe-xd--cm
 https://cms-assets.tutsplus.com/cdn-cgi/image/width=630/uploads/users/158/posts/34793/final_image/MusicPlayerAppUI0.jpg
 */
 
-ion-icon{
-    --color : white;
-}
+$colorBlack:#1b1a1f;
+$colorSoftBlack:#232429;
+$colorDarkBlack:#0f0f0f;
+$colorPrimary:#1f70e1;
+$colorWhite:#fff;
+
 
 @import "../src/theme/text.css";
 @import "../src/theme/btn.scss";
 
 .hidden{
     display: none;
+}
+.btn-sm-hollow{
+    border:1px solid $colorPrimary;
+    border-radius: 5px;
+    color: $colorPrimary;
+    padding: 5px;
+    margin: auto;
+    background: none;
+}
+
+ion-button.btn-header{
+    background: #26262e;
+    border-radius: 15px;
+    width:40px;
+    height: 40px;
+    color: $colorWhite;
+    line-height: 30px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+ion-button.btn-header.mr-left{
+    margin-left: 15px;
+}
+
+ion-button.btn-header.mr-right{
+    margin-right: 15px;
+}
+
+
+
+
+ion-icon{
+    --color : white;
+}
+
+ion-card.highlight{
+    --background : $colorPrimary  !important;
+    background : $colorPrimary !important;
+}
+
+
+ion-card.hidden,
+ion-input.hidden,
+ion-footer.hiden{
+    display: none;
+}
+
+ion-item.bg-black,
+ion-list.bg-black,
+ion-content.bg-black,
+ion-card.bg-black,
+ion-footer.bg-black{
+    --background:$colorBlack;
+    background:$colorBlack;
+    --color:$colorWhite;
+    color:$colorWhite;
+}
+
+ion-card.bg-soft-black{
+    --background:$colorSoftBlacks;
+    --color:$colorWhite;
+}
+
+ion-toolbar.bg-dark-black,
+ion-header.bg-dark-black,
+ion-toolbar.bg-dark-black,
+super-tabs-toolbar.bg-dark-black{
+    --background: $colorDarkBlack;
+    background: $colorDarkBlack;
+}
+
+
+ion-col.no-pad{
+    --padding-top:0px;
+    --padding-bottom:0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+
+ion-range.pt0{
+    --padding-top:0px;
+    padding-top:0px;
+}
+
+super-tabs-toolbar{
+    super-tab-button.active{
+        ion-label{
+            color:$colorPrimary;
+            text-shadow: 0 0 10px rgba(31,112,225,0.6);
+        }
+    }
 }
