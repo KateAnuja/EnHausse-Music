@@ -139,6 +139,7 @@ export class LocalMusicPage {
       }
       this.musicTrackService.playTrack(lastTrackPlayed,this.musicArray,false);
     }
+    this.highLightPlayingTrack(lastTrackPlayed);
   }
 
   async addMockMusicTrack(){
@@ -266,26 +267,28 @@ export class LocalMusicPage {
     this.musicTrackService.deleteMusictrackFromPlaylist(musicTrack, this.activePlaylistName);
   }
 
-  async deleteMusicTrack(track:MusicTrack){
-    await this.musicTrackService.deleteMusicTrack(track);
+  deleteMusicTrack(track:MusicTrack){
+    this.musicTrackService.deleteMusicTrack(track);
   }
 
-  highLightPlayingTrack(playingMusicTrack:MusicTrack){   
-    let foundCurrentTrack=false;
-    let foundPrevTrack=false;
-    for(let i=0;i<this.filteredMusicArray.length;i++){
-      if(this.filteredMusicArray[i].uiIsPlaying){
-        this.filteredMusicArray[i].uiIsPlaying=false;
-        foundPrevTrack=true;
+  highLightPlayingTrack(playingMusicTrack:MusicTrack){
+    if(playingMusicTrack){
+      let foundCurrentTrack=false;
+      let foundPrevTrack=false;
+      for(let i=0;i<this.filteredMusicArray.length;i++){
+        if(this.filteredMusicArray[i].uiIsPlaying){
+          this.filteredMusicArray[i].uiIsPlaying=false;
+          foundPrevTrack=true;
+        }
+        if(this.filteredMusicArray[i].path==playingMusicTrack.path){
+          this.filteredMusicArray[i].uiIsPlaying=true;
+          foundCurrentTrack=true;
+        }
+        if(foundCurrentTrack && foundPrevTrack){
+          break;
+        }
       }
-      if(this.filteredMusicArray[i].path==playingMusicTrack.path){
-        this.filteredMusicArray[i].uiIsPlaying=true;
-        foundCurrentTrack=true;
-      }
-      if(foundCurrentTrack && foundPrevTrack){
-        break;
-      }
-    }
+    }  
   }
 
 

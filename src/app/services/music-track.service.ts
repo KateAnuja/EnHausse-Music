@@ -174,7 +174,7 @@ export class MusicTrackService {
     }
 
     await this.storage.set(Constants.DB.MODEL_MUSIC_TRACK, JSON.stringify(musicTrackDbArray));
-    
+    this.musicTrackAddedBehaviourSubject.next(true);
   }
 
   async getPlaylist(){

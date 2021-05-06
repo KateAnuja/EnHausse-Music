@@ -114,6 +114,7 @@ export class FloatingMusicPlayerComponent {
       this.audioFile.pause();
     }else{
       this.audioFile.play();
+      this.musicTrackService.isPlayerPlayingBehaviourSubject.next(true);
     }
   }
 
