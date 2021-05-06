@@ -39,6 +39,11 @@ export class PlaylistPage {
         this.getPlaylist();
       }
     })
+    this.musicTrackService.favCountBehaviorSubject.subscribe(async (favUpdated)=>{
+      if(favUpdated){
+        this.favouritesCount=await this.musicTrackService.getFavCount();
+      }
+    });
   }
 
   ionViewWillEnter(){

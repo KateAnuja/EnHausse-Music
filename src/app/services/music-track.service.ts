@@ -13,8 +13,7 @@ import { MusicPlayer, MusicPlayerOrderPreference, MusicPlayerUtil } from '../mod
 })
 export class MusicTrackService {
   //allMusicTrack = new BehaviorSubject<MusicTrack[]>();
-  favCountBehaviorSubject = new BehaviorSubject(0);
-  playListUpdated = new BehaviorSubject(0);
+  favCountBehaviorSubject = new BehaviorSubject<boolean>(false);
   playerDataBehaviorSubject = new BehaviorSubject<MusicPlayer>(null);
   musicTrackAddedBehaviourSubject = new BehaviorSubject<boolean>(false);
   isPlayerPlayingBehaviourSubject = new BehaviorSubject<boolean>(false);
@@ -87,7 +86,8 @@ export class MusicTrackService {
           break;
         }
       }
-      this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(musicArray));
+      await this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(musicArray));
+      this.favCountBehaviorSubject.next(true);
     })
   }
 
@@ -146,12 +146,19 @@ export class MusicTrackService {
     } 
     delete playlistDbObj[playlistObj.name];
     await this.storage.set(Constants.DB.MODEL_PLAYLIST, JSON.stringify(playlistDbObj));
+    this.getAllLocalTracks()
+    .then(async (musicArray)=>{
+      for(let i=0;i<musicArray.length;i++){
+        if(musicArray[i].playlist.indexOf(playlistObj.name)!=-1){
+          musicArray[i].playlist.splice(musicArray[i].playlist.indexOf(playlistObj.name),1);
+        }
+      }
+      await this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(musicArray));
+      this.musicTrackAddedBehaviourSubject.next(true);
+    })
     
   }
 
-  removeFromPlaylist(playlistName : string, path : string){
-
-  }
 
   async deleteMusicTrack(musicTrack : MusicTrack){
     let musicTrackDbArray:MusicTrack[]=[];
