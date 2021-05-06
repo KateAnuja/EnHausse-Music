@@ -64,7 +64,7 @@ export class SearchPage implements OnInit {
     if(this.router.url.indexOf("/web")!=-1){
       let searchKey=decodeURI(this.router.url.replace("/search/web/",""));
       this.isInitialLoad=true;
-      this.getSearchResults(searchKey);
+      this.getSuggestion(searchKey);
     }
     if(this.router.url.indexOf("/download")!=-1){
       let videoId=this.router.url.replace("/search/download/","");

@@ -32,7 +32,7 @@
   <ion-button (click)="addMockMusicTrack()" hidden>Add Music Track</ion-button>
   <button 
     (click)="searchOnWeb()"
-    [ngClass]="{'show':!filteredMusicArray.length}" 
+    [ngClass]="{'show':musicArray.length && !filteredMusicArray.length}" 
     class="btn-download">
     Download {{trackInput}}
   </button>

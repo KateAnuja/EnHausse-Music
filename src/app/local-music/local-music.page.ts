@@ -28,6 +28,7 @@ export class LocalMusicPage {
   isOpen = false;
   isPlayerPlayingTrack : boolean = false;
 
+
   @ViewChild("inputSearch",{static:false})inputSearch:IonInput;
   
   constructor(
@@ -51,6 +52,11 @@ export class LocalMusicPage {
         this.getMusicArray();
       }
     })
+    this.musicTrackService.playListUpdatedBehaviourSubject.subscribe((playListrUpdated)=>{
+      if(playListrUpdated){
+        this.getPlaylist();
+      }
+    })
     this.activatedRoute.params.subscribe(params=>{
       if(params && params.playlistName){
         this.activePlaylist=params.playlistName;
@@ -60,6 +66,7 @@ export class LocalMusicPage {
   }
 
   ionViewDidEnter(){
+    this.getPlaylist();
   }
 
   ionViewWillLeave(){
@@ -68,6 +75,10 @@ export class LocalMusicPage {
 
   ionViewDidLeave(){
 
+  }
+
+  async getPlaylist(){
+    this.playlistArray=await this.musicTrackService.getPlaylist();
   }
 
   async getMusicArray(){
@@ -213,11 +224,39 @@ export class LocalMusicPage {
     this.musicTrackService.toggleFavourite(musicTrack.path);
   }
 
-  
+  async addToPlaylist(track:MusicTrack){
+    let buttonConfigArray=[];
+    for(let i=0;i<this.playlistArray.length;i++){
+      buttonConfigArray.push({
+        text:this.playlistArray[i].name,
+        handler: ()=>{
+          if(track.playlist.indexOf(this.playlistArray[i].name)==-1){
+            this.musicTrackService.addToPlaylist(
+              track,
+              this.playlistArray[i].name
+            )
+            this.musicTrackService.playListUpdatedBehaviourSubject.next(true);
+          }
+        }
+      });
+    }
+    
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Add To Playlist',
+      cssClass: 'action-sheet-playlist',
+      buttons: buttonConfigArray
+    });
+    await actionSheet.present();
+}
 
-  deleteFormPlaylist(musicTrack:MusicTrack){
-    this.musicTrackService.deleteMusictrackFromPlaylist(musicTrack, this.activePlaylistName);
+  async deleteFormPlaylist(musicTrack:MusicTrack){
+    await this.musicTrackService.deleteMusictrackFromPlaylist(musicTrack, this.activePlaylistName);
+    this.musicTrackService.playListUpdatedBehaviourSubject.next(true);
     musicTrack.uiHideInList = true;
+  }
+
+  async deleteMusicTrack(track:MusicTrack){
+    await this.musicTrackService.deleteMusicTrack(track);
   }
 
   openTrackMenu(){
@@ -249,7 +288,16 @@ export class LocalMusicPage {
 
     popover.onDidDismiss().then((result) => {
       if(result && result.data == "delete"){
-        item.uiHideInList=true;
+        if(this.activePlaylistName == Constants.STRING_WORD_ALL)
+        {
+          this.deleteMusicTrack(item);
+          item.uiHideInList=true;
+        }else{
+          this.deleteFormPlaylist(item);
+        }
+      }
+      if(result && result.data == "add"){
+        this.addToPlaylist(item);
       }
     });
 
