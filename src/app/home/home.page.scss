@@ -1,0 +1,9 @@
+$colorPrimary:#1f70e1;
+super-tabs-toolbar{
+    super-tab-button.active{
+        ion-label{
+            color:$colorPrimary;
+            text-shadow: 0 0 10px rgba(31,112,225,0.6);
+        }
+    }
+}

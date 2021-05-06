@@ -40,6 +40,7 @@
     [items]="filteredMusicArray" 
     approxItemHeight="320px">
     <ion-card 
+      class="bg-soft-black"
       *virtualItem="let item; let itemBounds = bounds;"
       [ngClass]="{'active':item.isFavourite, 'hidden':item.uiHideInList, 'highlight':item.uiIsPlaying}"
       (click)="playTrack(item)">

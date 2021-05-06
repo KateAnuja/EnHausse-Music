@@ -11,10 +11,19 @@
     (ionChange)="searchTerm()" 
     placeholder="Start Typing here...">
   </ion-input>
+  
+  <ion-card
+    (click)="initListen()"
+    class="bg-black ion-text-center"
+    *ngIf="isInitialLoad || (!suggestionArray.length && !searchResultArray.length && !isPreparingForDownload && !showProgressBar)">
+    <ion-icon 
+      style="font-size: 200px;"  
+    name="mic-circle"></ion-icon>
+    <p>Tap To Search</p>
+  </ion-card>
   <ion-title  *ngIf="isInitialLoad" color="light" class="ion-text-center">
     Download any of the following music
   </ion-title>
-
 
   <ion-item
     class="bg-black"

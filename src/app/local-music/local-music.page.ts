@@ -286,7 +286,6 @@ export class LocalMusicPage {
         break;
       }
     }
-    this.changeDetector.detectChanges();
   }
 
 

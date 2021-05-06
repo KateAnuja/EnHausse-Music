@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'local-music',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {

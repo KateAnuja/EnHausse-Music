@@ -1,9 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
-import { HTTP } from '@ionic-native/http/ngx';
 import { IonInput, IonRange } from '@ionic/angular';
 import { Constants } from '../util/constants';
 import { AlertController, ToastController } from '@ionic/angular';
@@ -11,9 +9,7 @@ import { NetworkService } from '../services/network.service';
 import { MusicTrackService } from '../services/music-track.service';
 import { MusicTrack } from '../model/track';
 import { Media } from '@ionic-native/media/ngx';
-
-
-const { IonicPlugin } = Plugins;
+import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
 
 interface SearchData{
   title:string,
@@ -27,7 +23,7 @@ interface SearchData{
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
 })
-export class SearchPage implements OnInit {
+export class SearchPage {
   public static TAG : string = "SearchPage";
   @ViewChild("searchInput",{static:false})searchInput:IonInput;
   @ViewChild('range', {static : false}) range : IonRange;
@@ -40,11 +36,11 @@ export class SearchPage implements OnInit {
   url : string="";
   progress = 0;
   isInitialLoad = false;
+  shouldRedirectToHome = false;
   showProgressBar = false;
   isPreparingForDownload = false;
 
   constructor(
-    private http: HTTP,
     private changeDetector:ChangeDetectorRef,
     private transfer: FileTransfer, 
     private file: File,
@@ -53,26 +49,27 @@ export class SearchPage implements OnInit {
     private networkService : NetworkService,
     private musicTrackService : MusicTrackService,
     private media : Media,
-    private activatedRoute : ActivatedRoute,
-    private router : Router
+    private router : Router,
+    private speechRecognition: SpeechRecognition,
 
-  ) { }
-
-  ngOnInit() {
+  ) {
+    
   }
+
   async ionViewWillEnter(){
     if(this.router.url.indexOf("/web")!=-1){
       let searchKey=decodeURI(this.router.url.replace("/search/web/",""));
-      this.isInitialLoad=true;
+      this.shouldRedirectToHome=true;
       this.getSuggestion(searchKey);
     }
     if(this.router.url.indexOf("/download")!=-1){
       let videoId=this.router.url.replace("/search/download/","");
-      this.isInitialLoad=true;
+      this.shouldRedirectToHome=true;
       this.scrapY2Mate(videoId);
     }
     if(this.router.url.indexOf("/search/init") != -1){
       this.isInitialLoad = true;
+      this.shouldRedirectToHome = true;
       let currentYear = +new Date().getFullYear();
       this.getSearchResults(Constants.STRING_INITIAL_LOAD_SEARCH+currentYear);
     }
@@ -183,7 +180,7 @@ export class SearchPage implements OnInit {
     });
     toast.present();
     this.musicTrackService.musicTrackAddedBehaviourSubject.next(true);
-    if(this.isInitialLoad){
+    if(this.shouldRedirectToHome){
       this.router.navigateByUrl('home');
     }
 
@@ -215,7 +212,6 @@ export class SearchPage implements OnInit {
       encodeURI(downloadUrl), 
       this.file.externalCacheDirectory + '/Music/' + fileName
     ).then(async (entry) => {
-        //IonicPlugin.download({fileName});
         this.url="";
         this.currentlyDownloading="";
         this.downloadPercentage=0;
@@ -265,6 +261,33 @@ export class SearchPage implements OnInit {
       console.error(err);
       this.showError();
     })
+  }
+
+  initListen(){
+    console.log("initListen")
+    this.speechRecognition.requestPermission()
+    .then(
+      () => {
+        this.startListen();
+      },
+      () => {
+        this.showError();
+      }
+    )
+  }
+
+  startListen(){
+    this.speechRecognition.startListening({
+      showPopup:true
+    })
+    .subscribe(
+      (matches: string[]) => {
+        this.getSuggestion(matches[0])
+      },
+      (onerror) => {
+        this.showError();
+      }
+    )
   }
 
   async showError(){

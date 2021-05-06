@@ -9,6 +9,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Media } from '@ionic-native/media/ngx';
+import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
 import { FCM } from '@capacitor-community/fcm';
@@ -41,6 +42,7 @@ import { Constants } from './util/constants';
     FileTransfer,
     File,
     Media,
+    SpeechRecognition,
     ScreenOrientation,
     FirebaseCrashlytics,
     FCM,
