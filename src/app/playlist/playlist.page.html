@@ -1,8 +1,8 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header class="bg-dark-black">
+  <ion-toolbar class="bg-dark-black">
     <ion-buttons slot="start">
       <ion-button 
-        class="mr-left"
+        class="btn-header mr-left"
         (click)="toggleSearchBar()">
         <ion-icon 
           name="search">
@@ -28,7 +28,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="bg-black">
   <!-- <ion-input
     class="input" 
     [(ngModel)]="playlist" 
@@ -41,7 +41,9 @@
   </ion-button>
   </div> -->
   
-  <ion-card (click)="openPlaylist(favPlaylistString)">
+  <ion-card 
+    class="bg-soft-black"
+    (click)="openPlaylist(favPlaylistString)">
     <ion-card-header class="card-hedaer-favourites">
       <ion-card-title color="light">
         Favourites
