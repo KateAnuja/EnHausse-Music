@@ -10,6 +10,8 @@ import { MusicTrackService } from '../services/music-track.service';
 import { MusicTrack } from '../model/track';
 import { Media } from '@ionic-native/media/ngx';
 import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
+import { Plugins } from '@capacitor/core';
+const { IonicPlugin,SplashScreen } = Plugins;
 
 interface SearchData{
   title:string,
@@ -78,6 +80,7 @@ export class SearchPage {
   
   ionViewDidEnter(){
     this.searchInput.setFocus();
+    SplashScreen.hide();
   }
 
   searchTerm(){

@@ -9,7 +9,7 @@ import { MusicTrackService } from '../services/music-track.service';
 import { Router } from '@angular/router';
 
 
-const { IonicPlugin,SplashScreen } = Plugins;
+
 
 
 @Component({
@@ -80,9 +80,7 @@ export class HomePage {
 
   ionViewDidEnter(){
     this.musicTrackService.playListUiUpdatedBehaviourSubject.next(true);
-    if(this.platform.is("hybrid")){
-      SplashScreen.hide();
-    }
+    
   }
 
   OnTabChange(event){

@@ -80,6 +80,9 @@ export class FloatingMusicPlayerComponent {
       this.audioProgressBarInterval=setInterval(async ()=>{
         this.audioFile.getCurrentPosition().then((pos)=>{
           this.currentMusicPlayingDuration = pos*1000;
+          if(this.currentMusicPlayingDuration<0){
+            this.currentMusicPlayingDuration=0;
+          }
           if(!this.isSeekBarFocused){
             if(this.audioDuration<0){
               this.audioDuration=this.audioFile.getDuration()*1000;
