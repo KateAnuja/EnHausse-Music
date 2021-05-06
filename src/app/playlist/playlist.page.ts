@@ -1,9 +1,11 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { AlertController, IonInput } from '@ionic/angular';
+import { AlertController, IonInput, PopoverController } from '@ionic/angular';
 import { Playlist } from '../model/playlist';
 import { MusicTrackService } from '../services/music-track.service';
 import { Router } from '@angular/router';
 import { Constants } from '../util/constants';
+import { PlaylistPopoverComponent } from '../playlist-popover/playlist-popover.component';
+
 
 @Component({
   selector: 'app-playlist',
@@ -28,6 +30,7 @@ export class PlaylistPage {
     private chnageDetector : ChangeDetectorRef,
     private alertController : AlertController,
     private changeDetector : ChangeDetectorRef,
+    private popoverController : PopoverController
   ) { 
     this.musicTrackService.playListUpdatedBehaviourSubject.subscribe((playListrUpdated)=>{
       if(playListrUpdated){
@@ -131,6 +134,21 @@ export class PlaylistPage {
       }
       this.filteredPlaylistArray = filteredPlaylistArray;     
       this.changeDetector.detectChanges();
+  }
+
+  async openAddPlaylistPopover(event : any){
+    const popover = await this.popoverController.create({
+      component: PlaylistPopoverComponent,
+      cssClass: '',
+      translucent: true
+    });
+
+    popover.onDidDismiss().then((result) => {
+      console.log(result);
+       this.addNewPlaylist(result.data);
+    });
+
+    return await popover.present();
   }
 
 }

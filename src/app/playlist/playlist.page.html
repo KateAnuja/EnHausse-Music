@@ -16,11 +16,20 @@
       (ionChange)="searchPlaylist()" 
       placeholder="Search Playlist here...">
     </ion-input>
+    <ion-buttons slot="end">
+      <ion-button 
+        class="mr-right"
+        (click)="openAddPlaylistPopover($event)">
+        <ion-icon 
+          name="add">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-input
+  <!-- <ion-input
     class="input" 
     [(ngModel)]="playlist" 
     placeholder="Enter Playlist To Add...">
@@ -30,7 +39,7 @@
     (click)="addNewPlaylist(playlist)">
     Add New Playlist
   </ion-button>
-  </div>
+  </div> -->
   
   <ion-card (click)="openPlaylist(favPlaylistString)">
     <ion-card-header class="card-hedaer-favourites">
