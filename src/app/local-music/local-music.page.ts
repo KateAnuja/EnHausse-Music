@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from '../util/constants';
 import { PopoverController } from '@ionic/angular';
 import { ActionMenuComponent } from '../action-menu/action-menu.component';
+import { MusicPlayer } from '../model/musicPlayer';
+import { ThisReceiver } from '@angular/compiler';
 
 
 @Component({
@@ -45,6 +47,12 @@ export class LocalMusicPage {
     .subscribe((isPlaying)=>{
       this.isPlayerPlayingTrack=isPlaying;
     })
+    this.musicTrackService.playerDataBehaviorSubject
+    .subscribe((mP:MusicPlayer)=>{
+      if(mP){
+        this.highLightPlayingTrack(mP.currentMusictTrack);
+      }
+    });
   }
 
   ionViewWillEnter(){
@@ -262,8 +270,23 @@ export class LocalMusicPage {
     await this.musicTrackService.deleteMusicTrack(track);
   }
 
-  openTrackMenu(){
-
+  highLightPlayingTrack(playingMusicTrack:MusicTrack){   
+    let foundCurrentTrack=false;
+    let foundPrevTrack=false;
+    for(let i=0;i<this.filteredMusicArray.length;i++){
+      if(this.filteredMusicArray[i].uiIsPlaying){
+        this.filteredMusicArray[i].uiIsPlaying=false;
+        foundPrevTrack=true;
+      }
+      if(this.filteredMusicArray[i].path==playingMusicTrack.path){
+        this.filteredMusicArray[i].uiIsPlaying=true;
+        foundCurrentTrack=true;
+      }
+      if(foundCurrentTrack && foundPrevTrack){
+        break;
+      }
+    }
+    this.changeDetector.detectChanges();
   }
 
 

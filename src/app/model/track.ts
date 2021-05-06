@@ -7,6 +7,7 @@ export interface MusicTrack{
     isFavourite : boolean;
     addedTimeStamp : number;
     uiHideInList? : boolean;
+    uiIsPlaying? : boolean;
 }
 
 export enum SortByMusicTrack{
