@@ -34,6 +34,11 @@ export class PlaylistPage {
         this.getPlaylist();
       }
     })
+    this.musicTrackService.playListUiUpdatedBehaviourSubject.subscribe((playUiListrUpdated)=>{
+      if(playUiListrUpdated){
+        this.getPlaylist();
+      }
+    })
   }
 
   ionViewWillEnter(){

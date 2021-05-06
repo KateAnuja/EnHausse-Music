@@ -79,6 +79,7 @@ export class HomePage {
   }
 
   ionViewDidEnter(){
+    this.musicTrackService.playListUiUpdatedBehaviourSubject.next(true);
     if(this.platform.is("hybrid")){
       SplashScreen.hide();
     }

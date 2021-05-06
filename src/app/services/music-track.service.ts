@@ -19,6 +19,7 @@ export class MusicTrackService {
   musicTrackAddedBehaviourSubject = new BehaviorSubject<boolean>(false);
   isPlayerPlayingBehaviourSubject = new BehaviorSubject<boolean>(false);
   playListUpdatedBehaviourSubject = new BehaviorSubject<boolean>(false);
+  playListUiUpdatedBehaviourSubject = new BehaviorSubject<boolean>(false);
 
   constructor(
     private storage:Storage  
@@ -196,9 +197,13 @@ export class MusicTrackService {
       playlistDbObj=JSON.parse(await this.storage.get(Constants.DB.MODEL_PLAYLIST) || Constants.STRING_EMPTY_OBJECT);
     }catch(err){
 
-    } 
+    }
+    if(!playlistDbObj[playlistName].count){
+      playlistDbObj[playlistName].count=0;
+    }
     playlistDbObj[playlistName].count+=incrementor;
     await this.storage.set(Constants.DB.MODEL_PLAYLIST, JSON.stringify(playlistDbObj));
+    this.playListUpdatedBehaviourSubject.next(true);
   }
 
   async createMockData(){
@@ -224,11 +229,6 @@ export class MusicTrackService {
     .then(async (musicArray)=>{
       for(let i=0;i<musicArray.length;i++){
         if(musicTrack.path == musicArray[i].path){
-          // musicArray[i].isFavourite = !musicArray[i].isFavourite;
-          // let favCount:number = (await this.storage.get(Constants.DB.COUNT_FAVOURITE) || 0);
-          // if(musicArray[i].isFavourite){favCount++}
-          // else{favCount--}
-          // this.storage.set(Constants.DB.COUNT_FAVOURITE,favCount);
           musicArray[i].playlist.splice(musicArray[i].playlist.indexOf(playlistName),1);
           this.setPlaylistMusicTracksCount(playlistName,false);
           break;

@@ -41,23 +41,27 @@ export class LocalMusicPage {
     private router:Router,
 
   ) { 
-    this.musicTrackService.isPlayerPlayingBehaviourSubject.subscribe((isPlaying)=>{
+    this.musicTrackService.isPlayerPlayingBehaviourSubject
+    .subscribe((isPlaying)=>{
       this.isPlayerPlayingTrack=isPlaying;
     })
   }
 
   ionViewWillEnter(){
-    this.musicTrackService.musicTrackAddedBehaviourSubject.subscribe((isNewMusicTrackAdded)=>{
+    this.musicTrackService.musicTrackAddedBehaviourSubject
+    .subscribe((isNewMusicTrackAdded)=>{
       if(isNewMusicTrackAdded){
         this.getMusicArray();
       }
     })
-    this.musicTrackService.playListUpdatedBehaviourSubject.subscribe((playListrUpdated)=>{
+    this.musicTrackService.playListUpdatedBehaviourSubject
+    .subscribe((playListrUpdated)=>{
       if(playListrUpdated){
         this.getPlaylist();
       }
     })
-    this.activatedRoute.params.subscribe(params=>{
+    this.activatedRoute.params
+    .subscribe(params=>{
       if(params && params.playlistName){
         this.activePlaylist=params.playlistName;
       }
@@ -247,12 +251,11 @@ export class LocalMusicPage {
       buttons: buttonConfigArray
     });
     await actionSheet.present();
-}
+  }
 
-  async deleteFormPlaylist(musicTrack:MusicTrack){
-    await this.musicTrackService.deleteMusictrackFromPlaylist(musicTrack, this.activePlaylistName);
-    this.musicTrackService.playListUpdatedBehaviourSubject.next(true);
+  deleteFormPlaylist(musicTrack:MusicTrack){
     musicTrack.uiHideInList = true;
+    this.musicTrackService.deleteMusictrackFromPlaylist(musicTrack, this.activePlaylistName);
   }
 
   async deleteMusicTrack(track:MusicTrack){
@@ -288,8 +291,7 @@ export class LocalMusicPage {
 
     popover.onDidDismiss().then((result) => {
       if(result && result.data == "delete"){
-        if(this.activePlaylistName == Constants.STRING_WORD_ALL)
-        {
+        if(this.activePlaylistName == Constants.STRING_WORD_ALL){
           this.deleteMusicTrack(item);
           item.uiHideInList=true;
         }else{

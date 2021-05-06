@@ -60,7 +60,7 @@
           <ion-col>
             <ion-buttons size="2">
               <ion-button 
-                (click)="deletePlaylist(item)">
+                (click)="deletePlaylist(item);$event.stopPropagation();">
                 <ion-icon 
                   name="trash">
                 </ion-icon>
