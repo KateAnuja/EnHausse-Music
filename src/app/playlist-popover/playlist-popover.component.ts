@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { IonInput, PopoverController } from '@ionic/angular';
 
 @Component({
   selector: 'app-playlist-popover',
@@ -15,11 +15,12 @@ export class PlaylistPopoverComponent implements OnInit {
 
   ngOnInit() {}
   ngAfterViewInit(){
-    this.playlistInput.nativeElement.setFocus();
+    setTimeout(()=>{
+      this.playlistInput.nativeElement.focus();
+    },500);
   }
 
   addPlaylist(){
-    console.log(this.playlistInput.nativeElement.value);
     this.popoverController.dismiss(this.playlistInput.nativeElement.value);
   }
 
