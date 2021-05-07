@@ -154,13 +154,15 @@ export class SearchPage {
   }
 
   currentlyDownloading="";
+  isAudioPlayed=false;
   async scrapY2Mate(vid:string){
     if(this.currentlyDownloading!=vid){
       this.currentlyDownloading=vid;
       try{
         let {kid,fileName}=await this.getVideoKid(vid);
         this.isPreparingForDownload=false;
-        if(this.isInitialLoad){
+        if(this.isInitialLoad && !this.isAudioPlayed){
+          this.isAudioPlayed=true;
           new Audio(Sounds.SOUND_DOWNLOADING).play();
         }
         this.showProgressBar=true;
@@ -183,7 +185,7 @@ export class SearchPage {
 
   async getVideoKid(vid:string):Promise<{kid:string,fileName:string}>{
     let videoKidObj:any=await this.networkService.getVideoKid(vid);
-    this.imgName=videoKidObj.fileName;
+    this.imgName=videoKidObj.fileName.replace(/.mp3/g,"").replace(/-/g," ");
     this.imgSrc=videoKidObj.thumbnailUrl;
     return videoKidObj;
   }
@@ -197,7 +199,7 @@ export class SearchPage {
       duration: 2000
     });
     toast.present();
-    this.musicTrackService.musicTrackAddedBehaviourSubject.next(true);
+    
     if(this.shouldRedirectToHome){
       setTimeout(()=>{
         this.router.navigateByUrl('home');
@@ -238,6 +240,7 @@ export class SearchPage {
         this.showProgressBar=false;
         this.lastUpdateValue=0;
         this.lastProgress=0;
+        this.changeDetector.detectChanges();
         
         let musicTrack : MusicTrack = {
           name : fileName.replace(/.mp3/g,"").replace(/-/g," "),
@@ -272,7 +275,7 @@ export class SearchPage {
               this.showError();
             }
           }
-        },100);
+        },200);
         
         
     }, (error) => {
@@ -286,7 +289,6 @@ export class SearchPage {
   }
 
   initListen(){
-    console.log("initListen")
     this.speechRecognition.requestPermission()
     .then(
       () => {

@@ -7,8 +7,8 @@ android {
         applicationId "in.enhausse.music_app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "0.0.7 -alpha"
+        versionCode 3
+        versionName "0.1.0 Beta"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

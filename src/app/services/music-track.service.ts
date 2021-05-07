@@ -31,10 +31,9 @@ export class MusicTrackService {
     .then(async (musicArray)=>{
       musicArray.push(musicTrack);
       musicArray = MusicTrackUtil.sort(SortByMusicTrack.RECENT_FIRST, musicArray);
-      this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(musicArray));
+      await this.storage.set(Constants.DB.MODEL_MUSIC_TRACK,JSON.stringify(musicArray));
+      this.musicTrackAddedBehaviourSubject.next(true);
     })
-
-
   }
 
   async playTrack(currentMusictTrack:MusicTrack,musicTrackArray:MusicTrack[],toPlay:boolean){

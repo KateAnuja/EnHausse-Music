@@ -53,9 +53,6 @@ export class LocalMusicPage {
         this.highLightPlayingTrack(mP.currentMusictTrack);
       }
     });
-  }
-
-  ionViewWillEnter(){
     this.musicTrackService.musicTrackAddedBehaviourSubject
     .subscribe((isNewMusicTrackAdded)=>{
       if(isNewMusicTrackAdded){
@@ -75,6 +72,10 @@ export class LocalMusicPage {
       }
       this.getMusicArray();
     });
+  }
+
+  ionViewWillEnter(){
+    
   }
 
   ionViewDidEnter(){

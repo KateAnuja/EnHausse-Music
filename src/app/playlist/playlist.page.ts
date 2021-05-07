@@ -144,8 +144,7 @@ export class PlaylistPage {
     });
 
     popover.onDidDismiss().then((result) => {
-      console.log(result);
-       this.addNewPlaylist(result.data);
+      this.addNewPlaylist(result.data);
     });
 
     return await popover.present();
