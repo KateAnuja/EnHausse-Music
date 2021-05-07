@@ -1,3 +1,24 @@
+@font-face {
+    font-family: "Montserrat";
+    src: local("Montserrat"), url(./assets/fonts/MontserratAlternates-Regular.ttf) format("truetype");
+}
+@font-face {
+    font-family: "Montserrat-light";
+    src: local("Montserrat"), url(./assets/fonts/MontserratAlternates-Light.ttf) format("truetype");
+}
+@font-face {
+    font-family: "Montserrat-thin";
+    src: local("Montserrat"), url(./assets/fonts/MontserratAlternates-Thin.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Montserrat-Medium";
+    src: local("Montserrat"), url(./assets/fonts/MontserratAlternates-Medium.ttf) format("truetype");
+}
+
+*{
+    font-family: "Montserrat", Arial, Helvetica, sans-serif;;
+}
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
@@ -78,7 +99,7 @@ ion-icon{
     --color : white;
 }
 
-ion-card.highlight{
+ion-item.highlight{
     --background : $colorPrimary  !important;
     background : $colorPrimary !important;
 }
@@ -101,6 +122,7 @@ ion-footer.bg-black{
     color:$colorWhite;
 }
 
+ion-item.bg-soft-black,
 ion-card.bg-soft-black{
     --background:$colorSoftBlack;
     --color:$colorWhite;
