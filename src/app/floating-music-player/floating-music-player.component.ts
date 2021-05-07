@@ -209,6 +209,7 @@ export class FloatingMusicPlayerComponent {
     });
    
     this.musicControls.listen();
+    this.musicControls.updateIsPlaying(true);
   }
 
 }
