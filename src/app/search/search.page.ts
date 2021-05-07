@@ -199,7 +199,9 @@ export class SearchPage {
     toast.present();
     this.musicTrackService.musicTrackAddedBehaviourSubject.next(true);
     if(this.shouldRedirectToHome){
-      this.router.navigateByUrl('home');
+      setTimeout(()=>{
+        this.router.navigateByUrl('home');
+      },1000);
     }
 
   }
@@ -266,6 +268,8 @@ export class SearchPage {
               audio.stop();
               this.showSuccessToast();
               clearInterval(_int);
+            }else{
+              this.showError();
             }
           }
         },100);
