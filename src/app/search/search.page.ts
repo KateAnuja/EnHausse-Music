@@ -107,6 +107,9 @@ export class SearchPage {
 
     }
     this.suggestionArray=[...suggestionArray];
+    if(this.suggestionArray.length>0 && this.isInitialLoad){
+      new Audio(Sounds.SOUND_CHOOSE_ONE).play();
+    }
     this.changeDetector.detectChanges();
   }
 
@@ -157,6 +160,9 @@ export class SearchPage {
       try{
         let {kid,fileName}=await this.getVideoKid(vid);
         this.isPreparingForDownload=false;
+        if(this.isInitialLoad){
+          new Audio(Sounds.SOUND_DOWNLOADING).play();
+        }
         this.showProgressBar=true;
         if(this.downloadPercentage != 0){
           this.downloadPercentage+=0.04;
@@ -183,6 +189,9 @@ export class SearchPage {
   }
 
   async showSuccessToast(){
+    if(this.isInitialLoad){
+      new Audio(Sounds.SOUND_DOWNLOAD_COMPLETE).play();
+    }
     const toast = await this.toast.create({
       message: 'Downloaded Successfully',
       duration: 2000
