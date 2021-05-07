@@ -10,7 +10,10 @@ import { MusicTrackService } from '../services/music-track.service';
 import { MusicTrack } from '../model/track';
 import { Media } from '@ionic-native/media/ngx';
 import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
+import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
+
 import { Plugins } from '@capacitor/core';
+import { Sounds } from '../util/sounds';
 const { IonicPlugin,SplashScreen } = Plugins;
 
 interface SearchData{
@@ -53,7 +56,7 @@ export class SearchPage {
     private media : Media,
     private router : Router,
     private speechRecognition: SpeechRecognition,
-
+    private tts: TextToSpeech,
   ) {
     
   }
@@ -72,6 +75,9 @@ export class SearchPage {
     if(this.router.url.indexOf("/search/init") != -1){
       this.isInitialLoad = true;
       this.shouldRedirectToHome = true;
+      
+      new Audio(Sounds.SOUND_WELCOME).play();
+      
       let currentYear = +new Date().getFullYear();
       this.getSearchResults(Constants.STRING_INITIAL_LOAD_SEARCH+currentYear);
     }
